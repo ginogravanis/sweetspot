@@ -23,23 +23,9 @@ namespace SweetSpot_2._0
         Effect effect;
         float effectAmount = 1f;
 
-        KinectSensor sensor;
+        Kinect kinect;
         Vector2 viewerPosition;
         GameTime viewerLastDetected;
-
-        /// <summary>
-        /// The position the user should optimally be standing relative to the sensor.
-        /// The x-coordinate corresponds to the user's position parallel to the sensor,
-        /// 0 being the center of the sensor and positive coordinates going to the right of the sensor.
-        /// The y-coordinate corresponds to the user's position away from the sensor,
-        /// 0 being the surface of the sensor.
-        /// </summary>
-        Vector2 sweetSpot;
-
-        /// <summary>
-        /// The minumum interaction distance from the sweetspot measured in meters.
-        /// </summary>
-        float sweetSpotPerimeter = 1f;
 
         public SweetSpot()
         {
@@ -53,7 +39,9 @@ namespace SweetSpot_2._0
             this.graphics.PreferredBackBufferHeight = ScreenHeight;
             this.graphics.SynchronizeWithVerticalRetrace = true;
 
-            this.sweetSpot = new Vector2(0.0f, 2.0f);
+            Vector2 sweetspot = new Vector2(0.0f, 2.0f);
+            this.kinect = new Kinect(sweetspot);
+
             this.viewerLastDetected = new GameTime(new TimeSpan(-10), new TimeSpan(-10));
 
             Content.RootDirectory = "Content";
@@ -68,28 +56,7 @@ namespace SweetSpot_2._0
         protected override void Initialize()
         {
             base.Initialize();
-            this.sensor = FindSensor();
-            this.sensor.SkeletonStream.Enable(this.GetSmoothingParameters());
-            this.sensor.Start();
-        }
-
-        private TransformSmoothParameters GetSmoothingParameters()
-        {
-            TransformSmoothParameters smoothingParameters = new TransformSmoothParameters();
-            {
-                smoothingParameters.Smoothing = 0.5f;
-                smoothingParameters.Correction = 0.5f;
-                smoothingParameters.Prediction = 0.5f;
-                smoothingParameters.JitterRadius = 0.05f;
-                smoothingParameters.MaxDeviationRadius = 0.04f;
-            };
-
-            return smoothingParameters;
-        }
-
-        private KinectSensor FindSensor()
-        {
-            return KinectSensor.KinectSensors.FirstOrDefault(sensor => sensor.Status == KinectStatus.Connected);
+            this.kinect.Initialize();
         }
 
         protected override void LoadContent()
@@ -107,7 +74,6 @@ namespace SweetSpot_2._0
 
         protected override void UnloadContent()
         {
-            this.sensor.Stop();
         }
 
         /// <summary>
@@ -119,6 +85,7 @@ namespace SweetSpot_2._0
         {
             base.Update(gameTime);
             this.inputManager.Update(gameTime);
+            this.kinect.Update(gameTime);
             this.UpdateUserPosition(gameTime);
             this.UpdateEffect(gameTime);
 
@@ -132,7 +99,7 @@ namespace SweetSpot_2._0
         {
             try
             {
-                this.viewerPosition = this.GetNearestViewerPosition();
+                this.viewerPosition = this.kinect.GetNearestViewerPosition();
                 this.viewerLastDetected = gameTime;
             }
             catch (ApplicationException)
@@ -144,9 +111,9 @@ namespace SweetSpot_2._0
         {
             if (this.ViewerRecentlyDetected(gameTime))
             {
-                float distanceFromSweetSpot = Math.Abs((this.sweetSpot - this.viewerPosition).Length());
-                distanceFromSweetSpot = Math.Min(distanceFromSweetSpot, this.sweetSpotPerimeter);
-                this.effectAmount = distanceFromSweetSpot / this.sweetSpotPerimeter;
+                float distanceFromSweetSpot = Math.Abs((this.kinect.sweetspot - this.viewerPosition).Length());
+                distanceFromSweetSpot = Math.Min(distanceFromSweetSpot, this.kinect.sweetspotPerimeter);
+                this.effectAmount = distanceFromSweetSpot / this.kinect.sweetspotPerimeter;
             }
             else
             {
@@ -165,63 +132,6 @@ namespace SweetSpot_2._0
             return viewerRecentlyDetected;
         }
 
-        private Vector2 GetNearestViewerPosition()
-        {
-            List<Vector2> viewerPositions = GetSkeletonPositions();
-            if (viewerPositions.Count == 0)
-                throw new ApplicationException("No skeletons detected.");
-
-            float shortestDistanceToSweetSpot = this.DistanceToSweetSpot(viewerPositions[0]);
-            Vector2 nearestUserPosition = viewerPositions[0];
-            foreach (Vector2 position in viewerPositions.Skip(1))
-            {
-                float newDistance = this.DistanceToSweetSpot(position);
-                if (newDistance < shortestDistanceToSweetSpot)
-                {
-                    shortestDistanceToSweetSpot = newDistance;
-                    nearestUserPosition = position;
-                }
-            }
-
-            return nearestUserPosition;
-        }
-
-        private float DistanceToSweetSpot(Vector2 position)
-        {
-            return Math.Abs((this.sweetSpot - position).Length());
-        }
-
-        private List<Vector2> GetSkeletonPositions()
-        {
-            List<Vector2> positions = new List<Vector2>();
-            foreach (Skeleton skeleton in this.GetSkeletonData())
-            {
-                if (skeleton.TrackingState != SkeletonTrackingState.NotTracked)
-                {
-                    positions.Add(new Vector2(skeleton.Position.X, skeleton.Position.Z));
-                }
-            }
-            return positions;
-        }
-
-        private Skeleton[] GetSkeletonData()
-        {
-            using (SkeletonFrame frame = this.sensor.SkeletonStream.OpenNextFrame(0))
-            {
-                Skeleton[] skeletons;
-                if (null != frame)
-                {
-                    skeletons = new Skeleton[frame.SkeletonArrayLength];
-                    frame.CopySkeletonDataTo(skeletons);
-                }
-                else
-                {
-                    skeletons = new Skeleton[0];
-                }
-                return skeletons;
-            }
-        }
-
         protected override void Draw(GameTime gameTime)
         {
             this.graphics.GraphicsDevice.Clear(Color.Black);
@@ -238,7 +148,7 @@ namespace SweetSpot_2._0
             this.spriteBatch.End();
 
             this.spriteBatch.Begin();
-            this.spriteBatch.Draw(this.greenPixel, new Rectangle((int)Coords(sweetSpot).X - 10, (int)Coords(sweetSpot).Y - 10, 20, 20), Color.White);
+            this.spriteBatch.Draw(this.greenPixel, new Rectangle((int)Coords(kinect.sweetspot).X - 10, (int)Coords(kinect.sweetspot).Y - 10, 20, 20), Color.White);
             if (this.ViewerRecentlyDetected(gameTime))
             {
                 this.spriteBatch.Draw(this.redPixel, new Rectangle((int)Coords(viewerPosition).X - 15, (int)Coords(viewerPosition).Y - 15, 30, 30), Color.White);
