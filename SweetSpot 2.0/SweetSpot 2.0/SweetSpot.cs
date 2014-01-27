@@ -24,8 +24,6 @@ namespace SweetSpot_2._0
         float effectAmount = 1f;
 
         Kinect kinect;
-        Vector2 viewerPosition;
-        GameTime viewerLastDetected;
 
         public SweetSpot()
         {
@@ -41,8 +39,6 @@ namespace SweetSpot_2._0
 
             Vector2 sweetspot = new Vector2(0.0f, 2.0f);
             this.kinect = new Kinect(sweetspot);
-
-            this.viewerLastDetected = new GameTime(new TimeSpan(-10), new TimeSpan(-10));
 
             Content.RootDirectory = "Content";
         }
@@ -72,10 +68,6 @@ namespace SweetSpot_2._0
             base.LoadContent();
         }
 
-        protected override void UnloadContent()
-        {
-        }
-
         /// <summary>
         /// Ermöglicht dem Spiel die Ausführung der Logik, wie zum Beispiel Aktualisierung der Welt,
         /// Überprüfung auf Kollisionen, Erfassung von Eingaben und Abspielen von Ton.
@@ -86,7 +78,6 @@ namespace SweetSpot_2._0
             base.Update(gameTime);
             this.inputManager.Update(gameTime);
             this.kinect.Update(gameTime);
-            this.UpdateUserPosition(gameTime);
             this.UpdateEffect(gameTime);
 
             if (this.inputManager.IsKeyPressed(Keys.Escape))
@@ -95,41 +86,16 @@ namespace SweetSpot_2._0
             }
         }
 
-        private void UpdateUserPosition(GameTime gameTime)
-        {
-            try
-            {
-                this.viewerPosition = this.kinect.GetNearestViewerPosition();
-                this.viewerLastDetected = gameTime;
-            }
-            catch (ApplicationException)
-            {
-            }
-        }
-
         private void UpdateEffect(GameTime gameTime)
         {
-            if (this.ViewerRecentlyDetected(gameTime))
+            if (this.kinect.IsViewerActive())
             {
-                float distanceFromSweetSpot = Math.Abs((this.kinect.sweetspot - this.viewerPosition).Length());
-                distanceFromSweetSpot = Math.Min(distanceFromSweetSpot, this.kinect.sweetspotPerimeter);
-                this.effectAmount = distanceFromSweetSpot / this.kinect.sweetspotPerimeter;
+                this.effectAmount = this.kinect.GetDistanceFromSweetSpot() / this.kinect.sweetSpotMargin;
             }
             else
             {
                 this.effectAmount = 1.0f;
             }
-        }
-
-        private bool ViewerRecentlyDetected(GameTime gameTime)
-        {
-            bool viewerRecentlyDetected = false;
-            if (this.viewerLastDetected.TotalGameTime > gameTime.TotalGameTime - new TimeSpan(0, 0, 0, 0, 50))
-            {
-                viewerRecentlyDetected = true;
-            }
-
-            return viewerRecentlyDetected;
         }
 
         protected override void Draw(GameTime gameTime)
@@ -147,11 +113,15 @@ namespace SweetSpot_2._0
             this.spriteBatch.Draw((Texture2D)screen, new Rectangle(0, 0, ScreenWidth, ScreenHeight), Color.White);
             this.spriteBatch.End();
 
+            Vector2 sweetSpotPosition = Coords(this.kinect.sweetSpot);
+            Rectangle sweetSpot = new Rectangle((int)sweetSpotPosition.X - 10, (int)sweetSpotPosition.Y - 10, 20, 20);
             this.spriteBatch.Begin();
-            this.spriteBatch.Draw(this.greenPixel, new Rectangle((int)Coords(kinect.sweetspot).X - 10, (int)Coords(kinect.sweetspot).Y - 10, 20, 20), Color.White);
-            if (this.ViewerRecentlyDetected(gameTime))
+            this.spriteBatch.Draw(this.greenPixel, sweetSpot, Color.White);
+            if (this.kinect.IsViewerActive())
             {
-                this.spriteBatch.Draw(this.redPixel, new Rectangle((int)Coords(viewerPosition).X - 15, (int)Coords(viewerPosition).Y - 15, 30, 30), Color.White);
+                Vector2 viewerPosition = this.kinect.GetViewerPosition();
+                Rectangle viewer = new Rectangle((int)Coords(viewerPosition).X - 15, (int)Coords(viewerPosition).Y - 15, 30, 30);
+                this.spriteBatch.Draw(this.redPixel, viewer, Color.White);
             }
             this.spriteBatch.End();
 

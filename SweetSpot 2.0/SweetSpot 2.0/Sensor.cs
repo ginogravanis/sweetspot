@@ -13,6 +13,7 @@ namespace SweetSpot_2._0
         {
             this.sensor = sensor;
         }
+
         ~Sensor()
         {
             this.sensor.Stop();

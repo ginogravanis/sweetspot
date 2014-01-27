@@ -15,19 +15,27 @@ namespace SweetSpot_2._0
         /// The y-coordinate corresponds to the user's position away from the sensor,
         /// 0 being the surface of the sensor.
         /// </summary>
-        public Vector2 sweetspot;
+        public Vector2 sweetSpot { get; set; }
 
         /// <summary>
         /// The minumum interaction distance from the sweetspot measured in meters.
         /// </summary>
-        public float sweetspotPerimeter = 1f;
+        public float sweetSpotMargin = 1f;
+
+        TimeSpan positionSmoothingTime = new TimeSpan(0, 0, 0, 0, 50);
 
         List<Sensor> sensors;
+        Vector2 lastViewerPosition;
+        TimeSpan viewerLastSeen;
+        bool viewerActive;
 
-        public Kinect(Vector2 sweetspot)
+        public Kinect(Vector2 sweetSpot)
         {
             this.sensors = new List<Sensor>();
-            this.sweetspot = sweetspot;
+            this.sweetSpot = sweetSpot;
+            this.lastViewerPosition = new Vector2();
+            this.viewerLastSeen = new TimeSpan(-1, 0, 0);
+            this.viewerActive = false;
         }
 
         public void Initialize()
@@ -43,11 +51,37 @@ namespace SweetSpot_2._0
             }
         }
 
-        public void Update(GameTime gameTime)
+        public bool IsViewerActive()
         {
+            return this.viewerActive;
         }
 
-        public Vector2 GetNearestViewerPosition()
+        public void Update(GameTime gameTime)
+        {
+            try
+            {
+                this.lastViewerPosition = this.CalculateViewerPosition();
+                this.viewerLastSeen = gameTime.TotalGameTime;
+            }
+            catch (ApplicationException)
+            {
+                if (this.viewerLastSeen > gameTime.TotalGameTime - this.positionSmoothingTime)
+                {
+                    this.viewerActive = true;
+                }
+                else
+                {
+                    this.viewerActive = false;
+                }
+            }
+        }
+
+        public Vector2 GetViewerPosition()
+        {
+            return this.lastViewerPosition;
+        }
+
+        private Vector2 CalculateViewerPosition()
         {
             List<Vector2> positions = new List<Vector2>();
             foreach (Sensor sensor in this.sensors)
@@ -73,9 +107,16 @@ namespace SweetSpot_2._0
             return nearestUserPosition;
         }
 
+        public float GetDistanceFromSweetSpot()
+        {
+            float distanceFromSweetSpot = Math.Abs((this.sweetSpot - this.lastViewerPosition).Length());
+            distanceFromSweetSpot = Math.Min(distanceFromSweetSpot, this.sweetSpotMargin);
+            return distanceFromSweetSpot;
+        }
+
         public float DistanceToSweetSpot(Vector2 position)
         {
-            return Math.Abs((this.sweetspot - position).Length());
+            return Math.Abs((this.sweetSpot - position).Length());
         }
     }
 }
