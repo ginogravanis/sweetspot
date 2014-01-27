@@ -28,17 +28,18 @@ namespace SweetSpot_2._0
         public SweetSpot()
         {
             this.Window.Title = "SweetSpot 2.0";
-
-            this.inputManager = new InputManager();
-
             this.graphics = new GraphicsDeviceManager(this);
             this.graphics.IsFullScreen = true;
             this.graphics.PreferredBackBufferWidth = ScreenWidth;
             this.graphics.PreferredBackBufferHeight = ScreenHeight;
             this.graphics.SynchronizeWithVerticalRetrace = true;
 
-            Vector2 sweetspot = new Vector2(0.0f, 2.0f);
-            this.kinect = new Kinect(sweetspot);
+            this.inputManager = new InputManager(this);
+            Components.Add(this.inputManager);
+
+            this.kinect = new Kinect(this);
+            this.kinect.sweetSpot = new Vector2(0f, 2f);
+            Components.Add(this.kinect);
 
             Content.RootDirectory = "Content";
         }
@@ -52,7 +53,6 @@ namespace SweetSpot_2._0
         protected override void Initialize()
         {
             base.Initialize();
-            this.kinect.Initialize();
         }
 
         protected override void LoadContent()
@@ -76,8 +76,6 @@ namespace SweetSpot_2._0
         protected override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            this.inputManager.Update(gameTime);
-            this.kinect.Update(gameTime);
             this.UpdateEffect(gameTime);
 
             if (this.inputManager.IsKeyPressed(Keys.Escape))

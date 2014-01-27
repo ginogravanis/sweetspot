@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace SweetSpot_2._0
 {
-    class Kinect
+    class Kinect : Microsoft.Xna.Framework.GameComponent
     {
         /// <summary>
         /// The position the user should optimally be standing relative to the sensor.
@@ -29,17 +29,19 @@ namespace SweetSpot_2._0
         TimeSpan viewerLastSeen;
         bool viewerActive;
 
-        public Kinect(Vector2 sweetSpot)
+        public Kinect(Game game)
+            : base(game)
         {
             this.sensors = new List<Sensor>();
-            this.sweetSpot = sweetSpot;
+            this.sweetSpot = new Vector2();
             this.lastViewerPosition = new Vector2();
             this.viewerLastSeen = new TimeSpan(-1, 0, 0);
             this.viewerActive = false;
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
+            base.Initialize();
             foreach(KinectSensor candidate in KinectSensor.KinectSensors)
             {
                 if (candidate.Status == KinectStatus.Connected)
@@ -51,13 +53,9 @@ namespace SweetSpot_2._0
             }
         }
 
-        public bool IsViewerActive()
+        public override void Update(GameTime gameTime)
         {
-            return this.viewerActive;
-        }
-
-        public void Update(GameTime gameTime)
-        {
+            base.Update(gameTime);
             try
             {
                 this.lastViewerPosition = this.CalculateViewerPosition();
@@ -74,6 +72,11 @@ namespace SweetSpot_2._0
                     this.viewerActive = false;
                 }
             }
+        }
+
+        public bool IsViewerActive()
+        {
+            return this.viewerActive;
         }
 
         public Vector2 GetViewerPosition()
