@@ -1,10 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
 
 namespace SweetSpot_2._0
 {
-    class InputManager
+    class InputManager : Microsoft.Xna.Framework.GameComponent
     {
         KeyboardState keyboardState;
         KeyboardState previousKeyboardState;
@@ -13,7 +12,11 @@ namespace SweetSpot_2._0
         GamePadState gamePadState;
         GamePadState previousGamePadState;
 
-        public void Update(GameTime gameTime)
+        public InputManager(Game game)
+            : base(game)
+        { }
+
+        public override void Update(GameTime gameTime)
         {
             this.previousKeyboardState = this.keyboardState;
             this.keyboardState = Keyboard.GetState();
