@@ -10,9 +10,12 @@ namespace SweetSpot_2._0
 
         Skeleton[] rawSkeletonData =  new Skeleton[0];
 
+        public Matrix TransformationMatrix { get; set; }
+
         public Sensor(KinectSensor kinect)
         {
             sensor = kinect;
+            TransformationMatrix = Matrix.Identity;
         }
 
         ~Sensor()
@@ -45,7 +48,9 @@ namespace SweetSpot_2._0
             List<Vector2> positions = new List<Vector2>();
             foreach (Skeleton skeleton in GetActiveUsers())
             {
-                positions.Add(new Vector2(skeleton.Position.X, skeleton.Position.Z));
+                Vector2 rawPosition = new Vector2(skeleton.Position.X, skeleton.Position.Z);
+                Vector2 adjustedPosition = Vector2.Transform(rawPosition, TransformationMatrix);
+                positions.Add(adjustedPosition);
             }
             return positions;
         }
