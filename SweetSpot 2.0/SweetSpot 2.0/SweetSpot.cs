@@ -6,17 +6,16 @@ namespace SweetSpot_2._0
     {
         const int ScreenWidth = 1920;
         const int ScreenHeight = 1080;
-        GraphicsDeviceManager graphics;
 
         public SweetSpot()
         {
             Content.RootDirectory = "Content";
-            this.Window.Title = "SweetSpot 2.0";
-            this.graphics = new GraphicsDeviceManager(this);
-            this.graphics.IsFullScreen = true;
-            this.graphics.PreferredBackBufferWidth = ScreenWidth;
-            this.graphics.PreferredBackBufferHeight = ScreenHeight;
-            this.graphics.SynchronizeWithVerticalRetrace = true;
+            Window.Title = "SweetSpot 2.0";
+            GraphicsDeviceManager graphics = new GraphicsDeviceManager(this);
+            graphics.IsFullScreen = true;
+            graphics.PreferredBackBufferWidth = ScreenWidth;
+            graphics.PreferredBackBufferHeight = ScreenHeight;
+            graphics.SynchronizeWithVerticalRetrace = true;
 
             Components.Add(new ScreenManager(this));
         }

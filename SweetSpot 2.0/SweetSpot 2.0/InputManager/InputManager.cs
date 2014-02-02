@@ -16,106 +16,106 @@ namespace SweetSpot_2._0
 
         public InputManager()
         {
-            this.keyboardState = Keyboard.GetState();
-            this.previousKeyboardState = new KeyboardState();
+            keyboardState = Keyboard.GetState();
+            previousKeyboardState = new KeyboardState();
 
-            this.mouseState = Mouse.GetState();
-            this.previousMouseState = new MouseState();
+            mouseState = Mouse.GetState();
+            previousMouseState = new MouseState();
 
-            this.gamePadState = GamePad.GetState(PlayerIndex.One);
-            this.previousGamePadState = new GamePadState();
+            gamePadState = GamePad.GetState(PlayerIndex.One);
+            previousGamePadState = new GamePadState();
         }
 
         public void Update(GameTime gameTime)
         {
-            this.previousKeyboardState = this.keyboardState;
-            this.keyboardState = Keyboard.GetState();
+            previousKeyboardState = keyboardState;
+            keyboardState = Keyboard.GetState();
 
-            this.previousMouseState = this.mouseState;
-            this.mouseState = Mouse.GetState();
+            previousMouseState = mouseState;
+            mouseState = Mouse.GetState();
 
-            this.previousGamePadState = this.gamePadState;
-            this.gamePadState = GamePad.GetState(PlayerIndex.One);
+            previousGamePadState = gamePadState;
+            gamePadState = GamePad.GetState(PlayerIndex.One);
         }
 
         public Keys[] GetPreviousDownKeys()
         {
-            return this.previousKeyboardState.GetPressedKeys();
+            return previousKeyboardState.GetPressedKeys();
         }
 
         public Keys[] GetDownKeys()
         {
-            return this.keyboardState.GetPressedKeys();
+            return keyboardState.GetPressedKeys();
         }
 
         public bool IsKeyDown(Keys key)
         {
-            return this.keyboardState.IsKeyDown(key);
+            return keyboardState.IsKeyDown(key);
         }
 
         private bool IsKeyUp(Keys key)
         {
-            return this.keyboardState.IsKeyUp(key);
+            return keyboardState.IsKeyUp(key);
         }
 
         private bool WasKeyDown(Keys key)
         {
-            return this.WasKeyDown(key);
+            return WasKeyDown(key);
         }
 
         private bool WasKeyUp(Keys key)
         {
-            return this.previousKeyboardState.IsKeyUp(key);
+            return previousKeyboardState.IsKeyUp(key);
         }
 
         public bool IsKeyPressed(Keys key)
         {
-            return this.IsKeyDown(key) && this.WasKeyUp(key);
+            return IsKeyDown(key) && WasKeyUp(key);
         }
 
         public bool IsKeyReleased(Keys key)
         {
-            return this.IsKeyUp(key) && this.WasKeyDown(key);
+            return IsKeyUp(key) && WasKeyDown(key);
         }
 
         public bool IsLeftMouseButtonDown()
         {
-            return this.mouseState.LeftButton == ButtonState.Pressed;
+            return mouseState.LeftButton == ButtonState.Pressed;
         }
 
         public bool IsMiddleMouseButtonDown()
         {
-            return this.mouseState.MiddleButton == ButtonState.Pressed;
+            return mouseState.MiddleButton == ButtonState.Pressed;
         }
 
         public bool IsRightMouseButtonDown()
         {
-            return this.mouseState.RightButton == ButtonState.Pressed;
+            return mouseState.RightButton == ButtonState.Pressed;
         }
 
         public bool IsRightMouseButtonPressed()
         {
-            return this.IsRightMouseButtonDown() && (this.previousMouseState.RightButton == ButtonState.Released);
+            return IsRightMouseButtonDown() && (previousMouseState.RightButton == ButtonState.Released);
         }
 
         public bool IsLeftMouseButtonPressed()
         {
-            return this.IsLeftMouseButtonDown() && (this.previousMouseState.LeftButton == ButtonState.Released);
+            return IsLeftMouseButtonDown() && (previousMouseState.LeftButton == ButtonState.Released);
         }
 
         public bool IsMiddleMouseButtonPressed()
         {
-            return IsMiddleMouseButtonDown() && (this.previousMouseState.MiddleButton == ButtonState.Released);
+            return IsMiddleMouseButtonDown() && (previousMouseState.MiddleButton == ButtonState.Released);
         }
 
         public bool IsGamePadButtonDown(Buttons button)
         {
-            return this.gamePadState.IsButtonDown(button);
+            return gamePadState.IsButtonDown(button);
         }
 
         public bool IsGamePadButtonPressed(Buttons button)
         {
-            return this.IsGamePadButtonDown(button) && (this.previousGamePadState.IsButtonUp(button));
+            return IsGamePadButtonDown(button) && (previousGamePadState.IsButtonUp(button));
         }
     }
 }
