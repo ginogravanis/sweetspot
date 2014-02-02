@@ -3,20 +3,30 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SweetSpot_2._0
 {
-    class InputManager : Microsoft.Xna.Framework.GameComponent
+    public class InputManager
     {
         KeyboardState keyboardState;
         KeyboardState previousKeyboardState;
+
         MouseState mouseState;
         MouseState previousMouseState;
+
         GamePadState gamePadState;
         GamePadState previousGamePadState;
 
-        public InputManager(Game game)
-            : base(game)
-        { }
+        public InputManager()
+        {
+            this.keyboardState = Keyboard.GetState();
+            this.previousKeyboardState = new KeyboardState();
 
-        public override void Update(GameTime gameTime)
+            this.mouseState = Mouse.GetState();
+            this.previousMouseState = new MouseState();
+
+            this.gamePadState = GamePad.GetState(PlayerIndex.One);
+            this.previousGamePadState = new GamePadState();
+        }
+
+        public void Update(GameTime gameTime)
         {
             this.previousKeyboardState = this.keyboardState;
             this.keyboardState = Keyboard.GetState();
