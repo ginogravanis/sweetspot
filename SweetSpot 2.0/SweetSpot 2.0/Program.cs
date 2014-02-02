@@ -1,5 +1,3 @@
-using System;
-
 namespace SweetSpot_2._0
 {
 #if WINDOWS || XBOX

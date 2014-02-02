@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 
 namespace SweetSpot_2._0
 {
-    class Sensor
+    public class Sensor
     {
         KinectSensor sensor;
 
