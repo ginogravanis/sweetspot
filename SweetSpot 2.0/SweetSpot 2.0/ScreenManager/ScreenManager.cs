@@ -5,25 +5,27 @@ namespace SweetSpot_2._0
 {
     public class ScreenManager : DrawableGameComponent
     {
-        Screen screen;
-
-        public SensorManager Kinect
+        private Screen screen;
+        public Screen Screen
         {
-            get;
-            internal set;
+            get { return screen; }
+
+            set
+            {
+                if (screen != null)
+                    screen.UnloadContent();
+
+                value.ScreenManager = this;
+                value.LoadContent();
+                screen = value;
+            }
         }
 
-        public InputManager Input
-        {
-            get;
-            internal set;
-        }
+        public SensorManager Kinect { get; internal set; }
 
-        public SpriteBatch SpriteBatch
-        {
-            get;
-            internal set;
-        }
+        public InputManager Input { get; internal set; }
+
+        public SpriteBatch SpriteBatch { get; internal set; }
 
         public ScreenManager(Game game)
             :base(game)
@@ -41,35 +43,27 @@ namespace SweetSpot_2._0
         protected override void LoadContent()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-            ChangeScreen(new SampleScreen());
-            screen.LoadContent();
+            Texture2D image = Game.Content.Load<Texture2D>("testimage");
+            Effect effect = Game.Content.Load<Effect>("SaturationShader");
+            Screen = new EffectScreen(image, effect);
+            Screen.LoadContent();
         }
 
         protected override void UnloadContent()
         {
-            screen.UnloadContent();
+            Screen.UnloadContent();
         }
 
         public override void Update(GameTime gameTime)
         {
             Input.Update(gameTime);
             Kinect.Update(gameTime);
-            screen.Update(gameTime);
+            Screen.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            screen.Draw(gameTime);
-        }
-
-        public void ChangeScreen(Screen newScreen)
-        {
-            if (screen != null)
-                screen.UnloadContent();
-
-            newScreen.ScreenManager = this;
-            newScreen.LoadContent();
-            screen = newScreen;
+            Screen.Draw(gameTime);
         }
     }
 }

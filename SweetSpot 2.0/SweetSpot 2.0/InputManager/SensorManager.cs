@@ -54,21 +54,24 @@ namespace SweetSpot_2._0
 
         public void Update(GameTime gameTime)
         {
-            try
+            foreach (Sensor sensor in sensors)
+            {
+                sensor.Update();
+            }
+
+            if (ViewerPositionAvailable())
             {
                 lastViewerPosition = CalculateViewerPosition();
                 viewerLastSeen = gameTime.TotalGameTime;
+                viewerActive = true;
             }
-            catch (ApplicationException)
+            else if (ViewerRecentlySeen(gameTime))
             {
-                if (viewerLastSeen > gameTime.TotalGameTime - positionSmoothingTime)
-                {
-                    viewerActive = true;
-                }
-                else
-                {
-                    viewerActive = false;
-                }
+                viewerActive = true;
+            }
+            else
+            {
+                viewerActive = false;
             }
         }
 
@@ -82,6 +85,21 @@ namespace SweetSpot_2._0
             return lastViewerPosition;
         }
 
+        private bool ViewerPositionAvailable()
+        {
+            foreach (Sensor sensor in sensors)
+            {
+                if (sensor.HasActiveUsers())
+                    return true;
+            }
+            return false;
+        }
+
+        private bool ViewerRecentlySeen(GameTime gameTime)
+        {
+            return viewerLastSeen > gameTime.TotalGameTime - positionSmoothingTime;
+        }
+
         private Vector2 CalculateViewerPosition()
         {
             List<Vector2> positions = new List<Vector2>();
@@ -91,7 +109,7 @@ namespace SweetSpot_2._0
             }
 
             if (positions.Count == 0)
-                throw new ApplicationException("No skeletons detected.");
+                throw new ApplicationException("User position not available.");
 
             float shortestDistanceToSweetSpot = DistanceToSweetSpot(positions[0]);
             Vector2 nearestUserPosition = positions[0];
