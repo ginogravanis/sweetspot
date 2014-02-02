@@ -8,6 +8,8 @@ namespace SweetSpot_2._0
     {
         KinectSensor sensor;
 
+        Skeleton[] rawSkeletonData =  new Skeleton[0];
+
         public Sensor(KinectSensor kinect)
         {
             sensor = kinect;
@@ -33,22 +35,47 @@ namespace SweetSpot_2._0
             sensor.Start();
         }
 
+        public void Update()
+        {
+            rawSkeletonData = GetRawSkeletonData();
+        }
+
         public List<Vector2> GetUserPositions()
         {
             List<Vector2> positions = new List<Vector2>();
-            foreach (Skeleton skeleton in GetRawSkeletonData())
+            foreach (Skeleton skeleton in GetActiveUsers())
             {
-                if (skeleton.TrackingState != SkeletonTrackingState.NotTracked)
-                {
-                    positions.Add(new Vector2(skeleton.Position.X, skeleton.Position.Z));
-                }
+                positions.Add(new Vector2(skeleton.Position.X, skeleton.Position.Z));
             }
             return positions;
         }
 
+        public bool HasActiveUsers()
+        {
+            return GetActiveUserCount() > 0;
+        }
+
+        public int GetActiveUserCount()
+        {
+            return GetActiveUsers().Count;
+        }
+
+        private List<Skeleton> GetActiveUsers()
+        {
+            List<Skeleton> activeUsers = new List<Skeleton>();
+            foreach (Skeleton skeleton in rawSkeletonData)
+            {
+                if (skeleton.TrackingState != SkeletonTrackingState.NotTracked)
+                {
+                    activeUsers.Add(skeleton);
+                }
+            }
+            return activeUsers;
+        }
+
         private Skeleton[] GetRawSkeletonData()
         {
-            using (SkeletonFrame frame = sensor.SkeletonStream.OpenNextFrame(0))
+            using (SkeletonFrame frame = sensor.SkeletonStream.OpenNextFrame(20))
             {
                 Skeleton[] skeletons;
                 if (null != frame)
