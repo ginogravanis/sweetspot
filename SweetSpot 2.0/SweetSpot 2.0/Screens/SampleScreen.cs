@@ -63,19 +63,19 @@ namespace SweetSpot_2._0
 
             effect.Parameters["effectAmount"].SetValue(effectAmount);
             graphics.Clear(Color.Black);
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, null, null, null, this.effect);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, null, null, null, effect);
             spriteBatch.Draw((Texture2D)screen, new Rectangle(0, 0, viewport.Width, viewport.Height), Color.White);
             spriteBatch.End();
 
             Vector2 sweetSpotPosition = WorldToScreenCoords(viewport.Bounds, ScreenManager.Kinect.sweetSpot);
             Rectangle sweetSpot = new Rectangle((int)sweetSpotPosition.X - 10, (int)sweetSpotPosition.Y - 10, 20, 20);
             spriteBatch.Begin();
-            spriteBatch.Draw(this.greenPixel, sweetSpot, Color.White);
+            spriteBatch.Draw(greenPixel, sweetSpot, Color.White);
             if (ScreenManager.Kinect.IsViewerActive())
             {
                 Vector2 viewerPosition = WorldToScreenCoords(viewport.Bounds, ScreenManager.Kinect.GetViewerPosition());
                 Rectangle viewer = new Rectangle((int)viewerPosition.X - 15, (int)viewerPosition.Y - 15, 30, 30);
-                spriteBatch.Draw(this.redPixel, viewer, Color.White);
+                spriteBatch.Draw(redPixel, viewer, Color.White);
             }
             spriteBatch.End();
         }

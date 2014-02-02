@@ -31,12 +31,12 @@ namespace SweetSpot_2._0
 
         public SensorManager()
         {
-            this.sensors = new List<Sensor>();
-            this.sweetSpot = new Vector2();
-            this.lastViewerPosition = new Vector2();
-            this.viewerLastSeen = TimeSpan.FromSeconds(-1);
-            this.viewerActive = false;
-            this.Initialize();
+            sensors = new List<Sensor>();
+            sweetSpot = new Vector2();
+            lastViewerPosition = new Vector2();
+            viewerLastSeen = TimeSpan.FromSeconds(-1);
+            viewerActive = false;
+            Initialize();
         }
 
         public void Initialize()
@@ -47,7 +47,7 @@ namespace SweetSpot_2._0
                 {
                     Sensor sensor = new Sensor(candidate);
                     sensor.Initialize();
-                    this.sensors.Add(sensor);
+                    sensors.Add(sensor);
                 }
             }
         }
@@ -56,36 +56,36 @@ namespace SweetSpot_2._0
         {
             try
             {
-                this.lastViewerPosition = this.CalculateViewerPosition();
-                this.viewerLastSeen = gameTime.TotalGameTime;
+                lastViewerPosition = CalculateViewerPosition();
+                viewerLastSeen = gameTime.TotalGameTime;
             }
             catch (ApplicationException)
             {
-                if (this.viewerLastSeen > gameTime.TotalGameTime - this.positionSmoothingTime)
+                if (viewerLastSeen > gameTime.TotalGameTime - positionSmoothingTime)
                 {
-                    this.viewerActive = true;
+                    viewerActive = true;
                 }
                 else
                 {
-                    this.viewerActive = false;
+                    viewerActive = false;
                 }
             }
         }
 
         public bool IsViewerActive()
         {
-            return this.viewerActive;
+            return viewerActive;
         }
 
         public Vector2 GetViewerPosition()
         {
-            return this.lastViewerPosition;
+            return lastViewerPosition;
         }
 
         private Vector2 CalculateViewerPosition()
         {
             List<Vector2> positions = new List<Vector2>();
-            foreach (Sensor sensor in this.sensors)
+            foreach (Sensor sensor in sensors)
             {
                 positions.AddRange(sensor.GetUserPositions());
             }
@@ -93,11 +93,11 @@ namespace SweetSpot_2._0
             if (positions.Count == 0)
                 throw new ApplicationException("No skeletons detected.");
 
-            float shortestDistanceToSweetSpot = this.DistanceToSweetSpot(positions[0]);
+            float shortestDistanceToSweetSpot = DistanceToSweetSpot(positions[0]);
             Vector2 nearestUserPosition = positions[0];
             foreach (Vector2 position in positions.Skip(1))
             {
-                float newDistance = this.DistanceToSweetSpot(position);
+                float newDistance = DistanceToSweetSpot(position);
                 if (newDistance < shortestDistanceToSweetSpot)
                 {
                     shortestDistanceToSweetSpot = newDistance;
@@ -110,14 +110,14 @@ namespace SweetSpot_2._0
 
         public float GetDistanceFromSweetSpot()
         {
-            float distanceFromSweetSpot = Math.Abs((this.sweetSpot - this.lastViewerPosition).Length());
-            distanceFromSweetSpot = Math.Min(distanceFromSweetSpot, this.sweetSpotMargin);
+            float distanceFromSweetSpot = Math.Abs((sweetSpot - lastViewerPosition).Length());
+            distanceFromSweetSpot = Math.Min(distanceFromSweetSpot, sweetSpotMargin);
             return distanceFromSweetSpot;
         }
 
         public float DistanceToSweetSpot(Vector2 position)
         {
-            return Math.Abs((this.sweetSpot - position).Length());
+            return Math.Abs((sweetSpot - position).Length());
         }
     }
 }

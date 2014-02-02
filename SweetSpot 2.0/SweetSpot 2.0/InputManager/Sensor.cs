@@ -8,14 +8,14 @@ namespace SweetSpot_2._0
     {
         KinectSensor sensor;
 
-        public Sensor(KinectSensor sensor)
+        public Sensor(KinectSensor kinect)
         {
-            this.sensor = sensor;
+            sensor = kinect;
         }
 
         ~Sensor()
         {
-            this.sensor.Stop();
+            sensor.Stop();
         }
 
         public void Initialize()
@@ -29,14 +29,14 @@ namespace SweetSpot_2._0
                 smoothingParameters.MaxDeviationRadius = 0.04f;
             };
 
-            this.sensor.SkeletonStream.Enable(smoothingParameters);
-            this.sensor.Start();
+            sensor.SkeletonStream.Enable(smoothingParameters);
+            sensor.Start();
         }
 
         public List<Vector2> GetUserPositions()
         {
             List<Vector2> positions = new List<Vector2>();
-            foreach (Skeleton skeleton in this.GetRawSkeletonData())
+            foreach (Skeleton skeleton in GetRawSkeletonData())
             {
                 if (skeleton.TrackingState != SkeletonTrackingState.NotTracked)
                 {
@@ -48,7 +48,7 @@ namespace SweetSpot_2._0
 
         private Skeleton[] GetRawSkeletonData()
         {
-            using (SkeletonFrame frame = this.sensor.SkeletonStream.OpenNextFrame(0))
+            using (SkeletonFrame frame = sensor.SkeletonStream.OpenNextFrame(0))
             {
                 Skeleton[] skeletons;
                 if (null != frame)
