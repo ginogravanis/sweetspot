@@ -20,12 +20,7 @@ namespace SweetSpot_2._0
         /// <summary>
         /// The minumum interaction distance from the sweetspot in meters.
         /// </summary>
-        public float sweetSpotMargin = 1f;
-
-        /// <summary>
-        /// The maximum distance from the sweetspot that still counts as the sweetspot in meters.
-        /// </summary>
-        public float safeZoneRadius = 0.05f;
+        public float sweetSpotMargin = 3f;
 
         TimeSpan positionSmoothingTime = TimeSpan.FromMilliseconds(50);
 
@@ -134,11 +129,6 @@ namespace SweetSpot_2._0
         public float GetDistanceFromSweetSpot()
         {
             return Math.Abs((sweetSpot - lastViewerPosition).Length());
-        }
-
-        public float GetDistanceFromSafeZone()
-        {
-            return Math.Max(0, GetDistanceFromSweetSpot() - safeZoneRadius);
         }
 
         public float DistanceToSweetSpot(Vector2 position)

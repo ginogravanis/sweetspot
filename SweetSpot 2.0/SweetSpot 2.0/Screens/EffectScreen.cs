@@ -47,14 +47,19 @@ namespace SweetSpot_2._0
         {
             if (ScreenManager.Kinect.IsViewerActive())
             {
-                targetEffectIntensity = ScreenManager.Kinect.GetDistanceFromSafeZone() / ScreenManager.Kinect.sweetSpotMargin;
+                targetEffectIntensity = ScreenManager.Kinect.GetDistanceFromSweetSpot() / ScreenManager.Kinect.sweetSpotMargin;
             }
             else
             {
                 targetEffectIntensity = 1.0f;
             }
-            currentEffectIntensity = ((currentEffectIntensity * (intensitySmoothingFactor - 1)) + targetEffectIntensity) / intensitySmoothingFactor;
+            currentEffectIntensity = WeightedAverage(currentEffectIntensity, targetEffectIntensity, intensitySmoothingFactor);
             effect.Parameters["effectIntensity"].SetValue(currentEffectIntensity);
+        }
+
+        public float WeightedAverage(float current, float target, float weight)
+        {
+            return ((current * (weight - 1)) + target) / weight;
         }
 
         public override void Draw(GameTime gameTime)
