@@ -6,12 +6,12 @@ int height;
 
 float4 main(float2 texCoord: TEXCOORD0) : COLOR
 {
-	int pixelSize = max(0, round(100 * effectIntensity));
-	int x = round(texCoord.x * width);
-	int y = round(texCoord.y * height);
-	float2 samplePos = float2(1.0 * (x - (x % pixelSize)) / width,
-							  1.0 * (y - (y % pixelSize)) / height);
-	return tex2D(textureSampler, samplePos);
+	int maxPixelSize = 100;
+	float dx = (maxPixelSize * effectIntensity) * (1./width);
+	float dy = (maxPixelSize * effectIntensity) * (1./height);
+	float2 pos = float2(dx * floor(texCoord.x/dx),
+						dy * floor(texCoord.y/dy));
+	return tex2D(textureSampler, pos);
 }
 
 technique Shader

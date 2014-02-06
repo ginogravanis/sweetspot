@@ -15,7 +15,7 @@ namespace SweetSpot_2._0
         Effect effect;
         float currentEffectIntensity = 1f;
         float targetEffectIntensity = 1f;
-        float intensitySmoothingFactor = 40f;
+        float intensitySmoothingFactor = 20f;
 
         public EffectScreen(Texture2D image, Effect effect)
         {
