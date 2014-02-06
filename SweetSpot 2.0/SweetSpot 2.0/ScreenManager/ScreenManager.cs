@@ -37,18 +37,19 @@ namespace SweetSpot_2._0
         public override void Initialize()
         {
             base.Initialize();
-            Kinect.sweetSpot = new Vector2(0f, 1f);
+            Kinect.sweetSpot = new Vector2(0f, 2f);
         }
 
         protected override void LoadContent()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-            Texture2D image = Game.Content.Load<Texture2D>("testimage");
-            //Effect effect = Game.Content.Load<Effect>("SaturationShader");
-            //Effect effect = Game.Content.Load<Effect>("BrightnessShader");
-            Effect effect = Game.Content.Load<Effect>("ContrastShader");
-            //Effect effect = Game.Content.Load<Effect>("SepiaShader");
-            Screen = new EffectScreen(image, effect);
+            Texture2D image = Game.Content.Load<Texture2D>("texture\\testimage");
+            Effect saturation= Game.Content.Load<Effect>("shader\\SaturationShader");
+            Effect brightness = Game.Content.Load<Effect>("shader\\BrightnessShader");
+            Effect contrast = Game.Content.Load<Effect>("shader\\ContrastShader");
+            Effect sepia = Game.Content.Load<Effect>("shader\\SepiaShader");
+            Effect pixelate = Game.Content.Load<Effect>("shader\\PixelateShader");
+            Screen = new EffectScreen(image, pixelate);
             Screen.LoadContent();
         }
 

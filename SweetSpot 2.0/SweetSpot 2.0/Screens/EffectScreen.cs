@@ -10,8 +10,12 @@ namespace SweetSpot_2._0
         ContentManager content;
         RenderTarget2D screen;
         Texture2D image;
+        Texture2D green;
+        Texture2D red;
         Effect effect;
-        float effectAmount = 1f;
+        float currentEffectIntensity = 1f;
+        float targetEffectIntensity = 1f;
+        float intensitySmoothingFactor = 40f;
 
         public EffectScreen(Texture2D image, Effect effect)
         {
@@ -25,6 +29,8 @@ namespace SweetSpot_2._0
             screen = new RenderTarget2D(ScreenManager.GraphicsDevice,
                 ScreenManager.GraphicsDevice.PresentationParameters.BackBufferWidth,
                 ScreenManager.GraphicsDevice.PresentationParameters.BackBufferHeight);
+            green = content.Load<Texture2D>("texture\\green");
+            red = content.Load<Texture2D>("texture\\red");
         }
 
         public override void Update(GameTime gameTime)
@@ -41,13 +47,14 @@ namespace SweetSpot_2._0
         {
             if (ScreenManager.Kinect.IsViewerActive())
             {
-                effectAmount = ScreenManager.Kinect.GetDistanceFromSweetSpot() / ScreenManager.Kinect.sweetSpotMargin;
+                targetEffectIntensity = ScreenManager.Kinect.GetDistanceFromSafeZone() / ScreenManager.Kinect.sweetSpotMargin;
             }
             else
             {
-                effectAmount = 1.0f;
+                targetEffectIntensity = 1.0f;
             }
-            effect.Parameters["effectAmount"].SetValue(effectAmount);
+            currentEffectIntensity = ((currentEffectIntensity * (intensitySmoothingFactor - 1)) + targetEffectIntensity) / intensitySmoothingFactor;
+            effect.Parameters["effectIntensity"].SetValue(currentEffectIntensity);
         }
 
         public override void Draw(GameTime gameTime)
@@ -55,9 +62,28 @@ namespace SweetSpot_2._0
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
 
+            effect.Parameters["width"].SetValue(image.Width);
+            effect.Parameters["height"].SetValue(image.Height);
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, null, null, null, effect);
             spriteBatch.Draw(image, new Rectangle(0, 0, viewport.Width, viewport.Height), Color.White);
             spriteBatch.End();
+
+            // Overlay
+            Vector2 sweetSpotPosition = WorldToScreenCoords(viewport.Bounds, ScreenManager.Kinect.sweetSpot);
+            Vector2 viewerPosition = WorldToScreenCoords(viewport.Bounds, ScreenManager.Kinect.GetViewerPosition());
+            Rectangle sweetSpot = new Rectangle((int)sweetSpotPosition.X - 10, (int)sweetSpotPosition.Y - 10, 20, 20);
+            Rectangle viewer = new Rectangle((int)viewerPosition.X - 15, (int)viewerPosition.Y - 15, 30, 30);
+            spriteBatch.Begin();
+            spriteBatch.Draw(green, sweetSpot, Color.White);
+            spriteBatch.Draw(red, viewer, Color.White);
+            spriteBatch.End();
+        }
+
+        private Vector2 WorldToScreenCoords(Rectangle viewport, Vector2 position)
+        {
+            float x = (viewport.Width / 2) + (int)(position.X * 250);
+            float y = (int)(position.Y * 250);
+            return new Vector2(x, y);
         }
     }
 }

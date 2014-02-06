@@ -1,7 +1,9 @@
 sampler textureSampler;
-float effectAmount;
+float effectIntensity;
+int width;
+int height;
 
-float4 Sepia(float2 texCoord: TEXCOORD0) : COLOR
+float4 main(float2 texCoord: TEXCOORD0) : COLOR
 {
 	float4 color = tex2D(textureSampler, texCoord);
 	float3x3 sepia = {0.393, 0.349, 0.272,
@@ -10,13 +12,13 @@ float4 Sepia(float2 texCoord: TEXCOORD0) : COLOR
 	float4 result;
 	result.rgb = mul(color.rgb, sepia);
 	result.a = 1.0f;
-	return lerp(color, result, effectAmount);
+	return lerp(color, result, effectIntensity);
 }
 
-technique SepiaShader
+technique Shader
 {
     pass Default
     {
-        PixelShader = compile ps_2_0 Sepia();
+        PixelShader = compile ps_2_0 main();
     }
 }

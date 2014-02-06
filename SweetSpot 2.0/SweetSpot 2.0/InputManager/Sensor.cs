@@ -27,10 +27,10 @@ namespace SweetSpot_2._0
         {
             TransformSmoothParameters smoothingParameters = new TransformSmoothParameters();
             {
-                smoothingParameters.Smoothing = 0.5f;
-                smoothingParameters.Correction = 0.5f;
+                smoothingParameters.Smoothing = 0.75f;
+                smoothingParameters.Correction = 0.2f;
                 smoothingParameters.Prediction = 0.5f;
-                smoothingParameters.JitterRadius = 0.05f;
+                smoothingParameters.JitterRadius = 0.01f;
                 smoothingParameters.MaxDeviationRadius = 0.04f;
             };
 
