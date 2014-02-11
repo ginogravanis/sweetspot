@@ -1,25 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace SweetSpot_2._0
 {
     public class ScreenManager : DrawableGameComponent
     {
-        private Screen screen;
-        public Screen Screen
-        {
-            get { return screen; }
-
-            set
-            {
-                if (screen != null)
-                    screen.UnloadContent();
-
-                value.ScreenManager = this;
-                value.LoadContent();
-                screen = value;
-            }
-        }
+        protected List<Screen> screens = new List<Screen>();
 
         public SensorManager Kinect { get; internal set; }
 
@@ -49,25 +37,45 @@ namespace SweetSpot_2._0
             Effect contrast = Game.Content.Load<Effect>("shader\\ContrastShader");
             Effect sepia = Game.Content.Load<Effect>("shader\\SepiaShader");
             Effect pixelate = Game.Content.Load<Effect>("shader\\PixelateShader");
-            Screen = new EffectScreen(image, pixelate);
-            Screen.LoadContent();
+            Effect distort = Game.Content.Load<Effect>("shader\\DistortShader");
+            AddScreen(new EffectScreen(image, pixelate));
         }
 
         protected override void UnloadContent()
         {
-            Screen.UnloadContent();
+            foreach (Screen screen in screens)
+                screen.UnloadContent();
+        }
+
+        public void AddScreen(Screen newScreen)
+        {
+            newScreen.ScreenManager = this;
+            newScreen.LoadContent();
+            screens.Add(newScreen);
         }
 
         public override void Update(GameTime gameTime)
         {
             Input.Update(gameTime);
-            Kinect.Update(gameTime);
-            Screen.Update(gameTime);
+            Kinect.Update(gameTime);            
+            screens[0].Update(gameTime);
+
+            if (screens[0].Finished)
+                RemoveScreen();
+
+            if (screens.Count == 0)
+                Game.Exit();
+        }
+
+        protected void RemoveScreen()
+        {
+            screens[0].UnloadContent();
+            screens.RemoveAt(0);   
         }
 
         public override void Draw(GameTime gameTime)
         {
-            Screen.Draw(gameTime);
+            screens[0].Draw(gameTime);
         }
     }
 }
