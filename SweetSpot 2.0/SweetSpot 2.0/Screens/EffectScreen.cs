@@ -38,9 +38,10 @@ namespace SweetSpot_2._0
             UpdateEffect(gameTime);
 
             if (ScreenManager.Input.IsKeyDown(Keys.Escape))
-            {
                 ScreenManager.Game.Exit();
-            }
+
+            if (ScreenManager.Input.IsKeyPressed(Keys.Space))
+                Finished = true;
         }
 
         private void UpdateEffect(GameTime gameTime)

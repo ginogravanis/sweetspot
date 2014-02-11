@@ -10,6 +10,8 @@ namespace SweetSpot_2._0
             internal set { screenManager = value; }
         }
 
+        public bool Finished { get; internal set; }
+
         ScreenManager screenManager;
 
         public virtual void LoadContent() { }
