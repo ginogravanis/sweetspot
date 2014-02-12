@@ -38,7 +38,17 @@ namespace SweetSpot_2._0
             Effect sepia = Game.Content.Load<Effect>("shader\\SepiaShader");
             Effect pixelate = Game.Content.Load<Effect>("shader\\PixelateShader");
             Effect distort = Game.Content.Load<Effect>("shader\\DistortShader");
-            AddScreen(new EffectScreen(image, pixelate));
+            AddScreen(new TransitionScreen(this, "Saturation Shader"));
+            AddScreen(new EffectScreen(this, image, saturation));
+            AddScreen(new TransitionScreen(this, "Brightness Shader"));
+            AddScreen(new EffectScreen(this, image, brightness));
+            AddScreen(new TransitionScreen(this, "Contrast Shader"));
+            AddScreen(new EffectScreen(this, image, contrast));
+            AddScreen(new TransitionScreen(this, "Pixelate Shader"));
+            AddScreen(new EffectScreen(this, image, pixelate));
+            AddScreen(new TransitionScreen(this, "Sepia Shader"));
+            AddScreen(new EffectScreen(this, image, sepia));
+            AddScreen(new TransitionScreen(this, "The End"));
         }
 
         protected override void UnloadContent()
@@ -49,7 +59,6 @@ namespace SweetSpot_2._0
 
         public void AddScreen(Screen newScreen)
         {
-            newScreen.ScreenManager = this;
             newScreen.LoadContent();
             screens.Add(newScreen);
         }
