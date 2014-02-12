@@ -7,6 +7,7 @@ namespace SweetSpot_2._0
     public abstract class Screen
     {
         protected ContentManager content;
+        protected bool initialized = false;
 
         public ScreenManager ScreenManager
         {
@@ -30,8 +31,16 @@ namespace SweetSpot_2._0
 
         public virtual void UnloadContent() { }
 
+        protected virtual void initialize(GameTime gameTime) { }
+
         public virtual void Update(GameTime gameTime)
         {
+            if (!initialized)
+            {
+                initialize(gameTime);
+                initialized = true;
+            }
+
             if (ScreenManager.Input.IsKeyDown(Keys.Escape))
                 ScreenManager.Game.Exit();
 
