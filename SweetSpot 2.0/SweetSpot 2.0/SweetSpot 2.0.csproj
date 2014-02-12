@@ -94,6 +94,7 @@
     <Compile Include="ScreenManager\Screen.cs" />
     <Compile Include="ScreenManager\ScreenManager.cs" />
     <Compile Include="Screens\EffectScreen.cs" />
+    <Compile Include="Screens\TransitionScreen.cs" />
     <Compile Include="SweetSpot.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,7 +7,6 @@ namespace SweetSpot_2._0
 {
     public class EffectScreen : Screen
     {
-        ContentManager content;
         RenderTarget2D screen;
         Texture2D image;
         Texture2D green;
@@ -17,7 +16,8 @@ namespace SweetSpot_2._0
         float targetEffectIntensity = 1f;
         float intensitySmoothingFactor = 20f;
 
-        public EffectScreen(Texture2D image, Effect effect)
+        public EffectScreen(ScreenManager screenManager, Texture2D image, Effect effect)
+            : base(screenManager)
         {
             this.image = image;
             this.effect = effect;
@@ -25,7 +25,7 @@ namespace SweetSpot_2._0
 
         public override void LoadContent()
         {
-            content = new ContentManager(ScreenManager.Game.Services, "Content");
+            base.LoadContent();
             screen = new RenderTarget2D(ScreenManager.GraphicsDevice,
                 ScreenManager.GraphicsDevice.PresentationParameters.BackBufferWidth,
                 ScreenManager.GraphicsDevice.PresentationParameters.BackBufferHeight);
@@ -35,13 +35,8 @@ namespace SweetSpot_2._0
 
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
             UpdateEffect(gameTime);
-
-            if (ScreenManager.Input.IsKeyDown(Keys.Escape))
-                ScreenManager.Game.Exit();
-
-            if (ScreenManager.Input.IsKeyPressed(Keys.Space))
-                Finished = true;
         }
 
         private void UpdateEffect(GameTime gameTime)
@@ -65,6 +60,8 @@ namespace SweetSpot_2._0
 
         public override void Draw(GameTime gameTime)
         {
+            base.Draw(gameTime);
+
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
 
