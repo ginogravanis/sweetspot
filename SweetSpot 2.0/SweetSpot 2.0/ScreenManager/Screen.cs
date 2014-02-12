@@ -41,10 +41,10 @@ namespace SweetSpot_2._0
                 initialized = true;
             }
 
-            if (ScreenManager.Input.IsKeyDown(Keys.Escape))
+            if (ScreenManager.Input.IsKeyDown(Keys.Escape) || ScreenManager.Input.IsGamePadButtonDown(Buttons.Start))
                 ScreenManager.Game.Exit();
 
-            if (ScreenManager.Input.IsKeyPressed(Keys.Space))
+            if (ScreenManager.Input.IsKeyPressed(Keys.Space) || ScreenManager.Input.IsGamePadButtonPressed(Buttons.A))
                 Finished = true;
         }
 
