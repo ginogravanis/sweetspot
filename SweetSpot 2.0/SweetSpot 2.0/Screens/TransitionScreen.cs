@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SweetSpot_2._0
 {
-    public enum TransitionState { PrePadding, FadingIn, Active, FadingOut, PostPadding }
+    public enum TransitionState { PreDelay, FadingIn, Active, FadingOut, PostDelay }
 
     class TransitionScreen : Screen
     {
@@ -36,7 +36,7 @@ namespace SweetSpot_2._0
         protected override void initialize(GameTime gameTime)
         {
             base.initialize(gameTime);
-            changeState(TransitionState.PrePadding, gameTime);
+            changeState(TransitionState.PreDelay, gameTime);
         }
 
         public override void Update(GameTime gameTime)
@@ -47,7 +47,7 @@ namespace SweetSpot_2._0
 
             switch (state)
             {
-                case TransitionState.PrePadding:
+                case TransitionState.PreDelay:
                     if (timeSinceStateChange >= paddingTime)
                         changeState(TransitionState.FadingIn, gameTime);
                     break;
@@ -75,7 +75,7 @@ namespace SweetSpot_2._0
                     if (timeSinceStateChange >= fadeTime)
                     {
                         alpha = 0f;
-                        changeState(TransitionState.PostPadding, gameTime);
+                        changeState(TransitionState.PostDelay, gameTime);
                     }
                     else
                     {
@@ -83,7 +83,7 @@ namespace SweetSpot_2._0
                     }
                     break;
 
-                case TransitionState.PostPadding:
+                case TransitionState.PostDelay:
                     if (timeSinceStateChange >= paddingTime)
                         Finished = true;
                     break;
