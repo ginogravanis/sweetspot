@@ -46,6 +46,8 @@ namespace SweetSpot_2._0
             AddScreen(new DebugEffectScreen(this, image, contrast));
             AddScreen(new TransitionScreen(this, "Pixelate Shader"));
             AddScreen(new DebugEffectScreen(this, image, pixelate));
+            AddScreen(new TransitionScreen(this, "Distort Shader"));
+            AddScreen(new DebugEffectScreen(this, image, distort));
             AddScreen(new TransitionScreen(this, "Sepia Shader"));
             AddScreen(new DebugEffectScreen(this, image, sepia));
             AddScreen(new TransitionScreen(this, "The End"));

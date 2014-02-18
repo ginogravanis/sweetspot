@@ -5,6 +5,7 @@ int height;
 
 float4 main(float2 texCoord: TEXCOORD0) : COLOR
 {
+	texCoord.y = texCoord.y + 0.05 * effectIntensity * sin(texCoord.y * 100);
 	float4 color = tex2D(textureSampler, texCoord);
 	return color;
 }
