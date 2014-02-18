@@ -58,6 +58,7 @@ namespace SweetSpot_2._0
 
             effect.Parameters["width"].SetValue(image.Width);
             effect.Parameters["height"].SetValue(image.Height);
+            effect.Parameters["elapsedTime"].SetValue((float)gameTime.TotalGameTime.TotalMilliseconds);
             effect.Parameters["effectIntensity"].SetValue(currentEffectIntensity);
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, null, null, null, effect);
             spriteBatch.Draw(image, new Rectangle(0, 0, viewport.Width, viewport.Height), Color.White);

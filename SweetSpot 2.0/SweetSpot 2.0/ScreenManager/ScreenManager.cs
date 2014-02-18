@@ -38,8 +38,11 @@ namespace SweetSpot_2._0
             Effect sepia = Game.Content.Load<Effect>("shader\\SepiaShader");
             Effect pixelate = Game.Content.Load<Effect>("shader\\PixelateShader");
             Effect distort = Game.Content.Load<Effect>("shader\\DistortShader");
+            Effect jitter = Game.Content.Load<Effect>("shader\\JitterShader");
             AddScreen(new TransitionScreen(this, "Saturation Shader"));
             AddScreen(new DebugEffectScreen(this, image, saturation));
+            AddScreen(new TransitionScreen(this, "Sepia Shader"));
+            AddScreen(new DebugEffectScreen(this, image, sepia));
             AddScreen(new TransitionScreen(this, "Brightness Shader"));
             AddScreen(new DebugEffectScreen(this, image, brightness));
             AddScreen(new TransitionScreen(this, "Contrast Shader"));
@@ -48,8 +51,8 @@ namespace SweetSpot_2._0
             AddScreen(new DebugEffectScreen(this, image, pixelate));
             AddScreen(new TransitionScreen(this, "Distort Shader"));
             AddScreen(new DebugEffectScreen(this, image, distort));
-            AddScreen(new TransitionScreen(this, "Sepia Shader"));
-            AddScreen(new DebugEffectScreen(this, image, sepia));
+            AddScreen(new TransitionScreen(this, "Jitter Shader"));
+            AddScreen(new DebugEffectScreen(this, image, jitter));
             AddScreen(new TransitionScreen(this, "The End"));
         }
 

@@ -1,5 +1,6 @@
 sampler textureSampler;
 sampler textureSampler2;
+float elapsedTime;
 float effectIntensity;
 int width;
 int height;
