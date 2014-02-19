@@ -26,7 +26,6 @@ namespace SweetSpot_2._0
         public BaselineTextScreen(ScreenManager screenManager, Texture2D image)
             : base(screenManager, image)
         {
-            textPosition = new Vector2();
         }
 
         public override void LoadContent()
@@ -54,7 +53,15 @@ namespace SweetSpot_2._0
             Vector2 vectorToSweetspot = ScreenManager.Kinect.GetVectorToSweetSpot();
             Direction direction = CalculateDominantDirection(vectorToSweetspot);
 
-            text = "Bitte noch etwas nach " + directionName[direction];
+            if (ScreenManager.Kinect.GetDistanceFromSweetSpot() < 0.05)
+            {
+                text = "Stop!";
+            }
+            else
+            {
+                text = "Bitte noch etwas nach " + directionName[direction];
+            }
+
             float textWidth = font.MeasureString(text).X;
             textPosition = new Vector2(textBox.Center.X - (int)textWidth/2, textBox.Y);
         }
