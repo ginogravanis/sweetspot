@@ -126,12 +126,22 @@ namespace SweetSpot_2._0
             return nearestUserPosition;
         }
 
-        public float GetDistanceFromSweetSpot()
+        public Vector2 GetVectorToSweetSpot()
         {
-            return Math.Abs((sweetSpot - lastViewerPosition).Length());
+            return VectorToSweetSpot(lastViewerPosition);
         }
 
-        public float DistanceToSweetSpot(Vector2 position)
+        protected Vector2 VectorToSweetSpot(Vector2 position)
+        {
+            return sweetSpot - position;
+        }
+
+        public float GetDistanceFromSweetSpot()
+        {
+            return DistanceToSweetSpot(lastViewerPosition);
+        }
+
+        protected float DistanceToSweetSpot(Vector2 position)
         {
             return Math.Abs((sweetSpot - position).Length());
         }
