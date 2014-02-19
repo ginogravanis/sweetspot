@@ -5,24 +5,17 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SweetSpot_2._0
 {
-    public class EffectScreen : Screen
+    public class EffectScreen : ImageScreen
     {
-        Texture2D image;
         Effect effect;
         float currentEffectIntensity = 1f;
         float targetEffectIntensity = 1f;
         float intensitySmoothingFactor = 20f;
 
         public EffectScreen(ScreenManager screenManager, Texture2D image, Effect effect)
-            : base(screenManager)
+            : base(screenManager, image)
         {
-            this.image = image;
             this.effect = effect;
-        }
-
-        public override void LoadContent()
-        {
-            base.LoadContent();
         }
 
         public override void Update(GameTime gameTime)
@@ -51,8 +44,6 @@ namespace SweetSpot_2._0
 
         public override void Draw(GameTime gameTime)
         {
-            base.Draw(gameTime);
-
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
 
