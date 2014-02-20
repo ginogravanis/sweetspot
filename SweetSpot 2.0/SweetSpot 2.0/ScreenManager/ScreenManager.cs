@@ -39,6 +39,7 @@ namespace SweetSpot_2._0
             Effect pixelate = Game.Content.Load<Effect>("shader\\PixelateShader");
             Effect distort = Game.Content.Load<Effect>("shader\\DistortShader");
             Effect jitter = Game.Content.Load<Effect>("shader\\JitterShader");
+            AddScreen(new BaselineArrowScreen(this, image));
             AddScreen(new BaselineTextScreen(this, image));
             AddScreen(new TransitionScreen(this, "Saturation Shader"));
             AddScreen(new DebugEffectScreen(this, image, saturation));
