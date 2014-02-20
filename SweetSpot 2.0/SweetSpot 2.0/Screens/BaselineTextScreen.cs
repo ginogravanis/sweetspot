@@ -97,7 +97,6 @@ namespace SweetSpot_2._0
             base.Draw(gameTime);
 
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-
             spriteBatch.Begin();
             spriteBatch.Draw(black, textBox, Color.White);
             if (viewerDetected)
