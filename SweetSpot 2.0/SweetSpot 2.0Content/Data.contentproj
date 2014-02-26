@@ -72,13 +72,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="shader\SepiaShader.fx">
-      <Name>SepiaShader</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="shader\PixelateShader.fx">
       <Name>PixelateShader</Name>
       <Importer>EffectImporter</Importer>
