@@ -24,7 +24,7 @@ namespace SweetSpot_2._0
             UpdateEffect(gameTime);
         }
 
-        private void UpdateEffect(GameTime gameTime)
+        protected void UpdateEffect(GameTime gameTime)
         {
             if (ScreenManager.Kinect.IsViewerActive())
             {

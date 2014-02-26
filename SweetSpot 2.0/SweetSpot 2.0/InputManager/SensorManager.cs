@@ -36,10 +36,10 @@ namespace SweetSpot_2._0
             lastViewerPosition = new Vector2();
             viewerLastSeen = TimeSpan.FromSeconds(-1);
             viewerActive = false;
-            Initialize();
+            InitializeSensors();
         }
 
-        public void Initialize()
+        protected void InitializeSensors()
         {
             foreach(KinectSensor candidate in KinectSensor.KinectSensors)
             {
@@ -85,7 +85,7 @@ namespace SweetSpot_2._0
             return lastViewerPosition;
         }
 
-        private bool ViewerPositionAvailable()
+        protected bool ViewerPositionAvailable()
         {
             foreach (Sensor sensor in sensors)
             {
@@ -95,12 +95,12 @@ namespace SweetSpot_2._0
             return false;
         }
 
-        private bool ViewerRecentlySeen(GameTime gameTime)
+        protected bool ViewerRecentlySeen(GameTime gameTime)
         {
             return viewerLastSeen > gameTime.TotalGameTime - positionSmoothingTime;
         }
 
-        private Vector2 CalculateViewerPosition()
+        protected Vector2 CalculateViewerPosition()
         {
             List<Vector2> positions = new List<Vector2>();
             foreach (Sensor sensor in sensors)
