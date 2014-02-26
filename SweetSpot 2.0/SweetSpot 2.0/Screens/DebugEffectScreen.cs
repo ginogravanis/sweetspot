@@ -39,7 +39,7 @@ namespace SweetSpot_2._0
             spriteBatch.End();
         }
 
-        private Vector2 WorldToScreenCoords(Rectangle viewport, Vector2 position)
+        protected Vector2 WorldToScreenCoords(Rectangle viewport, Vector2 position)
         {
             float x = (viewport.Width / 2) + (int)(position.X * 250);
             float y = (int)(position.Y * 250);

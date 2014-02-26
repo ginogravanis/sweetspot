@@ -53,17 +53,17 @@ namespace SweetSpot_2._0
             return keyboardState.IsKeyDown(key);
         }
 
-        private bool IsKeyUp(Keys key)
+        protected bool IsKeyUp(Keys key)
         {
             return keyboardState.IsKeyUp(key);
         }
 
-        private bool WasKeyDown(Keys key)
+        protected bool WasKeyDown(Keys key)
         {
             return WasKeyDown(key);
         }
 
-        private bool WasKeyUp(Keys key)
+        protected bool WasKeyUp(Keys key)
         {
             return previousKeyboardState.IsKeyUp(key);
         }
