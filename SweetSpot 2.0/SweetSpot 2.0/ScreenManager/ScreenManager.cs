@@ -31,6 +31,7 @@ namespace SweetSpot_2._0
         protected override void LoadContent()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
+
             Texture2D image = Game.Content.Load<Texture2D>("texture\\testimage");
             Effect saturation= Game.Content.Load<Effect>("shader\\SaturationShader");
             Effect brightness = Game.Content.Load<Effect>("shader\\BrightnessShader");
@@ -38,22 +39,23 @@ namespace SweetSpot_2._0
             Effect pixelate = Game.Content.Load<Effect>("shader\\PixelateShader");
             Effect distort = Game.Content.Load<Effect>("shader\\DistortShader");
             Effect jitter = Game.Content.Load<Effect>("shader\\JitterShader");
+
             AddScreen(new TransitionScreen(this, "Baseline: Arrow"));
             AddScreen(new BaselineArrowScreen(this, image));
             AddScreen(new TransitionScreen(this, "Baseline: Text"));
             AddScreen(new BaselineTextScreen(this, image));
             AddScreen(new TransitionScreen(this, "Saturation Shader"));
-            AddScreen(new DebugEffectScreen(this, image, saturation));
+            AddScreen(new EffectDebugScreen(this, image, saturation));
             AddScreen(new TransitionScreen(this, "Brightness Shader"));
-            AddScreen(new DebugEffectScreen(this, image, brightness));
+            AddScreen(new EffectDebugScreen(this, image, brightness));
             AddScreen(new TransitionScreen(this, "Contrast Shader"));
-            AddScreen(new DebugEffectScreen(this, image, contrast));
+            AddScreen(new EffectDebugScreen(this, image, contrast));
             AddScreen(new TransitionScreen(this, "Pixelate Shader"));
-            AddScreen(new DebugEffectScreen(this, image, pixelate));
+            AddScreen(new EffectDebugScreen(this, image, pixelate));
             AddScreen(new TransitionScreen(this, "Distort Shader"));
-            AddScreen(new DebugEffectScreen(this, image, distort));
+            AddScreen(new EffectDebugScreen(this, image, distort));
             AddScreen(new TransitionScreen(this, "Jitter Shader"));
-            AddScreen(new DebugEffectScreen(this, image, jitter));
+            AddScreen(new EffectDebugScreen(this, image, jitter));
             AddScreen(new TransitionScreen(this, "The End"));
         }
 
