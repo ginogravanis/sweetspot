@@ -5,12 +5,12 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SweetSpot_2._0
 {
-    public class DebugEffectScreen : EffectScreen
+    public class EffectDebugScreen : EffectScreen
     {
         Texture2D green;
         Texture2D red;
 
-        public DebugEffectScreen(ScreenManager screenManager, Texture2D image, Effect effect)
+        public EffectDebugScreen(ScreenManager screenManager, Texture2D image, Effect effect)
             : base(screenManager, image, effect)
         { }
 
