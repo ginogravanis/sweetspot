@@ -80,7 +80,7 @@ namespace SweetSpot_2._0
 
         protected Skeleton[] GetRawSkeletonData()
         {
-            using (SkeletonFrame frame = sensor.SkeletonStream.OpenNextFrame(20))
+            using (SkeletonFrame frame = sensor.SkeletonStream.OpenNextFrame(30))
             {
                 Skeleton[] skeletons;
                 if (null != frame)

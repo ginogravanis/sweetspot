@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework;
 
 namespace SweetSpot_2._0
 {
+    public enum SensorName { One, Two }
+
     public class SensorManager
     {
         /// <summary>
@@ -153,6 +155,30 @@ namespace SweetSpot_2._0
         protected float DistanceToSweetSpot(Vector2 position)
         {
             return Math.Abs((sweetSpot - position).Length());
+        }
+
+        public Sensor GetSensor(SensorName name)
+        {
+            if (sensors.Count == 0)
+                throw new ApplicationException("No sensor connected!");
+
+            Sensor sensorOne = sensors.First<Sensor>();
+            Sensor sensorTwo = sensors.Last<Sensor>();
+            Sensor result = sensorOne;
+
+            if (sensors.Count > 1 && name == SensorName.Two)
+            {
+                result = sensorTwo;
+            }
+
+            return result;
+        }
+
+        public static Vector2 WorldToScreenCoords(Rectangle bounds, Vector2 position)
+        {
+            float x = bounds.Left + (bounds.Width / 2) + ((bounds.Width / 2f) * position.X / (sensorRange/2f));
+            float y = bounds.Top + bounds.Height * (position.Y / sensorRange);
+            return new Vector2((int)Math.Round(x), (int)Math.Round(y));
         }
     }
 }

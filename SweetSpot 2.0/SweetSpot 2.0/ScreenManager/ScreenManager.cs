@@ -40,6 +40,8 @@ namespace SweetSpot_2._0
             Effect distort = Game.Content.Load<Effect>("shader\\DistortShader");
             Effect jitter = Game.Content.Load<Effect>("shader\\JitterShader");
 
+            AddScreen(new TransitionScreen(this, "Calibration"));
+            AddScreen(new SensorCalibrationScreen(this));
             AddScreen(new TransitionScreen(this, "Baseline: Arrow"));
             AddScreen(new BaselineArrowScreen(this, image));
             AddScreen(new TransitionScreen(this, "Baseline: Text"));

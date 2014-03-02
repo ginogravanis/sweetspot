@@ -94,10 +94,12 @@
     <Compile Include="ScreenManager\Screen.cs" />
     <Compile Include="ScreenManager\ScreenManager.cs" />
     <Compile Include="Screens\BaselineArrowScreen.cs" />
+    <Compile Include="Screens\SensorCalibrationScreen.cs" />
     <Compile Include="Screens\EffectScreen.cs" />
     <Compile Include="Screens\EffectDebugScreen.cs" />
     <Compile Include="Screens\ImageScreen.cs" />
     <Compile Include="Screens\BaselineTextScreen.cs" />
+    <Compile Include="Screens\SensorPanel.cs" />
     <Compile Include="Screens\TransitionScreen.cs" />
     <Compile Include="SweetSpot.cs" />
   </ItemGroup>
