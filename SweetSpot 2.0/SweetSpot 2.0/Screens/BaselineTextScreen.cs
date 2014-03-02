@@ -31,8 +31,8 @@ namespace SweetSpot_2._0
         public override void LoadContent()
         {
             base.LoadContent();
-            black = content.Load<Texture2D>("texture\\black");
-            font = content.Load<SpriteFont>("font\\segoe_36");
+            black = Content.Load<Texture2D>("texture\\black");
+            font = Content.Load<SpriteFont>("font\\segoe_36");
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
             int textBoxHeight = (int)font.MeasureString("W").Y;
             textBox = new Rectangle(0, viewport.Height - textBoxHeight, viewport.Width, textBoxHeight);

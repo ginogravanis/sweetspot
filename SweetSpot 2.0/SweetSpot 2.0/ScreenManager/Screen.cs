@@ -6,7 +6,7 @@ namespace SweetSpot_2._0
 {
     public abstract class Screen
     {
-        protected ContentManager content;
+        public ContentManager Content { get; internal set; }
         protected bool initialized = false;
 
         public ScreenManager ScreenManager
@@ -26,7 +26,7 @@ namespace SweetSpot_2._0
 
         public virtual void LoadContent()
         {
-            content = new ContentManager(ScreenManager.Game.Services, "Content");
+            Content = new ContentManager(ScreenManager.Game.Services, "Content");
         }
 
         public virtual void UnloadContent() { }

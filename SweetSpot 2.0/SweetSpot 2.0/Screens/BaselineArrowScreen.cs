@@ -25,10 +25,10 @@ namespace SweetSpot_2._0
         public override void LoadContent()
         {
             base.LoadContent();
-            black = content.Load<Texture2D>("texture\\black");
-            arrow = content.Load<Texture2D>("texture\\arrow");
-            checkMark = content.Load<Texture2D>("texture\\checkmark");
-            perspectiveShader = content.Load<Effect>("shader\\PerspectiveShader");
+            black = Content.Load<Texture2D>("texture\\black");
+            arrow = Content.Load<Texture2D>("texture\\arrow");
+            checkMark = Content.Load<Texture2D>("texture\\checkmark");
+            perspectiveShader = Content.Load<Effect>("shader\\PerspectiveShader");
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
             compass = new Rectangle(
                 viewport.Width - compassSize,
