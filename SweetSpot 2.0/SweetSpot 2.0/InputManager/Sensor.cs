@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 
@@ -6,16 +7,19 @@ namespace SweetSpot_2._0
 {
     public class Sensor
     {
-        KinectSensor sensor;
-
-        Skeleton[] rawSkeletonData =  new Skeleton[0];
-
+        protected KinectSensor sensor;
+        protected List<Skeleton> activeUsers;
+        protected TimeSpan lastSensorUpdate;
+        protected TimeSpan positionSmoothingTime;
         public Matrix TransformationMatrix { get; set; }
 
         public Sensor(KinectSensor kinect)
         {
             sensor = kinect;
+            activeUsers = new List<Skeleton>();
+            positionSmoothingTime = TimeSpan.FromMilliseconds(50);
             TransformationMatrix = Matrix.Identity;
+            lastSensorUpdate = TimeSpan.FromSeconds(-1);
         }
 
         ~Sensor()
@@ -38,15 +42,71 @@ namespace SweetSpot_2._0
             sensor.Start();
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
-            rawSkeletonData = GetRawSkeletonData();
+            Skeleton[] rawSkeletons = GetRawSkeletonData();
+            List<Skeleton> trackableSkeletons = GetTrackableSkeletons(rawSkeletons);
+
+            if (trackableSkeletons.Count > 0)
+            {
+                activeUsers = trackableSkeletons;
+                lastSensorUpdate = gameTime.TotalGameTime;
+            }
+            else
+            {
+                if (sensorRecentlyUpdated(gameTime))
+                {
+                    // user has been seen within position smoothing time
+                    // use old skeleton data
+                }
+                else
+                {
+                    activeUsers = trackableSkeletons;
+                    lastSensorUpdate = gameTime.TotalGameTime;
+                }
+            }
+        }
+
+        protected bool sensorRecentlyUpdated(GameTime gameTime)
+        {
+            return lastSensorUpdate > gameTime.TotalGameTime - positionSmoothingTime;
+        }
+
+        protected Skeleton[] GetRawSkeletonData()
+        {
+            using (SkeletonFrame frame = sensor.SkeletonStream.OpenNextFrame(30))
+            {
+                Skeleton[] skeletons;
+                if (null == frame)
+                {
+                    skeletons = new Skeleton[0];
+                }
+                else
+                {
+                    skeletons = new Skeleton[frame.SkeletonArrayLength];
+                    frame.CopySkeletonDataTo(skeletons);
+                }
+                return skeletons;
+            }
+        }
+
+        protected List<Skeleton> GetTrackableSkeletons(Skeleton[] candidates)
+        {
+            List<Skeleton> trackableSkeletons = new List<Skeleton>();
+            foreach (Skeleton skeleton in candidates)
+            {
+                if (skeleton.TrackingState != SkeletonTrackingState.NotTracked)
+                {
+                    trackableSkeletons.Add(skeleton);
+                }
+            }
+            return trackableSkeletons;
         }
 
         public List<Vector2> GetUserPositions()
         {
             List<Vector2> positions = new List<Vector2>();
-            foreach (Skeleton skeleton in GetActiveUsers())
+            foreach (Skeleton skeleton in activeUsers)
             {
                 Vector2 rawPosition = new Vector2(skeleton.Position.X, skeleton.Position.Z);
                 Vector2 adjustedPosition = Vector2.Transform(rawPosition, TransformationMatrix);
@@ -62,38 +122,7 @@ namespace SweetSpot_2._0
 
         public int GetActiveUserCount()
         {
-            return GetActiveUsers().Count;
-        }
-
-        protected List<Skeleton> GetActiveUsers()
-        {
-            List<Skeleton> activeUsers = new List<Skeleton>();
-            foreach (Skeleton skeleton in rawSkeletonData)
-            {
-                if (skeleton.TrackingState != SkeletonTrackingState.NotTracked)
-                {
-                    activeUsers.Add(skeleton);
-                }
-            }
-            return activeUsers;
-        }
-
-        protected Skeleton[] GetRawSkeletonData()
-        {
-            using (SkeletonFrame frame = sensor.SkeletonStream.OpenNextFrame(30))
-            {
-                Skeleton[] skeletons;
-                if (null != frame)
-                {
-                    skeletons = new Skeleton[frame.SkeletonArrayLength];
-                    frame.CopySkeletonDataTo(skeletons);
-                }
-                else
-                {
-                    skeletons = new Skeleton[0];
-                }
-                return skeletons;
-            }
+            return activeUsers.Count;
         }
     }
 }

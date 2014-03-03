@@ -9,24 +9,18 @@ namespace SweetSpot_2._0
         public ContentManager Content { get; internal set; }
         protected bool initialized = false;
 
-        public ScreenManager ScreenManager
-        {
-            get { return screenManager; }
-            internal set { screenManager = value; }
-        }
+        protected ScreenManager screenManager;
 
         public bool Finished { get; internal set; }
 
-        ScreenManager screenManager;
-
         public Screen(ScreenManager screenManager)
         {
-            ScreenManager = screenManager;
+            this.screenManager = screenManager;
         }
 
         public virtual void LoadContent()
         {
-            Content = new ContentManager(ScreenManager.Game.Services, "Content");
+            Content = new ContentManager(screenManager.Game.Services, "Content");
         }
 
         public virtual void UnloadContent() { }
@@ -41,10 +35,10 @@ namespace SweetSpot_2._0
                 initialized = true;
             }
 
-            if (ScreenManager.Input.IsKeyDown(Keys.Escape) || ScreenManager.Input.IsGamePadButtonDown(Buttons.Start))
-                ScreenManager.Game.Exit();
+            if (screenManager.Input.IsKeyDown(Keys.Escape))
+                screenManager.Game.Exit();
 
-            if (ScreenManager.Input.IsKeyPressed(Keys.Space) || ScreenManager.Input.IsGamePadButtonPressed(Buttons.A))
+            if (screenManager.Input.IsKeyPressed(Keys.Space) || screenManager.Input.IsGamePadButtonPressed(Buttons.A))
                 Finished = true;
         }
 
