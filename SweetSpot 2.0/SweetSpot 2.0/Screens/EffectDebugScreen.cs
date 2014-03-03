@@ -25,12 +25,12 @@ namespace SweetSpot_2._0
         {
             base.Draw(gameTime);
 
-            SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-            Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
+            SpriteBatch spriteBatch = screenManager.SpriteBatch;
+            Viewport viewport = screenManager.GraphicsDevice.Viewport;
 
             // Overlay
-            Vector2 sweetSpotPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, ScreenManager.Kinect.sweetSpot);
-            Vector2 viewerPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, ScreenManager.Kinect.GetViewerPosition());
+            Vector2 sweetSpotPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, screenManager.Kinect.sweetSpot);
+            Vector2 viewerPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, screenManager.Kinect.GetViewerPosition());
             Rectangle sweetSpot = new Rectangle((int)sweetSpotPosition.X - 10, (int)sweetSpotPosition.Y - 10, 20, 20);
             Rectangle viewer = new Rectangle((int)viewerPosition.X - 15, (int)viewerPosition.Y - 15, 30, 30);
             spriteBatch.Begin();

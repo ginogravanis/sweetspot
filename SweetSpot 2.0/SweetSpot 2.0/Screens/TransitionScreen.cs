@@ -28,7 +28,7 @@ namespace SweetSpot_2._0
         {
             base.LoadContent();
             font = Content.Load<SpriteFont>("font\\segoe_72");
-            Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
+            Viewport viewport = screenManager.GraphicsDevice.Viewport;
             Vector2 textSize = font.MeasureString(caption);
             textPosition = new Vector2((viewport.Width - textSize.X) / 2, (viewport.Height - textSize.Y) / 2);
         }
@@ -100,10 +100,10 @@ namespace SweetSpot_2._0
         {
             base.Draw(gameTime);
 
-            SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-            Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
+            SpriteBatch spriteBatch = screenManager.SpriteBatch;
+            Viewport viewport = screenManager.GraphicsDevice.Viewport;
 
-            ScreenManager.GraphicsDevice.Clear(Color.Black);
+            screenManager.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
             spriteBatch.DrawString(font, caption, textPosition, Color.White * alpha);
             spriteBatch.End();

@@ -67,7 +67,7 @@ namespace SweetSpot_2._0
         {
             foreach (Sensor sensor in sensors)
             {
-                sensor.Update();
+                sensor.Update(gameTime);
             }
 
             if (ViewerPositionAvailable())

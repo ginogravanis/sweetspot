@@ -33,7 +33,7 @@ namespace SweetSpot_2._0
             base.LoadContent();
             black = Content.Load<Texture2D>("texture\\black");
             font = Content.Load<SpriteFont>("font\\segoe_36");
-            Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
+            Viewport viewport = screenManager.GraphicsDevice.Viewport;
             int textBoxHeight = (int)font.MeasureString("W").Y;
             textBox = new Rectangle(0, viewport.Height - textBoxHeight, viewport.Width, textBoxHeight);
             textPosition = new Vector2(textBox.Center.X, textBox.Y);
@@ -43,17 +43,17 @@ namespace SweetSpot_2._0
         {
             base.Update(gameTime);
 
-            if (!ScreenManager.Kinect.IsViewerActive())
+            if (!screenManager.Kinect.IsViewerActive())
             {
                 viewerDetected = false;
                 return;
             }
 
             viewerDetected = true;
-            Vector2 vectorToSweetspot = ScreenManager.Kinect.GetVectorToSweetSpot();
+            Vector2 vectorToSweetspot = screenManager.Kinect.GetVectorToSweetSpot();
             Direction direction = CalculateDominantDirection(vectorToSweetspot);
 
-            if (ScreenManager.Kinect.GetDistanceFromSweetSpot() < 0.05)
+            if (screenManager.Kinect.GetDistanceFromSweetSpot() < 0.05)
             {
                 text = "Stop!";
             }
@@ -96,7 +96,7 @@ namespace SweetSpot_2._0
         {
             base.Draw(gameTime);
 
-            SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
+            SpriteBatch spriteBatch = screenManager.SpriteBatch;
             spriteBatch.Begin();
             spriteBatch.Draw(black, textBox, Color.White);
             if (viewerDetected)

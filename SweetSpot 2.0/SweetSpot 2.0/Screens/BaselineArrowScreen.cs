@@ -29,7 +29,7 @@ namespace SweetSpot_2._0
             arrow = Content.Load<Texture2D>("texture\\arrow");
             checkMark = Content.Load<Texture2D>("texture\\checkmark");
             perspectiveShader = Content.Load<Effect>("shader\\PerspectiveShader");
-            Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
+            Viewport viewport = screenManager.GraphicsDevice.Viewport;
             compass = new Rectangle(
                 viewport.Width - compassSize,
                 viewport.Height - compassSize,
@@ -53,24 +53,24 @@ namespace SweetSpot_2._0
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (!ScreenManager.Kinect.IsViewerActive())
+            if (!screenManager.Kinect.IsViewerActive())
             {
                 viewerDetected = false;
                 return;
             }
 
             viewerDetected = true;
-            Vector2 vectorToSweetspot = ScreenManager.Kinect.GetVectorToSweetSpot();
+            Vector2 vectorToSweetspot = screenManager.Kinect.GetVectorToSweetSpot();
             compassOrientation = (float)(2*Math.PI - Math.Atan2(vectorToSweetspot.Y, vectorToSweetspot.X));
 
-            targetReached = ScreenManager.Kinect.GetDistanceFromSweetSpot() < 0.05;
+            targetReached = screenManager.Kinect.GetDistanceFromSweetSpot() < 0.05;
         }
 
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
 
-            SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
+            SpriteBatch spriteBatch = screenManager.SpriteBatch;
             spriteBatch.Begin();
             spriteBatch.Draw(black, compass, Color.White);
             spriteBatch.End();

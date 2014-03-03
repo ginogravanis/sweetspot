@@ -26,9 +26,9 @@ namespace SweetSpot_2._0
 
         protected void UpdateEffect(GameTime gameTime)
         {
-            if (ScreenManager.Kinect.IsViewerActive())
+            if (screenManager.Kinect.IsViewerActive())
             {
-                targetEffectIntensity = ScreenManager.Kinect.GetDistanceFromSweetSpot() / ScreenManager.Kinect.sweetSpotMargin;
+                targetEffectIntensity = screenManager.Kinect.GetDistanceFromSweetSpot() / screenManager.Kinect.sweetSpotMargin;
             }
             else
             {
@@ -44,8 +44,8 @@ namespace SweetSpot_2._0
 
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-            Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
+            SpriteBatch spriteBatch = screenManager.SpriteBatch;
+            Viewport viewport = screenManager.GraphicsDevice.Viewport;
 
             effect.Parameters["width"].SetValue(image.Width);
             effect.Parameters["height"].SetValue(image.Height);
