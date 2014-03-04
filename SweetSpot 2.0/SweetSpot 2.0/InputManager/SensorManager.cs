@@ -29,6 +29,9 @@ namespace SweetSpot_2._0
         TimeSpan viewerLastSeen;
         bool viewerActive;
 
+        public static int MaxSensorCount = 2;
+        public static float sensorRange = 5.0f;
+
         public SensorManager()
         {
             sensors = new List<Sensor>();
@@ -49,6 +52,12 @@ namespace SweetSpot_2._0
                     sensor.Initialize();
                     sensors.Add(sensor);
                 }
+            }
+
+            int maxSensors = SensorManager.MaxSensorCount;
+            if (sensors.Count > maxSensors)
+            {
+                sensors.RemoveRange(maxSensors, sensors.Count - maxSensors);
             }
         }
 
