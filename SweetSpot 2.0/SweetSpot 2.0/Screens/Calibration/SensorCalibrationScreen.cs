@@ -71,9 +71,13 @@ namespace SweetSpot_2._0
                     Calibrator calibrator1 = leftSensorPanel.GetCalibrator();
                     Calibrator calibrator2 = rightSensorPanel.GetCalibrator();
 
-                    Tuple<Matrix, Matrix> calibration = Calibrator.Calibrate(calibrator1, calibrator2);
-                    leftSensorPanel.SetTransformation(calibration.Item1);
-                    rightSensorPanel.SetTransformation(calibration.Item2);
+                    try
+                    {
+                        Tuple<Matrix, Matrix> calibration = Calibrator.Calibrate(calibrator1, calibrator2);
+                        leftSensorPanel.SetTransformation(calibration.Item1);
+                        rightSensorPanel.SetTransformation(calibration.Item2);
+                    }
+                    catch (InvalidOperationException) { }
                 }
             }
 
