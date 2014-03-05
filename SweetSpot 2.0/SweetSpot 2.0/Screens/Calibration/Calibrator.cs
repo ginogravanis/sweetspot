@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace SweetSpot_2._0
@@ -18,15 +18,33 @@ namespace SweetSpot_2._0
                 throw new InvalidOperationException("Need two reference points for calibration!");
             }
 
-            float axisTilt1 = CalculateAxisTilt(CreateAxis(points1.Last<Vector2>(), points1.First<Vector2>()));
-            float axisTilt2 = CalculateAxisTilt(CreateAxis(points2.Last<Vector2>(), points2.First<Vector2>()));
-            Matrix rotation1 = Matrix.CreateRotationZ(-axisTilt1);
-            Matrix rotation2 = Matrix.CreateRotationZ(-axisTilt2);
+            // Calculate rotation of both coordinate systems
+            Vector2 point1A = points1.First<Vector2>();
+            Vector2 point1B = points1.Last<Vector2>();
+            Vector2 point2A = points2.First<Vector2>();
+            Vector2 point2B = points2.Last<Vector2>();
+            float axisTilt1 = CalculateAxisTilt(CreateAxis(point1B, point1A));
+            float axisTilt2 = CalculateAxisTilt(CreateAxis(point2B, point2A));
+            Matrix rotate1 = Matrix.CreateRotationZ(-axisTilt1);
+            Matrix rotate2 = Matrix.CreateRotationZ(-axisTilt2);
+
+            // Map coordinates to new respective coordinate systems
+            point1A = Vector2.Transform(point1A, rotate1);
+            point1B = Vector2.Transform(point1B, rotate1);
+            point2A = Vector2.Transform(point2A, rotate2);
+            point2B = Vector2.Transform(point2B, rotate2);
+
+            // Calculate translation of both coordinate systems
+            Vector2 point1M = CalculateMidpoint(point1A, point1B);
+            Vector2 point2M = CalculateMidpoint(point2A, point2B);
+            Vector2 targetMidpoint = CalculateMidpoint(point1M, point2M);
+            Matrix translate1 = Matrix.CreateTranslation(MakeVector3From(targetMidpoint - point1M));
+            Matrix translate2 = Matrix.CreateTranslation(MakeVector3From(targetMidpoint - point2M));
 
             calibrator1.Reset();
             calibrator2.Reset();
 
-            return new Tuple<Matrix, Matrix>(rotation1, rotation2);
+            return new Tuple<Matrix, Matrix>(rotate1 * translate1, rotate2 * translate2);
         }
 
         public static Vector2 CreateAxis(Vector2 v1, Vector2 v2)
@@ -58,6 +76,19 @@ namespace SweetSpot_2._0
             }
 
             return radians;
+        }
+
+        public static Vector2 CalculateMidpoint(Vector2 a, Vector2 b)
+        {
+            return new Vector2(
+                (a.X + b.X) / 2,
+                (a.Y + b.Y) / 2
+                );
+        }
+
+        public static Vector3 MakeVector3From(Vector2 v)
+        {
+            return new Vector3(v.X, v.Y, 0);
         }
 
         public Calibrator()
