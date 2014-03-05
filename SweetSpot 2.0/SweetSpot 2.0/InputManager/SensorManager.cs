@@ -22,7 +22,7 @@ namespace SweetSpot_2._0
         /// <summary>
         /// The minumum interaction distance from the sweetspot in meters.
         /// </summary>
-        public float sweetSpotMargin = 3f;
+        public float sweetSpotMargin = 1f;
 
         TimeSpan positionSmoothingTime = TimeSpan.FromMilliseconds(50);
 
