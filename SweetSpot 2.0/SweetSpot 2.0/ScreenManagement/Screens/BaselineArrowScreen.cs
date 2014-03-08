@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SweetSpot_2._0
+namespace SweetSpot_2._0.ScreenManagement.Screens
 {
     class BaselineArrowScreen : ImageScreen
     {

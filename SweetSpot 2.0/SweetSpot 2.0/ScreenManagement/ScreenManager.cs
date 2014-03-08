@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SweetSpot_2._0.Input;
+using SweetSpot_2._0.ScreenManagement.Screens;
 
-namespace SweetSpot_2._0
+namespace SweetSpot_2._0.ScreenManagement
 {
     public class ScreenManager : DrawableGameComponent
     {

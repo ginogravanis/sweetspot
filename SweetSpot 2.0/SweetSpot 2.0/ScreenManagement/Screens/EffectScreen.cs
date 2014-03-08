@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace SweetSpot_2._0
+namespace SweetSpot_2._0.ScreenManagement.Screens
 {
     public class EffectScreen : ImageScreen
     {
