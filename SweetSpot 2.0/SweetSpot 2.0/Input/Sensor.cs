@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 
-namespace SweetSpot_2._0
+namespace SweetSpot_2._0.Input
 {
     public class Sensor
     {
