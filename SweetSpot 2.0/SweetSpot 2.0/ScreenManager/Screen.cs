@@ -39,9 +39,19 @@ namespace SweetSpot_2._0
                 screenManager.Game.Exit();
 
             if (screenManager.Input.IsKeyPressed(Keys.Space) || screenManager.Input.IsGamePadButtonPressed(Buttons.A))
-                Finished = true;
+                SkipAction(gameTime);
         }
 
         public virtual void Draw(GameTime gameTime) { }
+
+        public virtual void SkipAction(GameTime gameTime)
+        {
+            ExitScreen(gameTime);
+        }
+
+        public virtual void ExitScreen(GameTime gameTime)
+        {
+            Finished = true;
+        }
     }
 }

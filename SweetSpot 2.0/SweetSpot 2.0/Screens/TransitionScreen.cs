@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace SweetSpot_2._0
 {
@@ -12,9 +13,8 @@ namespace SweetSpot_2._0
         Vector2 textPosition;
         TransitionState state;
         float timeSinceStateChange = 0f;    // in ms
-        float activeTime = 1000f;           // in ms
         float fadeTime = 300;               // in ms
-        float paddingTime = 300;            // in ms
+        float delay = 300;                  // in ms
         float alpha = 0f;
 
         public TransitionScreen(ScreenManager screenManager, string caption)
@@ -48,7 +48,7 @@ namespace SweetSpot_2._0
             switch (state)
             {
                 case TransitionState.PreDelay:
-                    if (timeSinceStateChange >= paddingTime)
+                    if (timeSinceStateChange >= delay)
                         changeState(TransitionState.FadingIn, gameTime);
                     break;
 
@@ -65,10 +65,6 @@ namespace SweetSpot_2._0
                     break;
 
                 case TransitionState.Active:
-                    if (timeSinceStateChange >= activeTime)
-                    {
-                        changeState(TransitionState.FadingOut, gameTime);
-                    }                    
                     break;
 
                 case TransitionState.FadingOut:
@@ -84,8 +80,8 @@ namespace SweetSpot_2._0
                     break;
 
                 case TransitionState.PostDelay:
-                    if (timeSinceStateChange >= paddingTime)
-                        Finished = true;
+                    if (timeSinceStateChange >= delay)
+                        ExitScreen(gameTime);
                     break;
             }
         }
@@ -107,6 +103,14 @@ namespace SweetSpot_2._0
             spriteBatch.Begin();
             spriteBatch.DrawString(font, caption, textPosition, Color.White * alpha);
             spriteBatch.End();
+        }
+
+        public override void SkipAction(GameTime gameTime)
+        {
+            if (TransitionState.Active == state)
+            {
+                changeState(TransitionState.FadingOut, gameTime);
+            }
         }
     }
 }
