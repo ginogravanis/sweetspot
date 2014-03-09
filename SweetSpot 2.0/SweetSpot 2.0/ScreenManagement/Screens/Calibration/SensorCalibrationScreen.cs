@@ -74,17 +74,16 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
 
                     try
                     {
-                        Tuple<Matrix, Matrix> calibration = Calibrator.Calibrate(calibrator1, calibrator2);
-                        leftSensorPanel.SetTransformation(calibration.Item1);
-                        rightSensorPanel.SetTransformation(calibration.Item2);
+                        Tuple<Tuple<float, Vector3>, Tuple<float, Vector3>> calibrations = Calibrator.Calibrate(calibrator1, calibrator2);
+                        Tuple<float, Vector3> calibration1 = calibrations.Item1;
+                        Tuple<float, Vector3> calibration2 = calibrations.Item2;
+                        leftSensorPanel.SetTransformation(calibration1.Item1, calibration1.Item2);
+                        rightSensorPanel.SetTransformation(calibration2.Item1, calibration2.Item2);
+                        screenManager.Database.SaveCalibration(leftSensorPanel.GetSensorID(), calibration1.Item1, calibration1.Item2);
+                        screenManager.Database.SaveCalibration(rightSensorPanel.GetSensorID(), calibration2.Item1, calibration2.Item2);
                     }
                     catch (InvalidOperationException) { }
                 }
-            }
-
-            if (screenManager.Input.IsGamePadButtonPressed(Buttons.X))
-            {
-                swapPanels();
             }
         }
 
@@ -98,13 +97,6 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
             rightSensorPanel.Draw(spriteBatch);
             spriteBatch.Draw(white, separator, Color.White);
             spriteBatch.End();
-        }
-
-        protected void swapPanels()
-        {
-            SensorPanel swapPanel = leftSensorPanel;
-            leftSensorPanel = rightSensorPanel;
-            rightSensorPanel = swapPanel;
         }
     }
 }

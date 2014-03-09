@@ -105,9 +105,14 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
             return activeUsers;
         }
 
-        public void SetTransformation(Matrix matrix)
+        public void SetTransformation(float axisTilt, Vector3 offset)
         {
-            sensor.TransformationMatrix = matrix;
+            sensor.Calibrate(axisTilt, offset);
+        }
+
+        public string GetSensorID()
+        {
+            return sensor.GetDeviceID();
         }
     }
 }
