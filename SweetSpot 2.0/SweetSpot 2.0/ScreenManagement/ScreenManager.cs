@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SweetSpot_2._0.Database;
 using SweetSpot_2._0.Input;
 using SweetSpot_2._0.ScreenManagement.Screens;
 
@@ -14,6 +15,8 @@ namespace SweetSpot_2._0.ScreenManagement
 
         public InputManager Input { get; internal set; }
 
+        public IDatabase Database { get; internal set; }
+
         public SpriteBatch SpriteBatch { get; internal set; }
 
         public ScreenManager(Game game)
@@ -21,6 +24,7 @@ namespace SweetSpot_2._0.ScreenManagement
         {
             Kinect = new SensorManager();
             Input = new InputManager();
+            Database = new SQLiteAdapter();
         }
 
         public override void Initialize()

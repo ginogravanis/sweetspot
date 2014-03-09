@@ -9,7 +9,7 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
     {
         protected List<Vector2> referencePoints;
 
-        public static Tuple<Matrix, Matrix> Calibrate(Calibrator calibrator1, Calibrator calibrator2)
+        public static Tuple<Tuple<float, Vector3>, Tuple<float, Vector3>> Calibrate(Calibrator calibrator1, Calibrator calibrator2)
         {
             List<Vector2> points1 = calibrator1.GetReferencePoints();
             List<Vector2> points2 = calibrator2.GetReferencePoints();
@@ -23,11 +23,11 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
             Vector2 point1B = points1.Last<Vector2>();
             Vector2 point2A = points2.First<Vector2>();
             Vector2 point2B = points2.Last<Vector2>();
-            float axisTilt1 = CalculateAxisTilt(CreateAxis(point1B, point1A));
-            float axisTilt2 = CalculateAxisTilt(CreateAxis(point2B, point2A));
+            float axisTilt1 = 0 - CalculateAxisTilt(CreateAxis(point1B, point1A));
+            float axisTilt2 = 0 - CalculateAxisTilt(CreateAxis(point2B, point2A));
             Matrix rotate1 = Matrix.CreateRotationZ(-axisTilt1);
             Matrix rotate2 = Matrix.CreateRotationZ(-axisTilt2);
-
+            
             // Map coordinates to new respective coordinate systems
             point1A = Vector2.Transform(point1A, rotate1);
             point1B = Vector2.Transform(point1B, rotate1);
@@ -35,16 +35,18 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
             point2B = Vector2.Transform(point2B, rotate2);
 
             // Calculate translation of both coordinate systems
-            Vector2 point1M = CalculateMidpoint(point1A, point1B);
-            Vector2 point2M = CalculateMidpoint(point2A, point2B);
-            Vector2 targetMidpoint = CalculateMidpoint(point1M, point2M);
-            Matrix translate1 = Matrix.CreateTranslation(MakeVector3From(targetMidpoint - point1M));
-            Matrix translate2 = Matrix.CreateTranslation(MakeVector3From(targetMidpoint - point2M));
+            Vector2 midpoint1 = CalculateMidpoint(point1A, point1B);
+            Vector2 midpoint2 = CalculateMidpoint(point2A, point2B);
+            Vector2 targetMidpoint = CalculateMidpoint(midpoint1, midpoint2);
+            Vector3 offset1 = MakeVector3From(targetMidpoint - midpoint1);
+            Vector3 offset2 = MakeVector3From(targetMidpoint - midpoint2);
 
             calibrator1.Reset();
             calibrator2.Reset();
 
-            return new Tuple<Matrix, Matrix>(rotate1 * translate1, rotate2 * translate2);
+            Tuple<float, Vector3> calibration1 = new Tuple<float, Vector3>(-axisTilt1, offset1);
+            Tuple<float, Vector3> calibration2 = new Tuple<float, Vector3>(-axisTilt2, offset2);
+            return new Tuple<Tuple<float, Vector3>, Tuple<float, Vector3>>(calibration1, calibration2);
         }
 
         public static Vector2 CreateAxis(Vector2 v1, Vector2 v2)

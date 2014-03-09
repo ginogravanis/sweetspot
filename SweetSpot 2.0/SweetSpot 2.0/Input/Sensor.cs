@@ -11,7 +11,7 @@ namespace SweetSpot_2._0.Input
         protected List<Skeleton> activeUsers;
         protected TimeSpan lastSensorUpdate;
         protected TimeSpan positionSmoothingTime;
-        public Matrix TransformationMatrix { get; set; }
+        protected Matrix TransformationMatrix;
 
         public Sensor(KinectSensor kinect)
         {
@@ -123,6 +123,18 @@ namespace SweetSpot_2._0.Input
         public int GetActiveUserCount()
         {
             return activeUsers.Count;
+        }
+
+        public void Calibrate(float axisTilt, Vector3 offset)
+        {
+            Matrix rotation = Matrix.CreateRotationZ(axisTilt);
+            Matrix translation = Matrix.CreateTranslation(offset);
+            TransformationMatrix = rotation * translation;
+        }
+
+        public string GetDeviceID()
+        {
+            return sensor.DeviceConnectionId;
         }
     }
 }
