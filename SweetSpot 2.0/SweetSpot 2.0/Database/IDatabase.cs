@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace SweetSpot_2._0.Database
@@ -7,14 +8,16 @@ namespace SweetSpot_2._0.Database
     {
         bool HasCalibrationDataFor(string deviceID);
 
-        Tuple<float, Vector3> GetCalibration(string deviceID);
+        Tuple<float, Vector3> LoadCalibration(string deviceID);
 
         void SaveCalibration(string deviceID, float axisTilt, Vector3 translate);
 
+        List<Vector2> LoadSweetSpots();
+
         void SaveSweetSpot(int id, Vector2 sweetSpot);
 
-        void GetSweetSpots();
+        int RecordTest(int testSubject, string screen, int sweetSpot);
 
-        void RecordUserPosition();
+        void RecordUserPosition(int test, Vector2 position);
     }
 }
