@@ -13,7 +13,7 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
         Rectangle separator;
         SensorPanel leftSensorPanel;
         SensorPanel rightSensorPanel;
-        List<Vector2> sweetspots;
+        public List<Vector2> sweetspots { get; set; }
 
         public SensorCalibrationScreen(ScreenManager screenManager)
             : base(screenManager)
