@@ -41,10 +41,10 @@ namespace SweetSpot_2._0.Input
             lastViewerPosition = new Vector2();
             viewerLastSeen = TimeSpan.FromSeconds(-1);
             viewerActive = false;
-            InitializeSensors();
+            initializeSensors();
         }
 
-        protected void InitializeSensors()
+        protected void initializeSensors()
         {
             foreach(KinectSensor candidate in KinectSensor.KinectSensors)
             {
@@ -70,13 +70,13 @@ namespace SweetSpot_2._0.Input
                 sensor.Update(gameTime);
             }
 
-            if (ViewerPositionAvailable())
+            if (viewerPositionAvailable())
             {
-                lastViewerPosition = CalculateViewerPosition();
+                lastViewerPosition = calculateViewerPosition();
                 viewerLastSeen = gameTime.TotalGameTime;
                 viewerActive = true;
             }
-            else if (ViewerRecentlySeen(gameTime))
+            else if (viewerRecentlySeen(gameTime))
             {
                 viewerActive = true;
             }
@@ -96,7 +96,7 @@ namespace SweetSpot_2._0.Input
             return lastViewerPosition;
         }
 
-        protected bool ViewerPositionAvailable()
+        protected bool viewerPositionAvailable()
         {
             foreach (Sensor sensor in sensors)
             {
@@ -106,27 +106,42 @@ namespace SweetSpot_2._0.Input
             return false;
         }
 
-        protected bool ViewerRecentlySeen(GameTime gameTime)
+        protected bool viewerRecentlySeen(GameTime gameTime)
         {
             return viewerLastSeen > gameTime.TotalGameTime - positionSmoothingTime;
         }
 
-        protected Vector2 CalculateViewerPosition()
+        protected Vector2 calculateViewerPosition()
         {
-            List<Vector2> positions = new List<Vector2>();
-            foreach (Sensor sensor in sensors)
+            if (sensors.Count == 2
+                && sensors[0].GetActiveUserCount() == 1
+                && sensors[1].GetActiveUserCount() == 1)
             {
-                positions.AddRange(sensor.GetUserPositions());
+                Vector2 position1 = sensors[0].GetUserPositions().First<Vector2>();
+                Vector2 position2 = sensors[1].GetUserPositions().First<Vector2>();
+                return Calibrator.CalculateMidpoint(position1, position2);
             }
+            else
+            {
+                List<Vector2> positions = new List<Vector2>();
+                foreach (Sensor sensor in sensors)
+                {
+                    positions.AddRange(sensor.GetUserPositions());
+                }
+                return getNearestViewer(positions);
+            }
+        }
 
+        protected Vector2 getNearestViewer(List<Vector2> positions)
+        {
             if (positions.Count == 0)
                 throw new ApplicationException("User position not available.");
 
-            float shortestDistanceToSweetSpot = DistanceToSweetSpot(positions[0]);
+            float shortestDistanceToSweetSpot = distanceToSweetSpot(positions[0]);
             Vector2 nearestUserPosition = positions[0];
             foreach (Vector2 position in positions.Skip(1))
             {
-                float newDistance = DistanceToSweetSpot(position);
+                float newDistance = distanceToSweetSpot(position);
                 if (newDistance < shortestDistanceToSweetSpot)
                 {
                     shortestDistanceToSweetSpot = newDistance;
@@ -139,20 +154,20 @@ namespace SweetSpot_2._0.Input
 
         public Vector2 GetVectorToSweetSpot()
         {
-            return VectorToSweetSpot(lastViewerPosition);
+            return vectorToSweetSpot(lastViewerPosition);
         }
 
-        protected Vector2 VectorToSweetSpot(Vector2 position)
+        protected Vector2 vectorToSweetSpot(Vector2 position)
         {
             return sweetSpot - position;
         }
 
         public float GetDistanceFromSweetSpot()
         {
-            return DistanceToSweetSpot(lastViewerPosition);
+            return distanceToSweetSpot(lastViewerPosition);
         }
 
-        protected float DistanceToSweetSpot(Vector2 position)
+        protected float distanceToSweetSpot(Vector2 position)
         {
             return Math.Abs((sweetSpot - position).Length());
         }

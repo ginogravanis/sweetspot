@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
-namespace SweetSpot_2._0.ScreenManagement.Screens
+namespace SweetSpot_2._0.Input
 {
     class Calibrator
     {
