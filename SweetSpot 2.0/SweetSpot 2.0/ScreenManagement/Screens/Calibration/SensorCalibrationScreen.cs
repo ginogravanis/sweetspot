@@ -57,7 +57,7 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
             leftSensorPanel.Update(gameTime);
             rightSensorPanel.Update(gameTime);
 
-            if (screenManager.Input.IsGamePadButtonPressed(Buttons.B))
+            if (screenManager.Input.IsGamePadButtonPressed(Buttons.B) || screenManager.Input.IsKeyPressed(Keys.F1))
             {
                 if (leftSensorPanel.HasActiveUsers() && rightSensorPanel.HasActiveUsers())
                 {
@@ -66,7 +66,7 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
                 }
             }
 
-            if (screenManager.Input.IsGamePadButtonPressed(Buttons.Y))
+            if (screenManager.Input.IsGamePadButtonPressed(Buttons.Y) || screenManager.Input.IsKeyPressed(Keys.F2))
             {
                 if (leftSensorPanel.HasEnoughReferencePoints() && rightSensorPanel.HasEnoughReferencePoints())
                 {

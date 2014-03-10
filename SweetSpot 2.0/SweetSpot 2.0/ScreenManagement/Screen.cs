@@ -35,7 +35,7 @@ namespace SweetSpot_2._0.ScreenManagement
                 initialized = true;
             }
 
-            if (screenManager.Input.IsKeyDown(Keys.Escape))
+            if (screenManager.Input.IsKeyDown(Keys.Escape) || screenManager.Input.IsGamePadButtonPressed(Buttons.Back))
                 screenManager.Game.Exit();
 
             if (screenManager.Input.IsKeyPressed(Keys.Space) || screenManager.Input.IsGamePadButtonPressed(Buttons.A))
