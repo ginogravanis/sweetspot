@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
+using System.Data.SQLite.Linq;
 using Microsoft.Xna.Framework;
 
 namespace SweetSpot_2._0.Database
@@ -9,21 +11,39 @@ namespace SweetSpot_2._0.Database
     {
         const string filename = "database.sqlite";
 
-        protected SQLiteConnection connection;
+        protected string db;
+
+        public SQLiteAdapter()
+        {
+            db = "Data Source=" + filename;
+        }
 
         public bool HasCalibrationDataFor(string deviceID)
         {
-            throw new NotImplementedException();
+            string sql = String.Format("SELECT COUNT(*) FROM calibration WHERE deviceId='{0}';", deviceID);
+            string result = ExecuteScalarQuery(sql);
+
+            return int.Parse(result) > 0;
         }
 
         public Tuple<float, Vector3> GetCalibration(string deviceID)
         {
-            throw new NotImplementedException();
-        }
+            string sql = String.Format("SELECT MAX(rowid) FROM calibration WHERE deviceID='{0}';", deviceID);
+            int rowid = int.Parse(ExecuteScalarQuery(sql));
 
-        public SQLiteAdapter()
-        {
-            connection = new SQLiteConnection("Data Source=" + filename);
+            sql = String.Format("SELECT axis_tilt FROM calibration WHERE rowid='{0}';", rowid);
+            float axisTilt = float.Parse(ExecuteScalarQuery(sql));
+
+            sql = String.Format("SELECT translate_x FROM calibration WHERE rowid='{0}';", rowid);
+            float x = float.Parse(ExecuteScalarQuery(sql));
+
+            sql = String.Format("SELECT translate_y FROM calibration WHERE rowid='{0}';", rowid);
+            float y = float.Parse(ExecuteScalarQuery(sql));
+
+            sql = String.Format("SELECT translate_z FROM calibration WHERE rowid='{0}';", rowid);
+            float z = float.Parse(ExecuteScalarQuery(sql));
+
+            return new Tuple<float, Vector3>(axisTilt, new Vector3(x, y, z));
         }
 
         public void SaveCalibration(string deviceID, float axisTilt, Vector3 translate)
@@ -62,6 +82,7 @@ namespace SweetSpot_2._0.Database
         {
             try
             {
+                SQLiteConnection connection = new SQLiteConnection(db);
                 connection.Open();
                 SQLiteCommand command = new SQLiteCommand(connection);
                 command.CommandText = sql;
@@ -72,6 +93,47 @@ namespace SweetSpot_2._0.Database
             {
                 // TODO: write to logfile
             }
+        }
+
+        public string ExecuteScalarQuery(string sql)
+        {
+            try
+            {
+                SQLiteConnection connection = new SQLiteConnection(db);
+                connection.Open();
+                SQLiteCommand command = new SQLiteCommand(connection);
+                command.CommandText = sql;
+                object result = command.ExecuteScalar();
+                connection.Close();
+                return result.ToString();
+            }
+            catch (Exception e)
+            {
+                // TODO: write to logfile
+                throw e;
+            }
+        }
+
+        public DataTable ExecuteTableQuery(string sql)
+        {
+            DataTable table = new DataTable();
+            try
+            {
+                SQLiteConnection connection = new SQLiteConnection(db);
+                connection.Open();
+                SQLiteCommand command = new SQLiteCommand(connection);
+                command.CommandText = sql;
+                SQLiteDataReader reader = command.ExecuteReader();
+                table.Load(reader);
+                reader.Close();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                // TODO: write to logfile
+                throw e;
+            }
+            return table;
         }
 
         public void Insert(string tableName, Dictionary<string, string> data)

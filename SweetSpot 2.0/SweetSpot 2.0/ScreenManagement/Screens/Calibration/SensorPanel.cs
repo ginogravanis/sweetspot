@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -105,9 +106,14 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
             return activeUsers;
         }
 
-        public void SetTransformation(float axisTilt, Vector3 offset)
+        public void Calibrate(float axisTilt, Vector3 offset)
         {
             sensor.Calibrate(axisTilt, offset);
+        }
+
+        public void Calibrate(Tuple<float, Vector3> calibration)
+        {
+            Calibrate(calibration.Item1, calibration.Item2);
         }
 
         public string GetSensorID()

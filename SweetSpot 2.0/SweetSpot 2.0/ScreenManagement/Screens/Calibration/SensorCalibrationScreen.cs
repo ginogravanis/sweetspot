@@ -48,6 +48,7 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
                 ));
             leftSensorPanel.LoadContent(Content);
             rightSensorPanel.LoadContent(Content);
+            loadCalibration();
         }
 
         public override void Update(GameTime gameTime)
@@ -77,8 +78,8 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
                         Tuple<Tuple<float, Vector3>, Tuple<float, Vector3>> calibrations = Calibrator.Calibrate(calibrator1, calibrator2);
                         Tuple<float, Vector3> calibration1 = calibrations.Item1;
                         Tuple<float, Vector3> calibration2 = calibrations.Item2;
-                        leftSensorPanel.SetTransformation(calibration1.Item1, calibration1.Item2);
-                        rightSensorPanel.SetTransformation(calibration2.Item1, calibration2.Item2);
+                        leftSensorPanel.Calibrate(calibration1.Item1, calibration1.Item2);
+                        rightSensorPanel.Calibrate(calibration2.Item1, calibration2.Item2);
                         screenManager.Database.SaveCalibration(leftSensorPanel.GetSensorID(), calibration1.Item1, calibration1.Item2);
                         screenManager.Database.SaveCalibration(rightSensorPanel.GetSensorID(), calibration2.Item1, calibration2.Item2);
                     }
@@ -97,6 +98,19 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
             rightSensorPanel.Draw(spriteBatch);
             spriteBatch.Draw(white, separator, Color.White);
             spriteBatch.End();
+        }
+
+        protected void loadCalibration()
+        {
+            string leftSensorID = leftSensorPanel.GetSensorID();
+            string rightSensorID = rightSensorPanel.GetSensorID();
+
+            if (screenManager.Database.HasCalibrationDataFor(leftSensorID)
+                && screenManager.Database.HasCalibrationDataFor(rightSensorID))
+            {
+                leftSensorPanel.Calibrate(screenManager.Database.GetCalibration(leftSensorID));
+                rightSensorPanel.Calibrate(screenManager.Database.GetCalibration(rightSensorID));
+            }
         }
     }
 }
