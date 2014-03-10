@@ -63,9 +63,17 @@ namespace SweetSpot_2._0.Database
             Insert(tableName, data);
         }
 
-        public void SaveSweetSpots()
+        public void SaveSweetSpot(int id, Vector2 sweetSpot)
         {
-            throw new NotImplementedException();
+            string tableName = "sweetspot";
+
+            var sweetSpots = new Dictionary<string, string>
+            {
+                {"id", id.ToString()},
+                {"x", sweetSpot.X.ToString()},
+                {"y", sweetSpot.Y.ToString()}
+            };
+            Insert(tableName, sweetSpots);
         }
 
         public void GetSweetSpots()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -12,10 +13,13 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
         Rectangle separator;
         SensorPanel leftSensorPanel;
         SensorPanel rightSensorPanel;
+        List<Vector2> sweetspots;
 
         public SensorCalibrationScreen(ScreenManager screenManager)
             : base(screenManager)
-        { }
+        {
+            sweetspots = new List<Vector2>();
+        }
 
         public override void LoadContent()
         {
@@ -86,6 +90,26 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
                     catch (InvalidOperationException) { }
                 }
             }
+
+            if (screenManager.Input.IsGamePadButtonPressed(Buttons.X) || screenManager.Input.IsKeyPressed(Keys.F5))
+            {
+                captureSweetSpot();
+            }
+        }
+
+        protected void captureSweetSpot()
+        {
+            if (screenManager.Kinect.IsViewerActive())
+            {
+                addSweetSpot(screenManager.Kinect.GetViewerPosition());
+            }
+        }
+
+        protected void addSweetSpot(Vector2 position)
+        {
+            int id = sweetspots.Count;
+            sweetspots.Add(position);
+            screenManager.Database.SaveSweetSpot(id, position);
         }
 
         public override void Draw(GameTime gameTime)

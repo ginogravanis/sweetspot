@@ -11,7 +11,7 @@ namespace SweetSpot_2._0.Database
 
         void SaveCalibration(string deviceID, float axisTilt, Vector3 translate);
 
-        void SaveSweetSpots();
+        void SaveSweetSpot(int id, Vector2 sweetSpot);
 
         void GetSweetSpots();
 
