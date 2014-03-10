@@ -10,7 +10,7 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
 {
     class SensorPanel
     {
-        protected Screen container;
+        protected SensorCalibrationScreen container;
         protected Texture2D green;
         protected Texture2D red;
         protected Texture2D blue;
@@ -25,7 +25,7 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
         protected List<Vector2> userPositions;
         protected Calibrator calibrator;
 
-        public SensorPanel(Screen container, Sensor sensor, Rectangle screenBounds)
+        public SensorPanel(SensorCalibrationScreen container, Sensor sensor, Rectangle screenBounds)
         {
             this.container = container;
             this.sensor = sensor;
@@ -83,6 +83,11 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
                 {
                     spriteBatch.Draw(green, makePositionMarker(position), Color.White);
                 }
+            }
+
+            foreach (Vector2 sweetSpot in container.sweetspots)
+            {
+                spriteBatch.Draw(blue, makePositionMarker(sweetSpot), Color.White);
             }
         }
 
