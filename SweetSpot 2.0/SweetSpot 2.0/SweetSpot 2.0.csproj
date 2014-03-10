@@ -107,7 +107,7 @@
     <Compile Include="ScreenManagement\Screen.cs" />
     <Compile Include="ScreenManagement\ScreenManager.cs" />
     <Compile Include="ScreenManagement\Screens\BaselineArrowScreen.cs" />
-    <Compile Include="ScreenManagement\Screens\Calibration\Calibrator.cs" />
+    <Compile Include="Input\Calibrator.cs" />
     <Compile Include="ScreenManagement\Screens\Calibration\SensorCalibrationScreen.cs" />
     <Compile Include="ScreenManagement\Screens\EffectScreen.cs" />
     <Compile Include="ScreenManagement\Screens\EffectDebugScreen.cs" />
