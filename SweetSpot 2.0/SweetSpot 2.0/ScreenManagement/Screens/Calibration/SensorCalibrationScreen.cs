@@ -132,8 +132,8 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
             if (screenManager.Database.HasCalibrationDataFor(leftSensorID)
                 && screenManager.Database.HasCalibrationDataFor(rightSensorID))
             {
-                leftSensorPanel.Calibrate(screenManager.Database.GetCalibration(leftSensorID));
-                rightSensorPanel.Calibrate(screenManager.Database.GetCalibration(rightSensorID));
+                leftSensorPanel.Calibrate(screenManager.Database.LoadCalibration(leftSensorID));
+                rightSensorPanel.Calibrate(screenManager.Database.LoadCalibration(rightSensorID));
             }
         }
     }

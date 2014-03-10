@@ -26,7 +26,7 @@ namespace SweetSpot_2._0.Database
             return int.Parse(result) > 0;
         }
 
-        public Tuple<float, Vector3> GetCalibration(string deviceID)
+        public Tuple<float, Vector3> LoadCalibration(string deviceID)
         {
             string sql = String.Format("SELECT MAX(rowid) FROM calibration WHERE deviceID='{0}';", deviceID);
             int rowid = int.Parse(ExecuteScalarQuery(sql));
@@ -63,6 +63,11 @@ namespace SweetSpot_2._0.Database
             Insert(tableName, data);
         }
 
+        public List<Vector2> LoadSweetSpots()
+        {
+            throw new NotImplementedException();
+        }
+
         public void SaveSweetSpot(int id, Vector2 sweetSpot)
         {
             string tableName = "sweetspot";
@@ -76,12 +81,12 @@ namespace SweetSpot_2._0.Database
             Insert(tableName, sweetSpots);
         }
 
-        public void GetSweetSpots()
+        public int RecordTest(int testSubject, string screen, int sweetSpot)
         {
             throw new NotImplementedException();
         }
 
-        public void RecordUserPosition()
+        public void RecordUserPosition(int test, Vector2 position)
         {
             throw new NotImplementedException();
         }
