@@ -23,8 +23,8 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
             Vector2 point1B = points1.Last<Vector2>();
             Vector2 point2A = points2.First<Vector2>();
             Vector2 point2B = points2.Last<Vector2>();
-            float axisTilt1 = 0 - CalculateAxisTilt(CreateAxis(point1B, point1A));
-            float axisTilt2 = 0 - CalculateAxisTilt(CreateAxis(point2B, point2A));
+            float axisTilt1 = CalculateAxisTilt(CreateAxis(point1B, point1A));
+            float axisTilt2 = CalculateAxisTilt(CreateAxis(point2B, point2A));
             Matrix rotate1 = Matrix.CreateRotationZ(-axisTilt1);
             Matrix rotate2 = Matrix.CreateRotationZ(-axisTilt2);
             
