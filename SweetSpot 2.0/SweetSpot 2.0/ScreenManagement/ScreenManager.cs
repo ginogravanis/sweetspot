@@ -47,23 +47,23 @@ namespace SweetSpot_2._0.ScreenManagement
 
             AddScreen(new TransitionScreen(this, "Calibration"));
             AddScreen(new SensorCalibrationScreen(this));
-            AddScreen(new TransitionScreen(this, "Baseline: Arrow"));
+            AddScreen(new TransitionScreen(this, "Arrow"));
             AddScreen(new BaselineArrowScreen(this, image));
-            AddScreen(new TransitionScreen(this, "Baseline: Text"));
+            AddScreen(new TransitionScreen(this, "Text"));
             AddScreen(new BaselineTextScreen(this, image));
-            AddScreen(new TransitionScreen(this, "Saturation Shader"));
+            AddScreen(new TransitionScreen(this, "Saturation"));
             AddScreen(new EffectDebugScreen(this, image, saturation));
-            AddScreen(new TransitionScreen(this, "Brightness Shader"));
+            AddScreen(new TransitionScreen(this, "Brightness"));
             AddScreen(new EffectDebugScreen(this, image, brightness));
-            AddScreen(new TransitionScreen(this, "Contrast Shader"));
+            AddScreen(new TransitionScreen(this, "Contrast"));
             AddScreen(new EffectDebugScreen(this, image, contrast));
-            AddScreen(new TransitionScreen(this, "Pixelate Shader"));
+            AddScreen(new TransitionScreen(this, "Pixelate"));
             AddScreen(new EffectDebugScreen(this, image, pixelate));
-            AddScreen(new TransitionScreen(this, "Distort Shader"));
+            AddScreen(new TransitionScreen(this, "Distort"));
             AddScreen(new EffectDebugScreen(this, image, distort));
-            AddScreen(new TransitionScreen(this, "Jitter Shader"));
+            AddScreen(new TransitionScreen(this, "Jitter"));
             AddScreen(new EffectDebugScreen(this, image, jitter));
-            AddScreen(new TransitionScreen(this, "The End"));
+            AddScreen(new TransitionScreen(this, "Thank you for participating!"));
         }
 
         protected override void UnloadContent()
