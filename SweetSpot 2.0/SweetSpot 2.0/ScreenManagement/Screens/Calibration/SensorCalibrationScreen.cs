@@ -53,6 +53,7 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
             leftSensorPanel.LoadContent(Content);
             rightSensorPanel.LoadContent(Content);
             loadCalibration();
+            sweetspots = screenManager.Database.LoadSweetSpots();
         }
 
         public override void Update(GameTime gameTime)
@@ -122,6 +123,12 @@ namespace SweetSpot_2._0.ScreenManagement.Screens
             rightSensorPanel.Draw(spriteBatch);
             spriteBatch.Draw(white, separator, Color.White);
             spriteBatch.End();
+        }
+
+        public override void SkipAction(GameTime gameTime)
+        {
+            base.SkipAction(gameTime);
+            screenManager.GenerateTestSession(sweetspots);
         }
 
         protected void loadCalibration()

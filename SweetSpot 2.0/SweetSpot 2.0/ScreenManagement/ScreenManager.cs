@@ -11,7 +11,9 @@ namespace SweetSpot_2._0.ScreenManagement
     {
         public bool Debug { get; internal set; }
 
-        protected List<Screen> screens = new List<Screen>();
+        protected List<Screen> screens;
+
+        protected List<Vector2> sweetSpots;
 
         public SensorManager Kinect { get; internal set; }
 
@@ -22,9 +24,11 @@ namespace SweetSpot_2._0.ScreenManagement
         public SpriteBatch SpriteBatch { get; internal set; }
 
         public ScreenManager(Game game)
-            :base(game)
+            : base(game)
         {
             Debug = false;
+            screens = new List<Screen>();
+            sweetSpots = new List<Vector2>();
             Kinect = new SensorManager();
             Input = new InputManager();
             Database = new SQLiteAdapter();
@@ -41,7 +45,7 @@ namespace SweetSpot_2._0.ScreenManagement
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
             Texture2D image = Game.Content.Load<Texture2D>("texture\\testimage");
-            Effect saturation= Game.Content.Load<Effect>("shader\\SaturationShader");
+            Effect saturation = Game.Content.Load<Effect>("shader\\SaturationShader");
             Effect brightness = Game.Content.Load<Effect>("shader\\BrightnessShader");
             Effect contrast = Game.Content.Load<Effect>("shader\\ContrastShader");
             Effect pixelate = Game.Content.Load<Effect>("shader\\PixelateShader");
@@ -81,6 +85,11 @@ namespace SweetSpot_2._0.ScreenManagement
             screens.Add(newScreen);
         }
 
+        public void GenerateTestSession(List<Vector2> sweetSpots)
+        {
+            this.sweetSpots = sweetSpots;
+        }
+
         public void ToggleDebug()
         {
             Debug = !Debug;
@@ -89,7 +98,7 @@ namespace SweetSpot_2._0.ScreenManagement
         public override void Update(GameTime gameTime)
         {
             Input.Update(gameTime);
-            Kinect.Update(gameTime);            
+            Kinect.Update(gameTime);
             screens[0].Update(gameTime);
 
             if (screens[0].Finished)
@@ -102,7 +111,7 @@ namespace SweetSpot_2._0.ScreenManagement
         protected void RemoveScreen()
         {
             screens[0].UnloadContent();
-            screens.RemoveAt(0);   
+            screens.RemoveAt(0);
         }
 
         public override void Draw(GameTime gameTime)
