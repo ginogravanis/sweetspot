@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using System.Data.SQLite.Linq;
 using Microsoft.Xna.Framework;
 
 namespace SweetSpot_2._0.Database
