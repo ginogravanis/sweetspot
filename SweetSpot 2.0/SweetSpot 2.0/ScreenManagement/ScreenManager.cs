@@ -9,6 +9,8 @@ namespace SweetSpot_2._0.ScreenManagement
 {
     public class ScreenManager : DrawableGameComponent
     {
+        public bool Debug { get; internal set; }
+
         protected List<Screen> screens = new List<Screen>();
 
         public SensorManager Kinect { get; internal set; }
@@ -22,6 +24,7 @@ namespace SweetSpot_2._0.ScreenManagement
         public ScreenManager(Game game)
             :base(game)
         {
+            Debug = false;
             Kinect = new SensorManager();
             Input = new InputManager();
             Database = new SQLiteAdapter();
@@ -52,17 +55,17 @@ namespace SweetSpot_2._0.ScreenManagement
             AddScreen(new TransitionScreen(this, "Text"));
             AddScreen(new BaselineTextScreen(this, image));
             AddScreen(new TransitionScreen(this, "Saturation"));
-            AddScreen(new EffectDebugScreen(this, image, saturation));
+            AddScreen(new EffectScreen(this, image, saturation));
             AddScreen(new TransitionScreen(this, "Brightness"));
-            AddScreen(new EffectDebugScreen(this, image, brightness));
+            AddScreen(new EffectScreen(this, image, brightness));
             AddScreen(new TransitionScreen(this, "Contrast"));
-            AddScreen(new EffectDebugScreen(this, image, contrast));
+            AddScreen(new EffectScreen(this, image, contrast));
             AddScreen(new TransitionScreen(this, "Pixelate"));
-            AddScreen(new EffectDebugScreen(this, image, pixelate));
+            AddScreen(new EffectScreen(this, image, pixelate));
             AddScreen(new TransitionScreen(this, "Distort"));
-            AddScreen(new EffectDebugScreen(this, image, distort));
+            AddScreen(new EffectScreen(this, image, distort));
             AddScreen(new TransitionScreen(this, "Jitter"));
-            AddScreen(new EffectDebugScreen(this, image, jitter));
+            AddScreen(new EffectScreen(this, image, jitter));
             AddScreen(new TransitionScreen(this, "Thank you for participating!"));
         }
 
@@ -76,6 +79,11 @@ namespace SweetSpot_2._0.ScreenManagement
         {
             newScreen.LoadContent();
             screens.Add(newScreen);
+        }
+
+        public void ToggleDebug()
+        {
+            Debug = !Debug;
         }
 
         public override void Update(GameTime gameTime)

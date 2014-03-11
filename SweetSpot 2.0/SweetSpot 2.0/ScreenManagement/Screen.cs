@@ -40,6 +40,9 @@ namespace SweetSpot_2._0.ScreenManagement
 
             if (screenManager.Input.IsKeyPressed(Keys.Space) || screenManager.Input.IsGamePadButtonPressed(Buttons.A))
                 SkipAction(gameTime);
+
+            if (screenManager.Input.IsKeyPressed(Keys.F12) || screenManager.Input.IsGamePadButtonPressed(Buttons.RightTrigger))
+                screenManager.ToggleDebug();
         }
 
         public virtual void Draw(GameTime gameTime) { }
