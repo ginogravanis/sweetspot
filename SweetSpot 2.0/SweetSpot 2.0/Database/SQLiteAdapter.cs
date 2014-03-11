@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 namespace SweetSpot_2._0.Database
 {
@@ -25,6 +26,7 @@ namespace SweetSpot_2._0.Database
             return int.Parse(result) > 0;
         }
 
+        // TODO: Cleanup using table query.
         public Tuple<float, Vector3> LoadCalibration(string deviceID)
         {
             string sql = String.Format("SELECT MAX(rowid) FROM calibration WHERE deviceID='{0}';", deviceID);
@@ -62,9 +64,28 @@ namespace SweetSpot_2._0.Database
             Insert(tableName, data);
         }
 
+        // TODO: Cleanup using table query.
         public List<Vector2> LoadSweetSpots()
         {
-            throw new NotImplementedException();
+            string tableName = "sweetspot";
+
+            string sql = String.Format("SELECT COUNT(*) FROM {0};", tableName);
+            int sweetSpotCount = int.Parse(ExecuteScalarQuery(sql));
+
+            List<Vector2> sweetSpots = new List<Vector2>();
+
+            foreach (int i in Enumerable.Range(0, sweetSpotCount))
+            {
+                sql = String.Format("SELECT x FROM {0} WHERE id='{1}';", tableName, i);
+                float x = float.Parse(ExecuteScalarQuery(sql));
+
+                sql = String.Format("SELECT y FROM {0} WHERE id='{1}';", tableName, i);
+                float y = float.Parse(ExecuteScalarQuery(sql));
+
+                sweetSpots.Add(new Vector2(x, y));
+            }
+
+            return sweetSpots;
         }
 
         public void SaveSweetSpot(int id, Vector2 sweetSpot)
