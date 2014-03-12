@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SweetSpot
+namespace SweetSpot.Util
 {
-    public static class Util
+    public static class Extensions
     {
         // Implements http://en.wikipedia.org/wiki/Fisher-Yates_shuffle
         public static void Shuffle<T>(this IList<T> list)
@@ -22,6 +22,11 @@ namespace SweetSpot
             T tmp = list[i];
             list[i] = list[j];
             list[j] = tmp;
+        }
+
+        public static String GetTimestamp(this DateTime value)
+        {
+            return value.ToString("yyyy/MM/dd-HH:mm:ss:ffff");
         }
     }
 }
