@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
-using SweetSpot_2._0.ScreenManagement;
+using SweetSpot.ScreenManagement;
 
-namespace SweetSpot_2._0
+namespace SweetSpot
 {
     public class SweetSpot : Microsoft.Xna.Framework.Game
     {

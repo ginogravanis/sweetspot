@@ -1,4 +1,4 @@
-namespace SweetSpot_2._0
+namespace SweetSpot
 {
 #if WINDOWS || XBOX
     static class Program

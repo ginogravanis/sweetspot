@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SweetSpot_2._0.Input;
+using SweetSpot.Input;
 
-namespace SweetSpot_2._0.ScreenManagement.Screens
+namespace SweetSpot.ScreenManagement.Screens
 {
     class SensorCalibrationScreen : Screen
     {

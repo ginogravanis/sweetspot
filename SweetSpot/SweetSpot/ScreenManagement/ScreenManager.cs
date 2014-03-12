@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SweetSpot_2._0.Database;
-using SweetSpot_2._0.Input;
-using SweetSpot_2._0.ScreenManagement.Screens;
+using SweetSpot.Database;
+using SweetSpot.Input;
+using SweetSpot.ScreenManagement.Screens;
 
-namespace SweetSpot_2._0.ScreenManagement
+namespace SweetSpot.ScreenManagement
 {
     public class ScreenManager : DrawableGameComponent
     {
@@ -43,9 +43,7 @@ namespace SweetSpot_2._0.ScreenManagement
         protected override void LoadContent()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-
             image = Game.Content.Load<Texture2D>("texture\\testimage");
-
             effects.Add(Game.Content.Load<Effect>("shader\\SaturationShader"));
             effects.Add(Game.Content.Load<Effect>("shader\\BrightnessShader"));
             effects.Add(Game.Content.Load<Effect>("shader\\ContrastShader"));
