@@ -92,6 +92,7 @@
     <Compile Include="ScreenManagement\Screens\Calibration\SensorPanel.cs" />
     <Compile Include="ScreenManagement\Screens\TransitionScreen.cs" />
     <Compile Include="SweetSpot.cs" />
+    <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="SweetSpot2.0.ico" />
