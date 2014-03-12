@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using Microsoft.Xna.Framework;
 using System.Linq;
+using Microsoft.Xna.Framework;
 
 namespace SweetSpot.Database
 {
@@ -124,7 +124,7 @@ namespace SweetSpot.Database
             }
             catch (Exception)
             {
-                // TODO: write to logfile
+                Logger.Log(String.Format("Failed to execute non-query: \"{0}\"", sql));
             }
         }
 
@@ -142,7 +142,7 @@ namespace SweetSpot.Database
             }
             catch (Exception e)
             {
-                // TODO: write to logfile
+                Logger.Log(String.Format("Failed to execute scalar query: \"{0}\"", sql));
                 throw e;
             }
         }
@@ -163,7 +163,7 @@ namespace SweetSpot.Database
             }
             catch (Exception e)
             {
-                // TODO: write to logfile
+                Logger.Log(String.Format("Failed to execute table query: \"{0}\"", sql));
                 throw e;
             }
             return table;
