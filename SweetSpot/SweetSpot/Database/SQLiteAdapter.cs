@@ -5,7 +5,7 @@ using System.Data.SQLite;
 using Microsoft.Xna.Framework;
 using System.Linq;
 
-namespace SweetSpot_2._0.Database
+namespace SweetSpot.Database
 {
     class SQLiteAdapter : IDatabase
     {

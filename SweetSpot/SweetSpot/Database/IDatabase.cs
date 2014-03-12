@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace SweetSpot_2._0.Database
+namespace SweetSpot.Database
 {
     public interface IDatabase
     {

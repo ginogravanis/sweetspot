@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SweetSpot_2._0.ScreenManagement.Screens
+namespace SweetSpot.ScreenManagement.Screens
 {
     class BaselineTextScreen : ImageScreen
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SweetSpot_2._0
+namespace SweetSpot
 {
     public static class Util
     {
