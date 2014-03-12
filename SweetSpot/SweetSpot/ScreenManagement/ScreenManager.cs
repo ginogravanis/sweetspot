@@ -94,12 +94,12 @@ namespace SweetSpot.ScreenManagement
 
         public override void Update(GameTime gameTime)
         {
-            if (screens[0].Finished)
-                RemoveScreen();
-
             Input.Update(gameTime);
             Kinect.Update(gameTime);
             screens[0].Update(gameTime);
+
+            if (screens[0].Finished)
+                RemoveScreen();
         }
 
         protected void RemoveScreen()
