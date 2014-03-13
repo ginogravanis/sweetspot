@@ -26,7 +26,7 @@ namespace SweetSpot.Util
 
         public static String GetTimestamp(this DateTime value)
         {
-            return value.ToString("yyyy/MM/dd-HH:mm:ss:ffff");
+            return value.ToString("yyyy/MM/dd HH:mm:ss");
         }
     }
 }
