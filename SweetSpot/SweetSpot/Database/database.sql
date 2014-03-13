@@ -1,4 +1,4 @@
-CREATE TABLE "calibration" ("deviceId" VARCHAR NOT NULL , "axis_tilt" FLOAT NOT NULL , "translate_x" FLOAT NOT NULL , "translate_y" FLOAT NOT NULL , "translate_z" FLOAT NOT NULL , "created" DATETIME NOT NULL  DEFAULT CURRENT_TIMESTAMP);
-CREATE TABLE "sweetspot" ("id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , "x" FLOAT, "y" FLOAT);
-CREATE TABLE "test" ("id" INTEGER PRIMARY KEY  NOT NULL ,"subject" INTEGER NOT NULL ,"screen" VARCHAR NOT NULL ,"begin" DATETIME NOT NULL  DEFAULT (CURRENT_TIMESTAMP) ,"sweetspot" INT DEFAULT (null) );
-CREATE TABLE "user_position" ("test" INTEGER,"timestamp" INTEGER,"x" FLOAT,"y" FLOAT);
+CREATE TABLE "calibration" ("deviceId" VARCHAR NOT NULL ,"axis_tilt" VARCHAR NOT NULL  DEFAULT (null) ,"translate_x" VARCHAR NOT NULL  DEFAULT (null) ,"translate_y" VARCHAR NOT NULL  DEFAULT (null) ,"translate_z" VARCHAR NOT NULL  DEFAULT (null) ,"created" DATETIME NOT NULL  DEFAULT (CURRENT_TIMESTAMP) );
+CREATE TABLE "sweetspot" ("id" INTEGER PRIMARY KEY  NOT NULL ,"x" VARCHAR DEFAULT (null) ,"y" VARCHAR DEFAULT (null) );
+CREATE TABLE "test" ("id" INTEGER PRIMARY KEY  NOT NULL ,"subject" INTEGER NOT NULL ,"screen" VARCHAR NOT NULL ,"begin" DATETIME NOT NULL  DEFAULT (CURRENT_TIMESTAMP) ,"sweetspot" INTEGER DEFAULT (null) );
+CREATE TABLE "user_position" ("test" INTEGER,"timestamp" INTEGER,"x" VARCHAR DEFAULT (null) ,"y" VARCHAR DEFAULT (null) );
