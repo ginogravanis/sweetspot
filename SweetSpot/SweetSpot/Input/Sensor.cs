@@ -136,5 +136,17 @@ namespace SweetSpot.Input
         {
             return sensor.DeviceConnectionId;
         }
+
+        public void ResetSensorTilt()
+        {
+            try
+            {
+                sensor.ElevationAngle = 0;
+            }
+            catch (InvalidOperationException)
+            {
+                Logger.Log("Can't change elevation angle, sensor not responding.");
+            }
+        }
     }
 }
