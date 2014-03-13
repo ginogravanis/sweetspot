@@ -1,15 +1,18 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using SweetSpot.ScreenManagement;
 
 namespace SweetSpot
 {
     public class SweetSpot : Microsoft.Xna.Framework.Game
     {
-        const int ScreenWidth = 1920;
-        const int ScreenHeight = 1080;
+        public int ScreenWidth;
+        public int ScreenHeight;
 
         public SweetSpot()
         {
+            ScreenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            ScreenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             Content.RootDirectory = "Content";
             Window.Title = "SweetSpot 2.0";
             GraphicsDeviceManager graphics = new GraphicsDeviceManager(this);
