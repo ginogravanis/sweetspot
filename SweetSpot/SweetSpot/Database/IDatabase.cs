@@ -14,7 +14,7 @@ namespace SweetSpot.Database
 
         List<Vector2> LoadSweetSpots();
 
-        void SaveSweetSpot(int id, Vector2 sweetSpot);
+        void SaveSweetSpot(Vector2 sweetSpot);
 
         int RecordTest(int testSubject, string screen, int sweetSpot);
 
