@@ -14,8 +14,8 @@ namespace SweetSpot.ScreenManagement.Screens
         Texture2D green;
         Texture2D red;
 
-        public EffectScreen(ScreenManager screenManager, Texture2D image, Effect effect)
-            : base(screenManager, image)
+        public EffectScreen(ScreenManager screenManager, Effect effect)
+            : base(screenManager)
         {
             this.effect = effect;
         }

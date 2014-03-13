@@ -18,8 +18,8 @@ namespace SweetSpot.ScreenManagement.Screens
         bool targetReached = false;
         Effect perspectiveShader;
 
-        public BaselineArrowScreen(ScreenManager screenManager, Texture2D image)
-            : base(screenManager, image)
+        public BaselineArrowScreen(ScreenManager screenManager)
+            : base(screenManager)
         { }
 
         public override void LoadContent()
