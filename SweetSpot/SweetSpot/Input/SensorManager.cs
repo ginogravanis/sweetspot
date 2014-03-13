@@ -189,6 +189,14 @@ namespace SweetSpot.Input
             return result;
         }
 
+        public void ResetSensorTilt()
+        {
+            foreach (Sensor sensor in sensors)
+            {
+                sensor.ResetSensorTilt();
+            }
+        }
+
         public static Vector2 WorldToScreenCoords(Rectangle bounds, Vector2 position)
         {
             float x = bounds.Left + (bounds.Width / 2) + ((bounds.Width / 2f) * position.X / (sensorRange/2f));

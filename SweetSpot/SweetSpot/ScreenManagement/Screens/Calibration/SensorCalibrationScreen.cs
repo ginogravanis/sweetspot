@@ -96,6 +96,11 @@ namespace SweetSpot.ScreenManagement.Screens
             {
                 captureSweetSpot();
             }
+
+            if (screenManager.Input.IsGamePadButtonPressed(Buttons.LeftShoulder) || screenManager.Input.IsKeyPressed(Keys.F9))
+            {
+                screenManager.Kinect.ResetSensorTilt();
+            }
         }
 
         protected void captureSweetSpot()
