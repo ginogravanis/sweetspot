@@ -108,9 +108,8 @@ namespace SweetSpot.ScreenManagement.Screens
 
         protected void addSweetSpot(Vector2 position)
         {
-            int id = sweetspots.Count;
             sweetspots.Add(position);
-            screenManager.Database.SaveSweetSpot(id, position);
+            screenManager.Database.SaveSweetSpot(position);
         }
 
         public override void Draw(GameTime gameTime)
