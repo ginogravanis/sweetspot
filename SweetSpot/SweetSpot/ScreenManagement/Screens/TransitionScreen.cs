@@ -26,7 +26,7 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void LoadContent()
         {
             base.LoadContent();
-            font = Content.Load<SpriteFont>("font\\segoe_72");
+            font = Content.Load<SpriteFont>(@"font\segoe_72");
             Viewport viewport = screenManager.GraphicsDevice.Viewport;
             Vector2 textSize = font.MeasureString(caption);
             textPosition = new Vector2((viewport.Width - textSize.X) / 2, (viewport.Height - textSize.Y) / 2);

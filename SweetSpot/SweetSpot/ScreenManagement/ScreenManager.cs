@@ -16,7 +16,6 @@ namespace SweetSpot.ScreenManagement
         protected List<Screen> screens;
         protected List<Vector2> sweetSpots;
         protected List<Effect> effects;
-        protected Texture2D image;
 
         public SensorManager Kinect { get; internal set; }
         public InputManager Input { get; internal set; }
@@ -44,13 +43,12 @@ namespace SweetSpot.ScreenManagement
         protected override void LoadContent()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-            image = Game.Content.Load<Texture2D>("texture\\testimage");
-            effects.Add(Game.Content.Load<Effect>("shader\\SaturationShader"));
-            effects.Add(Game.Content.Load<Effect>("shader\\BrightnessShader"));
-            effects.Add(Game.Content.Load<Effect>("shader\\ContrastShader"));
-            effects.Add(Game.Content.Load<Effect>("shader\\PixelateShader"));
-            effects.Add(Game.Content.Load<Effect>("shader\\DistortShader"));
-            effects.Add(Game.Content.Load<Effect>("shader\\JitterShader"));
+            effects.Add(Game.Content.Load<Effect>(@"shader\SaturationShader"));
+            effects.Add(Game.Content.Load<Effect>(@"shader\BrightnessShader"));
+            effects.Add(Game.Content.Load<Effect>(@"shader\ContrastShader"));
+            effects.Add(Game.Content.Load<Effect>(@"shader\PixelateShader"));
+            effects.Add(Game.Content.Load<Effect>(@"shader\DistortShader"));
+            effects.Add(Game.Content.Load<Effect>(@"shader\JitterShader"));
 
             AddScreen(new TransitionScreen(this, "Calibration"));
             AddScreen(new SensorCalibrationScreen(this));
@@ -72,11 +70,11 @@ namespace SweetSpot.ScreenManagement
         {
             this.sweetSpots = sweetSpots;
             List<Screen> testSession = new List<Screen>();
-            testSession.Add(new BaselineArrowScreen(this, image));
-            testSession.Add(new BaselineTextScreen(this, image));
+            testSession.Add(new BaselineArrowScreen(this));
+            testSession.Add(new BaselineTextScreen(this));
             foreach (Effect effect in effects)
             {
-                testSession.Add(new EffectScreen(this, image, effect));
+                testSession.Add(new EffectScreen(this, effect));
             }
             testSession.Shuffle();
 

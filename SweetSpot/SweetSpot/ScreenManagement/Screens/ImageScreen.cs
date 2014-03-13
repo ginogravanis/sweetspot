@@ -7,10 +7,14 @@ namespace SweetSpot.ScreenManagement.Screens
     {
         protected Texture2D image;
 
-        public ImageScreen(ScreenManager screenManager, Texture2D image)
+        public ImageScreen(ScreenManager screenManager)
             : base(screenManager)
+        { }
+
+        public override void LoadContent()
         {
-            this.image = image;
+            base.LoadContent();
+            image = Content.Load<Texture2D>(@"texture\testimage");
         }
 
         public override void Update(GameTime gameTime)

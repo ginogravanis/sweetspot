@@ -23,16 +23,16 @@ namespace SweetSpot.ScreenManagement.Screens
             { Direction.Back, "hinten" }
         };
 
-        public BaselineTextScreen(ScreenManager screenManager, Texture2D image)
-            : base(screenManager, image)
+        public BaselineTextScreen(ScreenManager screenManager)
+            : base(screenManager)
         {
         }
 
         public override void LoadContent()
         {
             base.LoadContent();
-            black = Content.Load<Texture2D>("texture\\black");
-            font = Content.Load<SpriteFont>("font\\segoe_36");
+            black = Content.Load<Texture2D>(@"texture\black");
+            font = Content.Load<SpriteFont>(@"font\segoe_36");
             Viewport viewport = screenManager.GraphicsDevice.Viewport;
             int textBoxHeight = (int)font.MeasureString("W").Y;
             textBox = new Rectangle(0, viewport.Height - textBoxHeight, viewport.Width, textBoxHeight);
