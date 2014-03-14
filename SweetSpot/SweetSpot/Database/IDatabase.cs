@@ -20,6 +20,6 @@ namespace SweetSpot.Database
 
         int RecordTest(int testSubject, string cue, Vector2 sweetSpot);
 
-        void RecordUserPosition(int test, Vector2 position);
+        void RecordUserPosition(int test, Vector2 position, int timestamp);
     }
 }

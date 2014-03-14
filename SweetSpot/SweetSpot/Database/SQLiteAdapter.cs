@@ -49,7 +49,7 @@ namespace SweetSpot.Database
 
         public void SaveCalibration(string deviceID, float axisTilt, Vector3 translate)
         {
-            string sql = String.Format("DELETE FROM {0} WHERE device_id='{1}'", tableCalibration, deviceID);
+            string sql = String.Format("DELETE FROM {0} WHERE device_id='{1}';", tableCalibration, deviceID);
             ExecuteNonQuery(sql);
 
             var data = new Dictionary<string, string>
@@ -90,7 +90,7 @@ namespace SweetSpot.Database
 
         public int GetNewSubjectID()
         {
-            string sql = String.Format("SELECT COUNT(*) FROM {0}", tableTest);
+            string sql = String.Format("SELECT COUNT(*) FROM {0};", tableTest);
             string result = ExecuteScalarQuery(sql);
             if (int.Parse(result) == 0)
                 return 1;
@@ -100,14 +100,40 @@ namespace SweetSpot.Database
             return int.Parse(result) + 1;
         }
 
-        public int RecordTest(int testSubject, string cue, Vector2 sweetSpot)
+        public int GetNewTestID()
         {
-            throw new NotImplementedException();
+            string sql = String.Format("SELECT COUNT(*) FROM {0};", tableTest);
+            string result = ExecuteScalarQuery(sql);
+            return int.Parse(result) + 1;
         }
 
-        public void RecordUserPosition(int test, Vector2 position)
+        public int RecordTest(int testSubject, string cue, Vector2 sweetSpot)
         {
-            throw new NotImplementedException();
+            int testID = GetNewTestID();
+
+            var test = new Dictionary<string, string>
+            {
+                {"id", testID.ToString()},
+                {"subject", testSubject.ToString()},
+                {"cue", cue},
+                {"sweetspot_x", sweetSpot.X.ToString()},
+                {"sweetspot_y", sweetSpot.Y.ToString()}
+            };
+            Insert(tableTest, test);
+
+            return testID;
+        }
+
+        public void RecordUserPosition(int test, Vector2 position, int timestamp)
+        {
+            var positionRecord = new Dictionary<string, string>
+            {
+                {"test_id", test.ToString()},
+                {"timestamp", timestamp.ToString()},
+                {"x", position.X.ToString()},
+                {"y", position.Y.ToString()}
+            };
+            Insert(tableUserPosition, positionRecord);
         }
 
         public void ExecuteNonQuery(string sql)
