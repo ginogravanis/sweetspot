@@ -49,7 +49,8 @@ namespace SweetSpot.Database
 
         public void SaveCalibration(string deviceID, float axisTilt, Vector3 translate)
         {
-            ExecuteNonQuery(String.Format("DELETE FROM {0} WHERE device_id='{1}'", tableCalibration, deviceID));
+            string sql = String.Format("DELETE FROM {0} WHERE device_id='{1}'", tableCalibration, deviceID);
+            ExecuteNonQuery(sql);
 
             var data = new Dictionary<string, string>
             {
@@ -87,7 +88,19 @@ namespace SweetSpot.Database
             Insert(tableSweetSpotBounds, sweetSpots);
         }
 
-        public int RecordTest(int testSubject, string screen, int sweetSpot)
+        public int GetNewSubjectID()
+        {
+            string sql = String.Format("SELECT COUNT(*) FROM {0}", tableTest);
+            string result = ExecuteScalarQuery(sql);
+            if (int.Parse(result) == 0)
+                return 1;
+
+            sql = String.Format("SELECT MAX(subject) FROM {0};", tableTest);
+            result = ExecuteScalarQuery(sql);
+            return int.Parse(result) + 1;
+        }
+
+        public int RecordTest(int testSubject, string cue, Vector2 sweetSpot)
         {
             throw new NotImplementedException();
         }

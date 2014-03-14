@@ -32,10 +32,10 @@ namespace SweetSpot.ScreenManagement.Screens
             textPosition = new Vector2((viewport.Width - textSize.X) / 2, (viewport.Height - textSize.Y) / 2);
         }
 
-        protected override void initialize(GameTime gameTime)
+        public override void Initialize()
         {
-            base.initialize(gameTime);
-            changeState(TransitionState.PreDelay, gameTime);
+            base.Initialize();
+            changeState(TransitionState.PreDelay);
         }
 
         public override void Update(GameTime gameTime)
@@ -48,14 +48,14 @@ namespace SweetSpot.ScreenManagement.Screens
             {
                 case TransitionState.PreDelay:
                     if (timeSinceStateChange >= delay)
-                        changeState(TransitionState.FadingIn, gameTime);
+                        changeState(TransitionState.FadingIn);
                     break;
 
                 case TransitionState.FadingIn:
                     if (timeSinceStateChange >= fadeTime)
                     {
                         alpha = 1f;
-                        changeState(TransitionState.Active, gameTime);
+                        changeState(TransitionState.Active);
                     }
                     else
                     {
@@ -70,7 +70,7 @@ namespace SweetSpot.ScreenManagement.Screens
                     if (timeSinceStateChange >= fadeTime)
                     {
                         alpha = 0f;
-                        changeState(TransitionState.PostDelay, gameTime);
+                        changeState(TransitionState.PostDelay);
                     }
                     else
                     {
@@ -85,7 +85,7 @@ namespace SweetSpot.ScreenManagement.Screens
             }
         }
 
-        protected void changeState(TransitionState newState, GameTime gameTime)
+        protected void changeState(TransitionState newState)
         {
             state = newState;
             timeSinceStateChange = 0f;
@@ -108,7 +108,7 @@ namespace SweetSpot.ScreenManagement.Screens
         {
             if (TransitionState.Active == state)
             {
-                changeState(TransitionState.FadingOut, gameTime);
+                changeState(TransitionState.FadingOut);
             }
         }
     }

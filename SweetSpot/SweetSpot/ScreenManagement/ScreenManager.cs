@@ -21,6 +21,8 @@ namespace SweetSpot.ScreenManagement
         public InputManager Input { get; internal set; }
         public IDatabase Database { get; internal set; }
         public SpriteBatch SpriteBatch { get; internal set; }
+        public Screen CurrentScreen { get { return screens[0]; } }
+        public int TestSubject { get; internal set; }
 
         public ScreenManager(Game game)
             : base(game)
@@ -38,6 +40,7 @@ namespace SweetSpot.ScreenManagement
         {
             base.Initialize();
             Kinect.sweetSpot = new Vector2(0f, 2f);
+            TestSubject = Database.GetNewSubjectID();
         }
 
         protected override void LoadContent()
@@ -95,15 +98,19 @@ namespace SweetSpot.ScreenManagement
         {
             Input.Update(gameTime);
             Kinect.Update(gameTime);
-            screens[0].Update(gameTime);
 
-            if (screens[0].Finished)
+            if (!CurrentScreen.Initialized)
+                CurrentScreen.Initialize();
+
+            CurrentScreen.Update(gameTime);
+
+            if (CurrentScreen.Finished)
                 RemoveScreen();
         }
 
         protected void RemoveScreen()
         {
-            screens[0].UnloadContent();
+            CurrentScreen.UnloadContent();
             screens.RemoveAt(0);
             if (screens.Count == 0)
                 Game.Exit();
@@ -111,7 +118,7 @@ namespace SweetSpot.ScreenManagement
 
         public override void Draw(GameTime gameTime)
         {
-            screens[0].Draw(gameTime);
+            CurrentScreen.Draw(gameTime);
         }
     }
 }
