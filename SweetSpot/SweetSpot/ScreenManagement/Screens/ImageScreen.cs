@@ -5,7 +5,12 @@ namespace SweetSpot.ScreenManagement.Screens
 {
     public class ImageScreen : Screen
     {
+        public Vector2 SweetSpot { get; set; }
+        public string Cue { get; set; }
+
         protected Texture2D image;
+        protected int test;
+        protected int testSubject;
 
         public ImageScreen(ScreenManager screenManager)
             : base(screenManager)
@@ -15,6 +20,13 @@ namespace SweetSpot.ScreenManagement.Screens
         {
             base.LoadContent();
             image = Content.Load<Texture2D>(@"texture\testimage");
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            testSubject = screenManager.TestSubject;
+            test = screenManager.Database.RecordTest(testSubject, Cue, SweetSpot);
         }
 
         public override void Update(GameTime gameTime)

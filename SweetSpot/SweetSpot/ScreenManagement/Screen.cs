@@ -7,11 +7,10 @@ namespace SweetSpot.ScreenManagement
     public abstract class Screen
     {
         public ContentManager Content { get; internal set; }
-        protected bool initialized = false;
+        public bool Initialized { get; internal set; }
+        public bool Finished { get; internal set; }
 
         protected ScreenManager screenManager;
-
-        public bool Finished { get; internal set; }
 
         public Screen(ScreenManager screenManager)
         {
@@ -25,16 +24,16 @@ namespace SweetSpot.ScreenManagement
 
         public virtual void UnloadContent() { }
 
-        protected virtual void initialize(GameTime gameTime) { }
+        public virtual void Initialize()
+        {
+            if (Initialized)
+                return;
+
+            Initialized = true;
+        }
 
         public virtual void Update(GameTime gameTime)
         {
-            if (!initialized)
-            {
-                initialize(gameTime);
-                initialized = true;
-            }
-
             if (screenManager.Input.IsKeyDown(Keys.Escape) || screenManager.Input.IsGamePadButtonPressed(Buttons.Back))
                 screenManager.Game.Exit();
 

@@ -16,7 +16,9 @@ namespace SweetSpot.Database
 
         void SaveSweetSpot(Vector2 sweetSpot);
 
-        int RecordTest(int testSubject, string screen, int sweetSpot);
+        int GetNewSubjectID();
+
+        int RecordTest(int testSubject, string cue, Vector2 sweetSpot);
 
         void RecordUserPosition(int test, Vector2 position);
     }
