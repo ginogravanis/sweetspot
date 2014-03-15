@@ -82,6 +82,7 @@
     <Compile Include="Logger\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ScreenManagement\Cue.cs" />
     <Compile Include="ScreenManagement\Screen.cs" />
     <Compile Include="ScreenManagement\ScreenManager.cs" />
     <Compile Include="ScreenManagement\Screens\BaselineArrowScreen.cs" />
@@ -91,9 +92,13 @@
     <Compile Include="ScreenManagement\Screens\ImageScreen.cs" />
     <Compile Include="ScreenManagement\Screens\BaselineTextScreen.cs" />
     <Compile Include="ScreenManagement\Screens\Calibration\SensorPanel.cs" />
+    <Compile Include="ScreenManagement\ScreenFactory.cs" />
     <Compile Include="ScreenManagement\Screens\TransitionScreen.cs" />
     <Compile Include="SweetSpot.cs" />
+    <Compile Include="Util\EnumUtil.cs" />
     <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Util\StringEnum.cs" />
+    <Compile Include="Util\StringValueAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="SweetSpot.ico" />

@@ -1,24 +1,25 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SweetSpot.Database;
+using SweetSpot.Util;
 
 namespace SweetSpot.ScreenManagement.Screens
 {
     public class ImageScreen : Screen
     {
-        public Vector2 SweetSpot { get; set; }
-        public string Cue { get; set; }
-
         protected Texture2D image;
+        protected string cue;
+        protected Vector2 sweetSpot;
         protected int test;
         protected int testSubject;
         protected TimeSpan lastPositionCaptured;
         protected TimeSpan recordingIntervall = TimeSpan.FromMilliseconds(100);
 
-        public ImageScreen(ScreenManager screenManager)
+        public ImageScreen(ScreenManager screenManager, string cue, Vector2 sweetSpot)
             : base(screenManager)
         {
+            this.cue = cue;
+            this.sweetSpot = sweetSpot;
             lastPositionCaptured = TimeSpan.FromSeconds(-1);
         }
 
@@ -31,11 +32,9 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void Initialize()
         {
             base.Initialize();
-            SweetSpot = new Vector2(0, 2);
-            Cue = "dummy";
             testSubject = screenManager.TestSubject;
-            test = screenManager.Database.RecordTest(testSubject, Cue, SweetSpot);
-            screenManager.Kinect.sweetSpot = SweetSpot;
+            test = screenManager.Database.RecordTest(testSubject, cue, sweetSpot);
+            screenManager.Kinect.sweetSpot = sweetSpot;
         }
 
         public override void Update(GameTime gameTime)
