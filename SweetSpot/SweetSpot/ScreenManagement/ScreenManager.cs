@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SweetSpot.Database;
 using SweetSpot.Input;
-using SweetSpot.ScreenManagement.Screens;
 using SweetSpot.Util;
 
 namespace SweetSpot.ScreenManagement
 {
     public class ScreenManager : DrawableGameComponent
     {
+        public readonly int TestsPerCue = 5;
+
         public bool Debug { get; internal set; }
-
-        protected List<Screen> screens;
-        protected List<Vector2> sweetSpots;
-        protected List<Effect> effects;
-
         public SensorManager Kinect { get; internal set; }
         public InputManager Input { get; internal set; }
         public IDatabase Database { get; internal set; }
@@ -24,13 +21,13 @@ namespace SweetSpot.ScreenManagement
         public Screen CurrentScreen { get { return screens[0]; } }
         public int TestSubject { get; internal set; }
 
+        protected List<Screen> screens;
+
         public ScreenManager(Game game)
             : base(game)
         {
             Debug = false;
             screens = new List<Screen>();
-            sweetSpots = new List<Vector2>();
-            effects = new List<Effect>();
             Kinect = new SensorManager();
             Input = new InputManager();
             Database = new SQLiteAdapter();
@@ -46,15 +43,9 @@ namespace SweetSpot.ScreenManagement
         protected override void LoadContent()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-            effects.Add(Game.Content.Load<Effect>(@"shader\SaturationShader"));
-            effects.Add(Game.Content.Load<Effect>(@"shader\BrightnessShader"));
-            effects.Add(Game.Content.Load<Effect>(@"shader\ContrastShader"));
-            effects.Add(Game.Content.Load<Effect>(@"shader\PixelateShader"));
-            effects.Add(Game.Content.Load<Effect>(@"shader\DistortShader"));
-            effects.Add(Game.Content.Load<Effect>(@"shader\JitterShader"));
 
-            AddScreen(new TransitionScreen(this, "Calibration"));
-            AddScreen(new SensorCalibrationScreen(this));
+            AddScreen(ScreenFactory.CreateTransitionScreen(this, "Calibration"));
+            AddScreen(ScreenFactory.CreateCalibrationScreen(this));
         }
 
         protected override void UnloadContent()
@@ -69,24 +60,33 @@ namespace SweetSpot.ScreenManagement
             screens.Add(screen);
         }
 
-        public void GenerateTestSession(List<Vector2> sweetSpots)
+        public void GenerateTestSession(List<Vector2> sweetSpotBounds)
         {
-            this.sweetSpots = sweetSpots;
             List<Screen> testSession = new List<Screen>();
-            testSession.Add(new BaselineArrowScreen(this));
-            testSession.Add(new BaselineTextScreen(this));
-            foreach (Effect effect in effects)
+            List<Cue> cues = EnumUtil.GetValues<Cue>().ToList();
+            cues.Shuffle();
+            int cueIndex = 0;
+            foreach (Cue cue in cues)
             {
-                testSession.Add(new EffectScreen(this, effect));
+                cueIndex++;
+                for (int test = 1; test <= TestsPerCue; test++)
+                {
+                    testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Cue {0}/{1}\nTest {2}/{3}", cueIndex, cues.Count, test, TestsPerCue)));
+                    testSession.Add(ScreenFactory.CreateTestScreen(this, cue, generateSweetSpot()));
+                }
+                testSession.Add(ScreenFactory.CreateTransitionScreen(this, "Questionnaire"));
             }
-            testSession.Shuffle();
+            testSession.Add(ScreenFactory.CreateTransitionScreen(this, "Thank you for participating!"));
 
-            for (int i = 0; i < testSession.Count; i++)
+            foreach (Screen screen in testSession)
             {
-                AddScreen(new TransitionScreen(this, String.Format("Test {0}/{1}", i + 1, testSession.Count)));
-                AddScreen(testSession[i]);
+                AddScreen(screen);
             }
-            AddScreen(new TransitionScreen(this, "Thank you for participating!"));
+        }
+
+        protected Vector2 generateSweetSpot()
+        {
+            return new Vector2();
         }
 
         public void ToggleDebug()

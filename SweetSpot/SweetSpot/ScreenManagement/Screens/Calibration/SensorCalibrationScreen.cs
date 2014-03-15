@@ -13,12 +13,12 @@ namespace SweetSpot.ScreenManagement.Screens
         Rectangle separator;
         SensorPanel leftSensorPanel;
         SensorPanel rightSensorPanel;
-        public List<Vector2> sweetspots { get; set; }
+        public List<Vector2> sweetSpotBounds { get; set; }
 
         public SensorCalibrationScreen(ScreenManager screenManager)
             : base(screenManager)
         {
-            sweetspots = new List<Vector2>();
+            sweetSpotBounds = new List<Vector2>();
         }
 
         public override void LoadContent()
@@ -53,7 +53,7 @@ namespace SweetSpot.ScreenManagement.Screens
             leftSensorPanel.LoadContent(Content);
             rightSensorPanel.LoadContent(Content);
             loadCalibration();
-            sweetspots = screenManager.Database.LoadSweetSpots();
+            sweetSpotBounds = screenManager.Database.LoadSweetSpots();
         }
 
         public override void Update(GameTime gameTime)
@@ -113,7 +113,7 @@ namespace SweetSpot.ScreenManagement.Screens
 
         protected void addSweetSpot(Vector2 position)
         {
-            sweetspots.Add(position);
+            sweetSpotBounds.Add(position);
             screenManager.Database.SaveSweetSpot(position);
         }
 
@@ -132,7 +132,7 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void SkipAction(GameTime gameTime)
         {
             base.SkipAction(gameTime);
-            screenManager.GenerateTestSession(sweetspots);
+            screenManager.GenerateTestSession(sweetSpotBounds);
         }
 
         protected void loadCalibration()
