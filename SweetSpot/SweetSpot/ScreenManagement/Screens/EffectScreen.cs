@@ -35,14 +35,19 @@ namespace SweetSpot.ScreenManagement.Screens
 
         protected void UpdateEffect(GameTime gameTime)
         {
+            targetEffectIntensity = 1.0f;
+
             if (screenManager.Kinect.IsViewerActive())
             {
-                targetEffectIntensity = screenManager.Kinect.GetDistanceFromSweetSpot() / screenManager.Kinect.sweetSpotMargin;
+                float distanceFromSweetSpot = screenManager.Kinect.GetDistanceFromSweetSpot();
+                float margin = screenManager.Kinect.sweetSpotMargin;
+
+                if (distanceFromSweetSpot <= margin)
+                {
+                    targetEffectIntensity = screenManager.Kinect.GetDistanceFromSweetSpot() / screenManager.Kinect.sweetSpotMargin;
+                }
             }
-            else
-            {
-                targetEffectIntensity = 1.0f;
-            }
+
             currentEffectIntensity = WeightedAverage(currentEffectIntensity, targetEffectIntensity, intensitySmoothingFactor);
         }
 
