@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework;
 
 namespace SweetSpot.Database
 {
+    public enum PersistenceStrategy { Immediate, Cached }
+
     class SQLiteAdapter : IDatabase
     {
         const string filename = "database.sqlite";
@@ -13,12 +15,20 @@ namespace SweetSpot.Database
         const string tableSweetSpotBounds = "sweetspot_bounds";
         const string tableTest = "test";
         const string tableUserPosition = "user_position";
+        const int cacheSize = 1000;
 
         protected string db;
+        protected List<string> insertCache;
 
         public SQLiteAdapter()
         {
             db = "Data Source=" + filename;
+            insertCache = new List<string>();
+        }
+
+        ~SQLiteAdapter()
+        {
+            flushInsertCache();
         }
 
         public bool HasCalibrationDataFor(string deviceID)
@@ -132,7 +142,12 @@ namespace SweetSpot.Database
                 {"x", position.X.ToString()},
                 {"y", position.Y.ToString()}
             };
-            Insert(tableUserPosition, positionRecord);
+            Insert(tableUserPosition, positionRecord, PersistenceStrategy.Cached);
+        }
+
+        public void ExecuteCachedNonQuery(string sql)
+        {
+            insertCache.Add(sql);
         }
 
         public void ExecuteNonQuery(string sql)
@@ -141,7 +156,7 @@ namespace SweetSpot.Database
             {
                 SQLiteConnection connection = new SQLiteConnection(db);
                 connection.Open();
-                SQLiteCommand command = new SQLiteCommand(connection);
+                SQLiteCommand command = connection.CreateCommand();
                 command.CommandText = sql;
                 command.ExecuteNonQuery();
                 connection.Close();
@@ -152,13 +167,42 @@ namespace SweetSpot.Database
             }
         }
 
-        public string ExecuteScalarQuery(string sql)
+        public void ExecuteNonQueries(List<string> sqls)
         {
             try
             {
                 SQLiteConnection connection = new SQLiteConnection(db);
                 connection.Open();
-                SQLiteCommand command = new SQLiteCommand(connection);
+                SQLiteCommand command = connection.CreateCommand();
+                SQLiteTransaction transaction = connection.BeginTransaction();
+                foreach (string sql in sqls)
+                {
+                    command.CommandText = sql;
+                    command.ExecuteNonQuery();
+                }
+                transaction.Commit();
+                connection.Close();
+                command.Dispose();
+                connection.Dispose();
+            }
+            catch (Exception)
+            {
+                Logger.Log("Failed to execute batch query:");
+                foreach (string sql in sqls)
+                {
+                    Logger.Log("    " + sql);
+                }
+            }
+        }
+
+        public string ExecuteScalarQuery(string sql)
+        {
+            flushInsertCache();
+            try
+            {
+                SQLiteConnection connection = new SQLiteConnection(db);
+                connection.Open();
+                SQLiteCommand command = connection.CreateCommand();
                 command.CommandText = sql;
                 object result = command.ExecuteScalar();
                 connection.Close();
@@ -173,6 +217,7 @@ namespace SweetSpot.Database
 
         public DataTable ExecuteTableQuery(string sql)
         {
+            flushInsertCache();
             DataTable table = new DataTable();
             try
             {
@@ -193,7 +238,7 @@ namespace SweetSpot.Database
             return table;
         }
 
-        public void Insert(string tableName, Dictionary<string, string> data)
+        public void Insert(string tableName, Dictionary<string, string> data, PersistenceStrategy caching = PersistenceStrategy.Immediate)
         {
             string columns = "";
             string values = "";
@@ -204,12 +249,35 @@ namespace SweetSpot.Database
             }
             columns = columns.Substring(0, columns.Length - 1);
             values = values.Substring(0, values.Length - 1);
-            ExecuteNonQuery(String.Format("INSERT INTO {0}({1}) VALUES({2});", tableName, columns, values));
+            string sql = String.Format("INSERT INTO {0}({1}) VALUES({2});", tableName, columns, values);
+
+            switch (caching)
+            {
+                case PersistenceStrategy.Cached:
+                    ExecuteCachedNonQuery(sql);
+                    break;
+                case PersistenceStrategy.Immediate:
+                    ExecuteNonQuery(sql);
+                    break;
+            }
         }
 
         public void ClearTable(string tableName)
         {
             ExecuteNonQuery(String.Format("DELETE FROM {0};", tableName));
+        }
+
+        protected void cacheQuery(string sql)
+        {
+            insertCache.Add(sql);
+            if (insertCache.Count > cacheSize)
+                flushInsertCache();
+        }
+
+        protected void flushInsertCache()
+        {
+            ExecuteNonQueries(insertCache);
+            insertCache.Clear();
         }
     }
 }
