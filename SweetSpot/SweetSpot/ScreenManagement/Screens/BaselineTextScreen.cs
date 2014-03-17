@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SweetSpot.Input;
 
 namespace SweetSpot.ScreenManagement.Screens
 {
     class BaselineTextScreen : ImageScreen
     {
         Texture2D black;
+        Texture2D green;
+        Texture2D red;
         SpriteFont font;
         Rectangle textBox;
         Vector2 textPosition;
@@ -32,6 +35,8 @@ namespace SweetSpot.ScreenManagement.Screens
         {
             base.LoadContent();
             black = Content.Load<Texture2D>(@"texture\black");
+            green = Content.Load<Texture2D>("texture\\green");
+            red = Content.Load<Texture2D>("texture\\red");
             font = Content.Load<SpriteFont>(@"font\segoe_36");
             Viewport viewport = screenManager.GraphicsDevice.Viewport;
             int textBoxHeight = (int)font.MeasureString("W").Y;
@@ -95,13 +100,27 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-
             SpriteBatch spriteBatch = screenManager.SpriteBatch;
+            Viewport viewport = screenManager.GraphicsDevice.Viewport;
+
             spriteBatch.Begin();
             spriteBatch.Draw(black, textBox, Color.White);
             if (viewerDetected)
                 spriteBatch.DrawString(font, text, textPosition, Color.White);
             spriteBatch.End();
+
+            if (screenManager.Debug)
+            {
+                // Overlay
+                Vector2 sweetSpotPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, screenManager.Kinect.sweetSpot);
+                Vector2 viewerPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, screenManager.Kinect.GetViewerPosition());
+                Rectangle sweetSpot = new Rectangle((int)sweetSpotPosition.X - 10, (int)sweetSpotPosition.Y - 10, 20, 20);
+                Rectangle viewer = new Rectangle((int)viewerPosition.X - 15, (int)viewerPosition.Y - 15, 30, 30);
+                spriteBatch.Begin();
+                spriteBatch.Draw(green, sweetSpot, Color.White);
+                spriteBatch.Draw(red, viewer, Color.White);
+                spriteBatch.End();
+            }
         }
     }
 }
