@@ -7,6 +7,9 @@ namespace SweetSpot.ScreenManagement.Screens
 {
     class BaselineArrowScreen : ImageScreen
     {
+        const int compassWidth = 405;
+        const int compassHeight = 200;
+
         Texture2D black;
         Texture2D green;
         Texture2D red;
@@ -15,7 +18,6 @@ namespace SweetSpot.ScreenManagement.Screens
         Rectangle compass;
         Rectangle arrowRect;
         Rectangle checkMarkRect;
-        int compassSize = 405;
         float compassOrientation;
         bool viewerDetected = false;
         bool targetReached = false;
@@ -36,22 +38,22 @@ namespace SweetSpot.ScreenManagement.Screens
             perspectiveShader = Content.Load<Effect>("shader\\PerspectiveShader");
             Viewport viewport = screenManager.GraphicsDevice.Viewport;
             compass = new Rectangle(
-                viewport.Width - compassSize,
-                viewport.Height - compassSize,
-                compassSize,
-                compassSize
+                viewport.Width - compassWidth,
+                viewport.Height - compassHeight,
+                compassWidth,
+                compassHeight
             );
             arrowRect = new Rectangle(
-                compass.Left + (compassSize - arrow.Bounds.Width) / 2,
+                compass.Left + (compassWidth - arrow.Bounds.Width) / 2,
                 compass.Bottom - arrow.Bounds.Height / 3,
                 arrow.Bounds.Width,
                 arrow.Bounds.Height / 3
             );
             checkMarkRect = new Rectangle(
-                compass.Left + (compassSize - checkMark.Bounds.Width) / 2,
-                compass.Top + (compassSize - checkMark.Bounds.Height) / 2,
-                checkMark.Bounds.Width,
-                checkMark.Bounds.Height
+                compass.Left + (compassWidth - checkMark.Bounds.Width / 2) / 2,
+                compass.Top + (compassWidth - checkMark.Bounds.Height) / 2,
+                checkMark.Bounds.Width / 2,
+                checkMark.Bounds.Height / 2
             );
         }
 
