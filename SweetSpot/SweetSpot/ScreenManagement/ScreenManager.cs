@@ -86,7 +86,7 @@ namespace SweetSpot.ScreenManagement
 
         protected Vector2 generateSweetSpot()
         {
-            return new Vector2();
+            return new Vector2(0, 1);
         }
 
         public void ToggleDebug()
@@ -96,16 +96,15 @@ namespace SweetSpot.ScreenManagement
 
         public override void Update(GameTime gameTime)
         {
-            Input.Update(gameTime);
-            Kinect.Update(gameTime);
+            if (CurrentScreen.Finished)
+                RemoveScreen();
 
             if (!CurrentScreen.Initialized)
                 CurrentScreen.Initialize();
 
+            Input.Update(gameTime);
+            Kinect.Update(gameTime);
             CurrentScreen.Update(gameTime);
-
-            if (CurrentScreen.Finished)
-                RemoveScreen();
         }
 
         protected void RemoveScreen()

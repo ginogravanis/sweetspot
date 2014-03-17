@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SweetSpot.Util
 {
@@ -22,6 +23,16 @@ namespace SweetSpot.Util
             T tmp = list[i];
             list[i] = list[j];
             list[j] = tmp;
+        }
+
+        public static void SwapPairs<T>(this IList<T> list, int numPairs)
+        {
+            List<int> indexList = Enumerable.Range(0, list.Count).ToList();
+            indexList.Shuffle();
+            for (int i = 0; i < numPairs; i++)
+            {
+                list.Swap(indexList[2*i], indexList[2*i + 1]);
+            }
         }
 
         public static String GetTimestamp(this DateTime value)
