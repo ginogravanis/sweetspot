@@ -58,6 +58,7 @@ namespace SweetSpot.ScreenManagement.Screens
 
         public override void Draw(GameTime gameTime)
         {
+            base.Draw(gameTime);
             SpriteBatch spriteBatch = screenManager.SpriteBatch;
             Viewport viewport = screenManager.GraphicsDevice.Viewport;
 
