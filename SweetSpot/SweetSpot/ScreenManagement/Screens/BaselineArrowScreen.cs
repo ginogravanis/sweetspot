@@ -1,12 +1,15 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SweetSpot.Input;
 
 namespace SweetSpot.ScreenManagement.Screens
 {
     class BaselineArrowScreen : ImageScreen
     {
         Texture2D black;
+        Texture2D green;
+        Texture2D red;
         Texture2D arrow;
         Texture2D checkMark;
         Rectangle compass;
@@ -26,6 +29,8 @@ namespace SweetSpot.ScreenManagement.Screens
         {
             base.LoadContent();
             black = Content.Load<Texture2D>("texture\\black");
+            green = Content.Load<Texture2D>("texture\\green");
+            red = Content.Load<Texture2D>("texture\\red");
             arrow = Content.Load<Texture2D>("texture\\arrow");
             checkMark = Content.Load<Texture2D>("texture\\checkmark");
             perspectiveShader = Content.Load<Effect>("shader\\PerspectiveShader");
@@ -69,8 +74,9 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-
             SpriteBatch spriteBatch = screenManager.SpriteBatch;
+            Viewport viewport = screenManager.GraphicsDevice.Viewport;
+
             spriteBatch.Begin();
             spriteBatch.Draw(black, compass, Color.White);
             spriteBatch.End();
@@ -90,6 +96,19 @@ namespace SweetSpot.ScreenManagement.Screens
                     spriteBatch.Draw(arrow, arrowRect, Color.White);
                     spriteBatch.End();
                 }
+            }
+
+            if (screenManager.Debug)
+            {
+                // Overlay
+                Vector2 sweetSpotPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, screenManager.Kinect.sweetSpot);
+                Vector2 viewerPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, screenManager.Kinect.GetViewerPosition());
+                Rectangle sweetSpot = new Rectangle((int)sweetSpotPosition.X - 10, (int)sweetSpotPosition.Y - 10, 20, 20);
+                Rectangle viewer = new Rectangle((int)viewerPosition.X - 15, (int)viewerPosition.Y - 15, 30, 30);
+                spriteBatch.Begin();
+                spriteBatch.Draw(green, sweetSpot, Color.White);
+                spriteBatch.Draw(red, viewer, Color.White);
+                spriteBatch.End();
             }
         }
     }
