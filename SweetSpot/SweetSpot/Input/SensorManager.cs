@@ -31,8 +31,8 @@ namespace SweetSpot.Input
         TimeSpan viewerLastSeen;
         bool viewerActive;
 
-        public static int MaxSensorCount = 2;
-        public static float sensorRange = 5.0f;
+        public static int MAX_SENSOR_COUNT = 2;
+        public static float SENSOR_RANGE = 5.0f;
 
         public SensorManager()
         {
@@ -56,7 +56,7 @@ namespace SweetSpot.Input
                 }
             }
 
-            int maxSensors = SensorManager.MaxSensorCount;
+            int maxSensors = SensorManager.MAX_SENSOR_COUNT;
             if (sensors.Count > maxSensors)
             {
                 sensors.RemoveRange(maxSensors, sensors.Count - maxSensors);
@@ -199,8 +199,8 @@ namespace SweetSpot.Input
 
         public static Vector2 WorldToScreenCoords(Rectangle bounds, Vector2 position)
         {
-            float x = bounds.Left + (bounds.Width / 2) + ((bounds.Width / 2f) * position.X / (sensorRange/2f));
-            float y = bounds.Top + bounds.Height * (position.Y / sensorRange);
+            float x = bounds.Left + (bounds.Width / 2) + ((bounds.Width / 2f) * position.X / (SENSOR_RANGE/2f));
+            float y = bounds.Top + bounds.Height * (position.Y / SENSOR_RANGE);
             return new Vector2((int)Math.Round(x), (int)Math.Round(y));
         }
     }

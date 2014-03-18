@@ -10,19 +10,19 @@ namespace SweetSpot.Database
 
     class SQLiteAdapter : IDatabase
     {
-        const string filename = "database.sqlite";
-        const string tableCalibration = "calibration";
-        const string tableSweetSpotBounds = "sweetspot_bounds";
-        const string tableTest = "test";
-        const string tableUserPosition = "user_position";
-        const int cacheSize = 1000;
+        const string FILENAME = "database.sqlite";
+        const string TABLE_CALIBRATION = "calibration";
+        const string TABLE_SWEETSPOT_BOUNDS = "sweetspot_bounds";
+        const string TABLE_TEST = "test";
+        const string TABLE_USER_POSITION = "user_position";
+        const int CACHE_SIZE = 1000;
 
         protected string db;
         protected List<string> insertCache;
 
         public SQLiteAdapter()
         {
-            db = "Data Source=" + filename;
+            db = "Data Source=" + FILENAME;
             insertCache = new List<string>();
         }
 
@@ -33,7 +33,7 @@ namespace SweetSpot.Database
 
         public bool HasCalibrationDataFor(string deviceID)
         {
-            string sql = String.Format("SELECT COUNT(*) FROM {0} WHERE device_id='{1}';", tableCalibration, deviceID);
+            string sql = String.Format("SELECT COUNT(*) FROM {0} WHERE device_id='{1}';", TABLE_CALIBRATION, deviceID);
             string result = ExecuteScalarQuery(sql);
 
             return int.Parse(result) > 0;
@@ -41,7 +41,7 @@ namespace SweetSpot.Database
 
         public Tuple<float, Vector3> LoadCalibration(string deviceID)
         {
-            string sql = String.Format("SELECT * FROM {0} WHERE device_id='{1}' ORDER BY created DESC;", tableCalibration, deviceID);
+            string sql = String.Format("SELECT * FROM {0} WHERE device_id='{1}' ORDER BY created DESC;", TABLE_CALIBRATION, deviceID);
             DataTable table = ExecuteTableQuery(sql);
             
             if (table.Rows.Count == 0)
@@ -58,7 +58,7 @@ namespace SweetSpot.Database
 
         public void SaveCalibration(string deviceID, float axisTilt, Vector3 translate)
         {
-            string sql = String.Format("DELETE FROM {0} WHERE device_id='{1}';", tableCalibration, deviceID);
+            string sql = String.Format("DELETE FROM {0} WHERE device_id='{1}';", TABLE_CALIBRATION, deviceID);
             ExecuteNonQuery(sql);
 
             var data = new Dictionary<string, string>
@@ -69,12 +69,12 @@ namespace SweetSpot.Database
                 {"translate_y", translate.Y.ToString()},
                 {"translate_z", translate.Z.ToString()}
             };
-            Insert(tableCalibration, data);
+            Insert(TABLE_CALIBRATION, data);
         }
 
         public List<Vector2> LoadSweetSpots()
         {
-            string sql = String.Format("SELECT x, y FROM {0};", tableSweetSpotBounds);
+            string sql = String.Format("SELECT x, y FROM {0};", TABLE_SWEETSPOT_BOUNDS);
             DataTable table = ExecuteTableQuery(sql);
             var sweetSpots = new List<Vector2>();
             foreach (DataRow row in table.Rows)
@@ -94,24 +94,24 @@ namespace SweetSpot.Database
                 {"x", sweetSpot.X.ToString()},
                 {"y", sweetSpot.Y.ToString()}
             };
-            Insert(tableSweetSpotBounds, sweetSpots);
+            Insert(TABLE_SWEETSPOT_BOUNDS, sweetSpots);
         }
 
         public int GetNewSubjectID()
         {
-            string sql = String.Format("SELECT COUNT(*) FROM {0};", tableTest);
+            string sql = String.Format("SELECT COUNT(*) FROM {0};", TABLE_TEST);
             string result = ExecuteScalarQuery(sql);
             if (int.Parse(result) == 0)
                 return 1;
 
-            sql = String.Format("SELECT MAX(subject) FROM {0};", tableTest);
+            sql = String.Format("SELECT MAX(subject) FROM {0};", TABLE_TEST);
             result = ExecuteScalarQuery(sql);
             return int.Parse(result) + 1;
         }
 
         public int GetNewTestID()
         {
-            string sql = String.Format("SELECT COUNT(*) FROM {0};", tableTest);
+            string sql = String.Format("SELECT COUNT(*) FROM {0};", TABLE_TEST);
             string result = ExecuteScalarQuery(sql);
             return int.Parse(result) + 1;
         }
@@ -128,7 +128,7 @@ namespace SweetSpot.Database
                 {"sweetspot_x", sweetSpot.X.ToString()},
                 {"sweetspot_y", sweetSpot.Y.ToString()}
             };
-            Insert(tableTest, test);
+            Insert(TABLE_TEST, test);
 
             return testID;
         }
@@ -142,7 +142,7 @@ namespace SweetSpot.Database
                 {"x", position.X.ToString()},
                 {"y", position.Y.ToString()}
             };
-            Insert(tableUserPosition, positionRecord, PersistenceStrategy.Cached);
+            Insert(TABLE_USER_POSITION, positionRecord, PersistenceStrategy.Cached);
         }
 
         public void ExecuteCachedNonQuery(string sql)
@@ -270,7 +270,7 @@ namespace SweetSpot.Database
         protected void cacheQuery(string sql)
         {
             insertCache.Add(sql);
-            if (insertCache.Count > cacheSize)
+            if (insertCache.Count > CACHE_SIZE)
                 flushInsertCache();
         }
 

@@ -9,7 +9,7 @@ namespace SweetSpot.ScreenManagement.Screens
         Effect effect;
         float currentEffectIntensity = 1f;
         float targetEffectIntensity = 1f;
-        float intensitySmoothingFactor = 20f;
+        const float INTENSITY_SMOOTHING_FACTOR = 20f;
 
         Texture2D green;
         Texture2D red;
@@ -48,7 +48,7 @@ namespace SweetSpot.ScreenManagement.Screens
                 }
             }
 
-            currentEffectIntensity = WeightedAverage(currentEffectIntensity, targetEffectIntensity, intensitySmoothingFactor);
+            currentEffectIntensity = WeightedAverage(currentEffectIntensity, targetEffectIntensity, INTENSITY_SMOOTHING_FACTOR);
         }
 
         public float WeightedAverage(float current, float target, float weight)

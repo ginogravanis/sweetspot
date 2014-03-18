@@ -17,7 +17,7 @@ namespace SweetSpot.ScreenManagement.Screens
         protected Texture2D white;
         protected Rectangle bounds;
         protected Rectangle sensorRect;
-        protected const int rectangleSize = 20;
+        protected const int MARKER_SIZE = 20;
 
         protected Sensor sensor;
         protected bool activeUsers = false;
@@ -34,10 +34,10 @@ namespace SweetSpot.ScreenManagement.Screens
             userPositions = new List<Vector2>();
             calibrator = new Calibrator();
             sensorRect = new Rectangle(
-                screenBounds.Center.X - rectangleSize/2,
+                screenBounds.Center.X - MARKER_SIZE/2,
                 0,
-                rectangleSize,
-                rectangleSize
+                MARKER_SIZE,
+                MARKER_SIZE
                 );
         }
 
@@ -46,10 +46,10 @@ namespace SweetSpot.ScreenManagement.Screens
             Vector2 screenPosition = SensorManager.WorldToScreenCoords(bounds, position);
 
             return new Rectangle(
-                (int)screenPosition.X - rectangleSize / 2,
-                (int)screenPosition.Y - rectangleSize / 2,
-                rectangleSize,
-                rectangleSize
+                (int)screenPosition.X - MARKER_SIZE / 2,
+                (int)screenPosition.Y - MARKER_SIZE / 2,
+                MARKER_SIZE,
+                MARKER_SIZE
                 );
         }
 

@@ -11,10 +11,10 @@ namespace SweetSpot.ScreenManagement.Screens
         string caption;
         Vector2 textPosition;
         TransitionState state;
-        float timeSinceStateChange = 0f;    // in ms
-        float fadeTime = 300;               // in ms
-        float delay = 300;                  // in ms
         float alpha = 0f;
+        float timeSinceStateChange = 0f;    // in ms
+        const float FADE_TIME = 300;         // in ms
+        const float DELAY = 300;            // in ms
 
         public TransitionScreen(ScreenManager screenManager, string caption)
             : base(screenManager)
@@ -47,19 +47,19 @@ namespace SweetSpot.ScreenManagement.Screens
             switch (state)
             {
                 case TransitionState.PreDelay:
-                    if (timeSinceStateChange >= delay)
+                    if (timeSinceStateChange >= DELAY)
                         changeState(TransitionState.FadingIn);
                     break;
 
                 case TransitionState.FadingIn:
-                    if (timeSinceStateChange >= fadeTime)
+                    if (timeSinceStateChange >= FADE_TIME)
                     {
                         alpha = 1f;
                         changeState(TransitionState.Active);
                     }
                     else
                     {
-                        alpha = timeSinceStateChange / fadeTime;
+                        alpha = timeSinceStateChange / FADE_TIME;
                     }
                     break;
 
@@ -67,19 +67,19 @@ namespace SweetSpot.ScreenManagement.Screens
                     break;
 
                 case TransitionState.FadingOut:
-                    if (timeSinceStateChange >= fadeTime)
+                    if (timeSinceStateChange >= FADE_TIME)
                     {
                         alpha = 0f;
                         changeState(TransitionState.PostDelay);
                     }
                     else
                     {
-                        alpha = 1f - (timeSinceStateChange / fadeTime);
+                        alpha = 1f - (timeSinceStateChange / FADE_TIME);
                     }
                     break;
 
                 case TransitionState.PostDelay:
-                    if (timeSinceStateChange >= delay)
+                    if (timeSinceStateChange >= DELAY)
                         ExitScreen(gameTime);
                     break;
             }
