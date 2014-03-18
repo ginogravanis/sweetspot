@@ -7,8 +7,8 @@ namespace SweetSpot.ScreenManagement.Screens
 {
     class BaselineArrowScreen : ImageScreen
     {
-        const int compassWidth = 405;
-        const int compassHeight = 200;
+        const int COMPASS_WIDTH = 405;
+        const int COMPASS_HEIGHT = 200;
 
         Texture2D black;
         Texture2D green;
@@ -38,20 +38,20 @@ namespace SweetSpot.ScreenManagement.Screens
             perspectiveShader = Content.Load<Effect>("shader\\PerspectiveShader");
             Viewport viewport = screenManager.GraphicsDevice.Viewport;
             compass = new Rectangle(
-                viewport.Width - compassWidth,
-                viewport.Height - compassHeight,
-                compassWidth,
-                compassHeight
+                viewport.Width - COMPASS_WIDTH,
+                viewport.Height - COMPASS_HEIGHT,
+                COMPASS_WIDTH,
+                COMPASS_HEIGHT
             );
             arrowRect = new Rectangle(
-                compass.Left + (compassWidth - arrow.Bounds.Width) / 2,
+                compass.Left + (COMPASS_WIDTH - arrow.Bounds.Width) / 2,
                 compass.Bottom - arrow.Bounds.Height / 3,
                 arrow.Bounds.Width,
                 arrow.Bounds.Height / 3
             );
             checkMarkRect = new Rectangle(
-                compass.Left + (compassWidth - checkMark.Bounds.Width / 2) / 2,
-                compass.Top + (compassWidth - checkMark.Bounds.Height) / 2,
+                compass.Left + (COMPASS_WIDTH - checkMark.Bounds.Width / 2) / 2,
+                compass.Top + (COMPASS_WIDTH - checkMark.Bounds.Height) / 2,
                 checkMark.Bounds.Width / 2,
                 checkMark.Bounds.Height / 2
             );

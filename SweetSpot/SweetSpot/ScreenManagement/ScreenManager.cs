@@ -11,7 +11,7 @@ namespace SweetSpot.ScreenManagement
 {
     public class ScreenManager : DrawableGameComponent
     {
-        public readonly int TestsPerCue = 5;
+        public readonly int TESTS_PER_CUE = 5;
 
         public bool Debug { get; internal set; }
         public SensorManager Kinect { get; internal set; }
@@ -69,9 +69,9 @@ namespace SweetSpot.ScreenManagement
             foreach (Cue cue in cues)
             {
                 cueIndex++;
-                for (int test = 1; test <= TestsPerCue; test++)
+                for (int test = 1; test <= TESTS_PER_CUE; test++)
                 {
-                    testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Cue {0}/{1}\nTest {2}/{3}", cueIndex, cues.Count, test, TestsPerCue)));
+                    testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Cue {0}/{1}\nTest {2}/{3}", cueIndex, cues.Count, test, TESTS_PER_CUE)));
                     testSession.Add(ScreenFactory.CreateTestScreen(this, cue, generateSweetSpot()));
                 }
                 testSession.Add(ScreenFactory.CreateTransitionScreen(this, "Questionnaire"));
