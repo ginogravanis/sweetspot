@@ -72,7 +72,7 @@ namespace SweetSpot.Database
             Insert(TABLE_CALIBRATION, data);
         }
 
-        public List<Vector2> LoadSweetSpotBounds()
+        public IList<Vector2> LoadSweetSpotBounds()
         {
             string sql = String.Format("SELECT x, y FROM {0};", TABLE_SWEETSPOT_BOUNDS);
             DataTable table = ExecuteTableQuery(sql);
@@ -87,7 +87,7 @@ namespace SweetSpot.Database
             return sweetSpotBounds;
         }
 
-        public void SaveSweetSpotBounds(List<Vector2> sweetSpotBounds)
+        public void SaveSweetSpotBounds(IList<Vector2> sweetSpotBounds)
         {
             foreach (var point in sweetSpotBounds)
             {

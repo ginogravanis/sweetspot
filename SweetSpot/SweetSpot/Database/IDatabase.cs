@@ -12,9 +12,9 @@ namespace SweetSpot.Database
 
         void SaveCalibration(string deviceID, float axisTilt, Vector3 translate);
 
-        List<Vector2> LoadSweetSpotBounds();
+        IList<Vector2> LoadSweetSpotBounds();
 
-        void SaveSweetSpotBounds(List<Vector2> sweetSpotBounds);
+        void SaveSweetSpotBounds(IList<Vector2> sweetSpotBounds);
 
         int GetNewSubjectID();
 
