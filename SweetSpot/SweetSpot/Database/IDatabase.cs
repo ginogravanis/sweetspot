@@ -14,7 +14,7 @@ namespace SweetSpot.Database
 
         IList<Vector2> LoadSweetSpotBounds();
 
-        void SaveSweetSpotBounds(IList<Vector2> sweetSpotBounds);
+        void SaveSweetSpotBounds(IEnumerable<Vector2> sweetSpotBounds);
 
         int GetNewSubjectID();
 

@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SweetSpot.Input;
+using SweetSpot.Util.ConvexHull;
 
 namespace SweetSpot.ScreenManagement.Screens
 {
@@ -13,12 +13,14 @@ namespace SweetSpot.ScreenManagement.Screens
         Rectangle separator;
         SensorPanel leftSensorPanel;
         SensorPanel rightSensorPanel;
-        public IList<Vector2> sweetSpotBounds { get; set; }
+        public ConvexHull sweetSpotBounds;
+        protected bool calibrationFinished = false;
+        protected bool sweetSpotBoundsSaved = false;
 
         public SensorCalibrationScreen(ScreenManager screenManager)
             : base(screenManager)
         {
-            sweetSpotBounds = new List<Vector2>();
+            sweetSpotBounds = new ConvexHull();
         }
 
         public override void LoadContent()
@@ -53,7 +55,7 @@ namespace SweetSpot.ScreenManagement.Screens
             leftSensorPanel.LoadContent(Content);
             rightSensorPanel.LoadContent(Content);
             loadCalibration();
-            sweetSpotBounds = screenManager.Database.LoadSweetSpotBounds();
+            loadSweetSpotBounds();
         }
 
         public override void Update(GameTime gameTime)
@@ -87,12 +89,13 @@ namespace SweetSpot.ScreenManagement.Screens
                         rightSensorPanel.Calibrate(calibration2.Item1, calibration2.Item2);
                         screenManager.Database.SaveCalibration(leftSensorPanel.GetSensorID(), calibration1.Item1, calibration1.Item2);
                         screenManager.Database.SaveCalibration(rightSensorPanel.GetSensorID(), calibration2.Item1, calibration2.Item2);
+                        calibrationFinished = true;
                     }
                     catch (InvalidOperationException) { }
                 }
             }
 
-            if (screenManager.Input.IsGamePadButtonPressed(Buttons.X) || screenManager.Input.IsKeyPressed(Keys.F5))
+            if (calibrationFinished && (screenManager.Input.IsGamePadButtonPressed(Buttons.X) || screenManager.Input.IsKeyPressed(Keys.F5)))
             {
                 captureSweetSpot();
             }
@@ -108,6 +111,7 @@ namespace SweetSpot.ScreenManagement.Screens
             if (screenManager.Kinect.IsViewerActive())
             {
                 sweetSpotBounds.Add(screenManager.Kinect.GetViewerPosition());
+                sweetSpotBoundsSaved = false;
             }
         }
 
@@ -126,7 +130,8 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void SkipAction(GameTime gameTime)
         {
             base.SkipAction(gameTime);
-            screenManager.Database.SaveSweetSpotBounds(sweetSpotBounds);
+            if (!sweetSpotBoundsSaved)
+                screenManager.Database.SaveSweetSpotBounds(sweetSpotBounds.GetPoints());
             screenManager.GenerateTestSession(sweetSpotBounds);
         }
 
@@ -140,7 +145,19 @@ namespace SweetSpot.ScreenManagement.Screens
             {
                 leftSensorPanel.Calibrate(screenManager.Database.LoadCalibration(leftSensorID));
                 rightSensorPanel.Calibrate(screenManager.Database.LoadCalibration(rightSensorID));
+                calibrationFinished = true;
             }
+        }
+
+        protected void loadSweetSpotBounds()
+        {
+            var savedBounds = screenManager.Database.LoadSweetSpotBounds();
+            if (savedBounds.Count > 0)
+            {
+                sweetSpotBounds.AddAll(savedBounds);
+                sweetSpotBoundsSaved = true;
+            }
+            
         }
     }
 }
