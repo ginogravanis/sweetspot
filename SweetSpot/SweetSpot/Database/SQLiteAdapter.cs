@@ -87,7 +87,7 @@ namespace SweetSpot.Database
             return sweetSpotBounds;
         }
 
-        public void SaveSweetSpotBounds(IList<Vector2> sweetSpotBounds)
+        public void SaveSweetSpotBounds(IEnumerable<Vector2> sweetSpotBounds)
         {
             foreach (var point in sweetSpotBounds)
             {

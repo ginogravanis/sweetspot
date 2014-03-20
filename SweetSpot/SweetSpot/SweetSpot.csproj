@@ -95,6 +95,8 @@
     <Compile Include="ScreenManagement\ScreenFactory.cs" />
     <Compile Include="ScreenManagement\Screens\TransitionScreen.cs" />
     <Compile Include="SweetSpot.cs" />
+    <Compile Include="Util\ConvexHull\ConvexHull.cs" />
+    <Compile Include="Util\ConvexHull\HullVertex.cs" />
     <Compile Include="Util\EnumUtil.cs" />
     <Compile Include="Util\Extensions.cs" />
     <Compile Include="Util\StringEnum.cs" />

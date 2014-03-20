@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using SweetSpot.Database;
 using SweetSpot.Input;
 using SweetSpot.Util;
+using SweetSpot.Util.ConvexHull;
 
 namespace SweetSpot.ScreenManagement
 {
@@ -60,7 +61,7 @@ namespace SweetSpot.ScreenManagement
             screens.Add(screen);
         }
 
-        public void GenerateTestSession(IList<Vector2> sweetSpotBounds)
+        public void GenerateTestSession(ConvexHull sweetSpotBounds)
         {
             List<Screen> testSession = new List<Screen>();
             List<Cue> cues = EnumUtil.GetValues<Cue>().ToList();
@@ -74,7 +75,7 @@ namespace SweetSpot.ScreenManagement
                 for (int test = 1; test <= TESTS_PER_CUE; test++)
                 {
                     testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Cue {0}/{1}\nTest {2}/{3}", cueIndex, cues.Count, test, TESTS_PER_CUE)));
-                    testSession.Add(ScreenFactory.CreateTestScreen(this, cue, generateSweetSpot()));
+                    testSession.Add(ScreenFactory.CreateTestScreen(this, cue, sweetSpotBounds.GenerateInternalPoint()));
                 }
                 testSession.Add(ScreenFactory.CreateTransitionScreen(this, "Questionnaire"));
             }
@@ -84,11 +85,6 @@ namespace SweetSpot.ScreenManagement
             {
                 AddScreen(screen);
             }
-        }
-
-        protected Vector2 generateSweetSpot()
-        {
-            return new Vector2(0, 1);
         }
 
         public void ToggleDebug()

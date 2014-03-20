@@ -38,6 +38,25 @@ namespace SweetSpot.Util
             }
         }
 
+        public static LinkedListNode<T> NextOrFirst<T>(this LinkedListNode<T> current)
+        {
+            return current.Next ?? current.List.First;
+        }
+
+        public static LinkedListNode<T> PreviousOrLast<T>(this LinkedListNode<T> current)
+        {
+            return current.Previous ?? current.List.Last;
+        }
+
+        public static void ClearBetween<T>(this LinkedList<T> list, LinkedListNode<T> start, LinkedListNode<T> end)
+        {
+            if (start == end)
+                return;
+
+            while (start.NextOrFirst() != end)
+                list.Remove(start.NextOrFirst());
+        }
+
         public static String GetTimestamp(this DateTime value)
         {
             return value.ToString("yyyy/MM/dd HH:mm:ss");
