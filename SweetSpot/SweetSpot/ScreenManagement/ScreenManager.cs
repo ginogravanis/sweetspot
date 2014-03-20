@@ -21,7 +21,7 @@ namespace SweetSpot.ScreenManagement
         public Screen CurrentScreen { get { return screens[0]; } }
         public int TestSubject { get; internal set; }
 
-        protected List<Screen> screens;
+        protected IList<Screen> screens;
 
         public ScreenManager(Game game)
             : base(game)
@@ -60,7 +60,7 @@ namespace SweetSpot.ScreenManagement
             screens.Add(screen);
         }
 
-        public void GenerateTestSession(List<Vector2> sweetSpotBounds)
+        public void GenerateTestSession(IList<Vector2> sweetSpotBounds)
         {
             List<Screen> testSession = new List<Screen>();
             List<Cue> cues = EnumUtil.GetValues<Cue>().ToList();
