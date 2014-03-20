@@ -72,29 +72,33 @@ namespace SweetSpot.Database
             Insert(TABLE_CALIBRATION, data);
         }
 
-        public List<Vector2> LoadSweetSpots()
+        public List<Vector2> LoadSweetSpotBounds()
         {
             string sql = String.Format("SELECT x, y FROM {0};", TABLE_SWEETSPOT_BOUNDS);
             DataTable table = ExecuteTableQuery(sql);
-            var sweetSpots = new List<Vector2>();
+            var sweetSpotBounds = new List<Vector2>();
             foreach (DataRow row in table.Rows)
             {
                 float x = float.Parse(row["x"].ToString());
                 float y = float.Parse(row["y"].ToString());
-                sweetSpots.Add(new Vector2(x, y));
+                sweetSpotBounds.Add(new Vector2(x, y));
             }
 
-            return sweetSpots;
+            return sweetSpotBounds;
         }
 
-        public void SaveSweetSpot(Vector2 sweetSpot)
+        public void SaveSweetSpotBounds(List<Vector2> sweetSpotBounds)
         {
-            var sweetSpots = new Dictionary<string, string>
+            foreach (var point in sweetSpotBounds)
             {
-                {"x", sweetSpot.X.ToString()},
-                {"y", sweetSpot.Y.ToString()}
-            };
-            Insert(TABLE_SWEETSPOT_BOUNDS, sweetSpots);
+                var points = new Dictionary<string, string>
+                {
+                    {"x", point.X.ToString()},
+                    {"y", point.Y.ToString()}
+                };
+                Insert(TABLE_SWEETSPOT_BOUNDS, points, PersistenceStrategy.Cached);
+            }
+            flushInsertCache();
         }
 
         public int GetNewSubjectID()

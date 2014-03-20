@@ -53,7 +53,7 @@ namespace SweetSpot.ScreenManagement.Screens
             leftSensorPanel.LoadContent(Content);
             rightSensorPanel.LoadContent(Content);
             loadCalibration();
-            sweetSpotBounds = screenManager.Database.LoadSweetSpots();
+            sweetSpotBounds = screenManager.Database.LoadSweetSpotBounds();
         }
 
         public override void Update(GameTime gameTime)
@@ -107,14 +107,8 @@ namespace SweetSpot.ScreenManagement.Screens
         {
             if (screenManager.Kinect.IsViewerActive())
             {
-                addSweetSpot(screenManager.Kinect.GetViewerPosition());
+                sweetSpotBounds.Add(screenManager.Kinect.GetViewerPosition());
             }
-        }
-
-        protected void addSweetSpot(Vector2 position)
-        {
-            sweetSpotBounds.Add(position);
-            screenManager.Database.SaveSweetSpot(position);
         }
 
         public override void Draw(GameTime gameTime)
@@ -132,6 +126,7 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void SkipAction(GameTime gameTime)
         {
             base.SkipAction(gameTime);
+            screenManager.Database.SaveSweetSpotBounds(sweetSpotBounds);
             screenManager.GenerateTestSession(sweetSpotBounds);
         }
 
