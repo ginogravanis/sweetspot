@@ -25,13 +25,16 @@ namespace SweetSpot.Util
             list[j] = tmp;
         }
 
-        public static void SwapPairs<T>(this IList<T> list, int numPairs)
+        public static void ShuffleSubset<T>(this IList<T> list, int subsetSize)
         {
+            if (subsetSize <= 1)
+                return;
+
             List<int> indexList = Enumerable.Range(0, list.Count).ToList();
             indexList.Shuffle();
-            for (int i = 0; i < numPairs; i++)
+            for (int i = 1; i < subsetSize; i++)
             {
-                list.Swap(indexList[2*i], indexList[2*i + 1]);
+                list.Swap(indexList[i - 1], indexList[i]);
             }
         }
 
