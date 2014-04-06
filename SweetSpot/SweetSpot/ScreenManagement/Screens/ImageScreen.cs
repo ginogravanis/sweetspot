@@ -140,7 +140,7 @@ namespace SweetSpot.ScreenManagement.Screens
                 spriteBatch.Draw(items[i], new Rectangle(x, y, itemWidth, itemHeight), Color.White);
             }
 
-            items.SwapPairs(IMAGE_DIFFERENCES);
+            items.ShuffleSubset(IMAGE_DIFFERENCES);
             for (int i = 0; i < items.Count; i++)
             {
                 int x = ((i % ITEMS_PER_ROW) + 1) * horizontalSpacing + (i % ITEMS_PER_ROW) * itemWidth;
