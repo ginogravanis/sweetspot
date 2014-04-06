@@ -66,6 +66,8 @@ namespace SweetSpot.ScreenManagement
             List<Cue> cues = EnumUtil.GetValues<Cue>().ToList();
             cues.Shuffle();
             int cueIndex = 0;
+
+            testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Test subject {0}", TestSubject)));
             foreach (Cue cue in cues)
             {
                 cueIndex++;
