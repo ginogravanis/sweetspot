@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SweetSpot.Input;
-using SweetSpot.Util.ConvexHull;
+using SweetSpot.Util;
 
 namespace SweetSpot.ScreenManagement.Screens
 {
@@ -95,9 +95,14 @@ namespace SweetSpot.ScreenManagement.Screens
                 }
             }
 
-            if (calibrationFinished && (screenManager.Input.IsGamePadButtonPressed(Buttons.X) || screenManager.Input.IsKeyPressed(Keys.F5)))
+            if (screenManager.Input.IsGamePadButtonPressed(Buttons.X) || screenManager.Input.IsKeyPressed(Keys.F5))
             {
                 captureSweetSpot();
+            }
+
+            if (screenManager.Input.IsGamePadButtonPressed(Buttons.LeftTrigger) || screenManager.Input.IsKeyPressed(Keys.F6))
+            {
+                clearSweetSpots();
             }
 
             if (screenManager.Input.IsGamePadButtonPressed(Buttons.LeftShoulder) || screenManager.Input.IsKeyPressed(Keys.F9))
@@ -113,6 +118,11 @@ namespace SweetSpot.ScreenManagement.Screens
                 sweetSpotBounds.Add(screenManager.Kinect.GetViewerPosition());
                 sweetSpotBoundsSaved = false;
             }
+        }
+
+        protected void clearSweetSpots()
+        {
+            sweetSpotBounds.Clear();
         }
 
         public override void Draw(GameTime gameTime)

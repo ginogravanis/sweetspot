@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using SweetSpot.Database;
 using SweetSpot.Input;
 using SweetSpot.Util;
-using SweetSpot.Util.ConvexHull;
 
 namespace SweetSpot.ScreenManagement
 {
