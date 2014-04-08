@@ -11,10 +11,12 @@ namespace SweetSpot.ScreenManagement
         public bool Finished { get; internal set; }
 
         protected ScreenManager screenManager;
+        protected Color background;
 
         public Screen(ScreenManager screenManager)
         {
             this.screenManager = screenManager;
+            background = Color.White;
         }
 
         public virtual void LoadContent()
@@ -44,7 +46,10 @@ namespace SweetSpot.ScreenManagement
                 screenManager.ToggleDebug();
         }
 
-        public virtual void Draw(GameTime gameTime) { }
+        public virtual void Draw(GameTime gameTime)
+        {
+            screenManager.Game.GraphicsDevice.Clear(background);
+        }
 
         public virtual void SkipAction(GameTime gameTime)
         {

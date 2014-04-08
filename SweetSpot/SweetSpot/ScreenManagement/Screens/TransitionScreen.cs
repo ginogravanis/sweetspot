@@ -5,16 +5,16 @@ namespace SweetSpot.ScreenManagement.Screens
 {
     public enum TransitionState { PreDelay, FadingIn, Active, FadingOut, PostDelay }
 
-    class TransitionScreen : Screen
+    public class TransitionScreen : Screen
     {
-        SpriteFont font;
-        string caption;
-        Vector2 textPosition;
-        TransitionState state;
-        float alpha = 0f;
-        float timeSinceStateChange = 0f;    // in ms
-        const float FADE_TIME = 300;         // in ms
-        const float DELAY = 300;            // in ms
+        protected SpriteFont font;
+        protected string caption;
+        protected Vector2 textPosition;
+        protected TransitionState currentState;
+        protected float alpha = 0f;
+        protected float timeSinceStateChange = 0f;  // in ms
+        const float FADE_TIME = 300;                // in ms
+        const float DELAY = 300;                    // in ms
 
         public TransitionScreen(ScreenManager screenManager, string caption)
             : base(screenManager)
@@ -44,7 +44,7 @@ namespace SweetSpot.ScreenManagement.Screens
 
             timeSinceStateChange += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            switch (state)
+            switch (currentState)
             {
                 case TransitionState.PreDelay:
                     if (timeSinceStateChange >= DELAY)
@@ -87,7 +87,7 @@ namespace SweetSpot.ScreenManagement.Screens
 
         protected void changeState(TransitionState newState)
         {
-            state = newState;
+            currentState = newState;
             timeSinceStateChange = 0f;
         }
 
@@ -98,18 +98,19 @@ namespace SweetSpot.ScreenManagement.Screens
             SpriteBatch spriteBatch = screenManager.SpriteBatch;
             Viewport viewport = screenManager.GraphicsDevice.Viewport;
 
-            screenManager.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, caption, textPosition, Color.White * alpha);
+            spriteBatch.DrawString(font, caption, textPosition, Color.Black * alpha);
             spriteBatch.End();
         }
 
         public override void SkipAction(GameTime gameTime)
         {
-            if (TransitionState.Active == state)
+            if (TransitionState.Active == currentState)
             {
                 changeState(TransitionState.FadingOut);
             }
+            else
+                base.SkipAction(gameTime);
         }
     }
 }
