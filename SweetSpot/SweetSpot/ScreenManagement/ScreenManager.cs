@@ -68,6 +68,9 @@ namespace SweetSpot.ScreenManagement
             int cueIndex = 0;
 
             testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Test subject {0}", TestSubject)));
+            testSession.AddRange(ScreenFactory.CreateSnellenTest(this));
+            testSession.AddRange(ScreenFactory.CreateIshiharaTest(this));
+            testSession.AddRange(ScreenFactory.CreatePelliRobsonTest(this));
             foreach (Cue cue in cues)
             {
                 cueIndex++;
