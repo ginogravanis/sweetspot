@@ -17,6 +17,7 @@ namespace SweetSpot.ScreenManagement.Screens
         const float ITEM_HEIGHT = 0.111111f;                // as fraction from viewport height
         const float VERTICAL_ITEM_SPACING = 0.051852f;      // as fraction from viewport height
         const float VERTICAL_ITEM_OFFSET = 0.13426f;        // as fraction from viewport height
+        const float SEPARATOR_WIDTH = 0.00521f;             // as fraction from viewport width
 
         protected Texture2D image;
         protected string cue;
@@ -26,10 +27,9 @@ namespace SweetSpot.ScreenManagement.Screens
         protected TimeSpan lastPositionCaptured;
         protected TimeSpan recordingIntervall = TimeSpan.FromMilliseconds(100);
 
+        protected List<Texture2D> items;
         protected Texture2D shelfTexture;
         protected Texture2D separatorTexture;
-        protected List<Texture2D> items;
-
         protected Rectangle separatorRect;
 
         public ImageScreen(ScreenManager screenManager, string cue, Vector2 sweetSpot)
@@ -82,7 +82,12 @@ namespace SweetSpot.ScreenManagement.Screens
             screenManager.Kinect.sweetSpot = sweetSpot;
 
             Viewport viewport = screenManager.GraphicsDevice.Viewport;
-            separatorRect = new Rectangle(viewport.Width / 2, 0, 1, viewport.Height);
+            separatorRect = new Rectangle(
+                (int)((1 - SEPARATOR_WIDTH) * viewport.Width / 2),
+                0,
+                (int)(SEPARATOR_WIDTH * viewport.Width),
+                viewport.Height
+                );
             image = createBackgroundImage();
         }
 
