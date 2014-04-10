@@ -130,7 +130,8 @@ namespace SweetSpot.Database
                 {"subject", testSubject.ToString()},
                 {"cue", cue},
                 {"sweetspot_x", sweetSpot.X.ToString()},
-                {"sweetspot_y", sweetSpot.Y.ToString()}
+                {"sweetspot_y", sweetSpot.Y.ToString()},
+                {"begin_ms", DateTime.Now.Millisecond.ToString()}
             };
             Insert(TABLE_TEST, test);
 
