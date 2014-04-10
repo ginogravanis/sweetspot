@@ -105,6 +105,7 @@
     <Compile Include="Util\StringValueAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Database\database.sql" />
     <Content Include="SweetSpot.ico" />
   </ItemGroup>
   <ItemGroup>
