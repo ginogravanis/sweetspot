@@ -70,7 +70,7 @@ namespace SweetSpot.ScreenManagement.Screens
             Vector2 vectorToSweetspot = screenManager.Kinect.GetVectorToSweetSpot();
             compassOrientation = (float)(2*Math.PI - Math.Atan2(vectorToSweetspot.Y, vectorToSweetspot.X));
 
-            targetReached = screenManager.Kinect.GetDistanceFromSweetSpot() < 0.05;
+            targetReached = screenManager.Kinect.GetDistanceFromSweetSpot() == 0;
         }
 
         public override void Draw(GameTime gameTime)

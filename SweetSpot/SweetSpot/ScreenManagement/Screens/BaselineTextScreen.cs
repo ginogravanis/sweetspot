@@ -58,7 +58,7 @@ namespace SweetSpot.ScreenManagement.Screens
             Vector2 vectorToSweetspot = screenManager.Kinect.GetVectorToSweetSpot();
             Direction direction = CalculateDominantDirection(vectorToSweetspot);
 
-            if (screenManager.Kinect.GetDistanceFromSweetSpot() < 0.05)
+            if (screenManager.Kinect.GetDistanceFromSweetSpot() == 0)
             {
                 text = "Stop!";
             }
