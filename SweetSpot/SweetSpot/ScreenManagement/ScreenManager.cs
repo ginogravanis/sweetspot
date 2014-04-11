@@ -67,6 +67,9 @@ namespace SweetSpot.ScreenManagement
             cues.Shuffle();
             int cueIndex = 0;
 
+            string[] startingPositions = { "rechts", "links" };
+            int startingPosition = 0;
+
             testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Test subject {0}", TestSubject)));
             testSession.AddRange(ScreenFactory.CreateSnellenTest(this));
             testSession.AddRange(ScreenFactory.CreateIshiharaTest(this));
@@ -76,7 +79,8 @@ namespace SweetSpot.ScreenManagement
                 cueIndex++;
                 for (int test = 1; test <= TESTS_PER_CUE; test++)
                 {
-                    testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Cue {0}/{1}\nTest {2}/{3}", cueIndex, cues.Count, test, TESTS_PER_CUE)));
+                    startingPosition = (TestSubject + cueIndex + test) % startingPositions.Length;
+                    testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Cue {0}/{1}\nTest {2}/{3}\nStart von {4}", cueIndex, cues.Count, test, TESTS_PER_CUE, startingPositions[startingPosition])));
                     testSession.Add(ScreenFactory.CreateTestScreen(this, cue, sweetSpotBounds.GenerateInternalPoint()));
                 }
                 testSession.Add(ScreenFactory.CreateTransitionScreen(this, "Questionnaire"));
