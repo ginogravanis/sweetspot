@@ -90,7 +90,7 @@
     <Compile Include="Input\Calibrator.cs" />
     <Compile Include="ScreenManagement\Screens\Calibration\SensorCalibrationScreen.cs" />
     <Compile Include="ScreenManagement\Screens\EffectScreen.cs" />
-    <Compile Include="ScreenManagement\Screens\ImageScreen.cs" />
+    <Compile Include="ScreenManagement\Screens\TestScreen.cs" />
     <Compile Include="ScreenManagement\Screens\BaselineTextScreen.cs" />
     <Compile Include="ScreenManagement\Screens\Calibration\SensorPanel.cs" />
     <Compile Include="ScreenManagement\ScreenFactory.cs" />

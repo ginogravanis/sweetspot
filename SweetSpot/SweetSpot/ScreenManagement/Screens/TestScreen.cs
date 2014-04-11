@@ -6,7 +6,7 @@ using SweetSpot.Util;
 
 namespace SweetSpot.ScreenManagement.Screens
 {
-    public class ImageScreen : Screen
+    public class TestScreen : Screen
     {
         const int BG_IMAGE_WIDTH = 1920;
         const int BG_IMAGE_HEIGHT = 1080;
@@ -33,7 +33,7 @@ namespace SweetSpot.ScreenManagement.Screens
         protected Texture2D separatorTexture;
         protected Rectangle separatorRect;
 
-        public ImageScreen(ScreenManager screenManager, string cue, Vector2 sweetSpot, bool shuffleItems = true)
+        public TestScreen(ScreenManager screenManager, string cue, Vector2 sweetSpot, bool shuffleItems = true)
             : base(screenManager)
         {
             this.cue = cue;

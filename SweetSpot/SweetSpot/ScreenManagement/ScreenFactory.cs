@@ -38,7 +38,7 @@ namespace SweetSpot.ScreenManagement
             ishiharaTest.Add(CreateTransitionScreen(screenManager, "Ishihara Test"));
             for (int i = 1; i <= 17; i++)
             {
-                ishiharaTest.Add(CreateAutoTransitionScreen(screenManager, String.Format("Ishihara Plate {0}/17", i)));
+                ishiharaTest.Add(CreateAutoTransitionScreen(screenManager, String.Format("Ishihara Plate {0}", i)));
                 ishiharaTest.Add(CreateTimedSlideScreen(screenManager, String.Format(@"texture\vision\ishihara\Plate{0}", i), 3));
             }
             return ishiharaTest;
@@ -55,7 +55,7 @@ namespace SweetSpot.ScreenManagement
         public static Screen CreateDemoScreen(ScreenManager screenManager)
         {
             bool shuffleItems = false;
-            Screen screen = new ImageScreen(screenManager, StringEnum.GetStringValue(Cue.Baseline), new Vector2(), shuffleItems);
+            Screen screen = new TestScreen(screenManager, StringEnum.GetStringValue(Cue.Baseline), new Vector2(), shuffleItems);
             return screen;
         }
 
@@ -79,7 +79,7 @@ namespace SweetSpot.ScreenManagement
             switch (cue)
             {
                 case Cue.Baseline:
-                    screen = new ImageScreen(screenManager, StringEnum.GetStringValue(cue), new Vector2());
+                    screen = new TestScreen(screenManager, StringEnum.GetStringValue(cue), new Vector2());
                     break;
                 case Cue.BaselineArrow:
                     screen = new BaselineArrowScreen(screenManager, StringEnum.GetStringValue(cue), sweetSpot);
