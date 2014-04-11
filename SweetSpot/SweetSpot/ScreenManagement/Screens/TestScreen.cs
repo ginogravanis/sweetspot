@@ -27,6 +27,7 @@ namespace SweetSpot.ScreenManagement.Screens
         protected TimeSpan lastPositionCaptured;
         protected TimeSpan recordingIntervall = TimeSpan.FromMilliseconds(100);
         protected bool shuffleItems;
+        protected bool taskCompleted = false;
 
         protected List<Texture2D> items;
         protected Texture2D shelfTexture;
@@ -167,6 +168,20 @@ namespace SweetSpot.ScreenManagement.Screens
             image.SetData(colors);
 
             return image;
+        }
+
+        public override void SkipAction(GameTime gameTime)
+        {
+            if (taskCompleted)
+                base.SkipAction(gameTime);
+            else
+                markTaskAsCompleted(gameTime);
+        }
+
+        protected void markTaskAsCompleted(GameTime gameTime)
+        {
+            screenManager.Database.TestCompleted(test, (int)gameTime.TotalGameTime.TotalMilliseconds);
+            taskCompleted = true;
         }
     }
 }
