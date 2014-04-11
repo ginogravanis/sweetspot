@@ -24,8 +24,9 @@ namespace SweetSpot.ScreenManagement.Screens
         protected Vector2 sweetSpot;
         protected int test;
         protected int testSubject;
-        protected TimeSpan lastPositionCaptured;
         protected TimeSpan recordingIntervall = TimeSpan.FromMilliseconds(100);
+        protected TimeSpan elapsedTime;
+        protected TimeSpan lastPositionCaptured;
         protected bool shuffleItems;
         protected bool taskCompleted = false;
 
@@ -40,6 +41,7 @@ namespace SweetSpot.ScreenManagement.Screens
             this.cue = cue;
             this.sweetSpot = sweetSpot;
             this.shuffleItems = shuffleItems;
+            elapsedTime = TimeSpan.FromSeconds(0);
             lastPositionCaptured = TimeSpan.FromSeconds(-1);
             items = new List<Texture2D>();
         }
@@ -97,8 +99,9 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (screenManager.Kinect.IsViewerActive() && recordingIntervalElapsed(gameTime))
-                recordPosition(gameTime);
+            elapsedTime += gameTime.ElapsedGameTime;
+            if (screenManager.Kinect.IsViewerActive() && recordingIntervalElapsed())
+                recordPosition();
         }
 
         public override void Draw(GameTime gameTime)
@@ -111,15 +114,15 @@ namespace SweetSpot.ScreenManagement.Screens
             spriteBatch.End();
         }
 
-        protected bool recordingIntervalElapsed(GameTime gameTime)
+        protected bool recordingIntervalElapsed()
         {
-            return lastPositionCaptured + recordingIntervall <= gameTime.TotalGameTime;
+            return lastPositionCaptured + recordingIntervall <= elapsedTime;
         }
 
-        protected void recordPosition(GameTime gameTime)
+        protected void recordPosition()
         {
-            lastPositionCaptured = gameTime.TotalGameTime;
-            screenManager.Database.RecordUserPosition(test, screenManager.Kinect.GetViewerPosition(), (int)gameTime.TotalGameTime.TotalMilliseconds);
+            lastPositionCaptured = elapsedTime;
+            screenManager.Database.RecordUserPosition(test, screenManager.Kinect.GetViewerPosition(), (int)lastPositionCaptured.TotalMilliseconds);
         }
 
         protected Texture2D createBackgroundImage()
@@ -175,12 +178,12 @@ namespace SweetSpot.ScreenManagement.Screens
             if (taskCompleted)
                 base.SkipAction(gameTime);
             else
-                markTaskAsCompleted(gameTime);
+                markTaskAsCompleted();
         }
 
-        protected void markTaskAsCompleted(GameTime gameTime)
+        protected void markTaskAsCompleted()
         {
-            screenManager.Database.TestCompleted(test, (int)gameTime.TotalGameTime.TotalMilliseconds);
+            screenManager.Database.TestCompleted(test, (int)elapsedTime.TotalMilliseconds);
             taskCompleted = true;
         }
     }
