@@ -8,6 +8,8 @@ namespace SweetSpot.ScreenManagement.Screens
 {
     class BaselineTextScreen : ImageScreen
     {
+        const float FADE_TIME = 200;    // in ms
+
         Texture2D black;
         Texture2D green;
         Texture2D red;
@@ -16,6 +18,7 @@ namespace SweetSpot.ScreenManagement.Screens
         Vector2 textPosition;
         string text = "";
         bool viewerDetected = false;
+        float alpha = 0;
 
         public enum Direction { Right, Forward, Left, Back }
         public Dictionary<Direction, string> directionName = new Dictionary<Direction, string>
@@ -61,10 +64,12 @@ namespace SweetSpot.ScreenManagement.Screens
             if (screenManager.Kinect.GetDistanceFromSweetSpot() == 0)
             {
                 text = "Stop!";
+                alpha = Math.Min(alpha + (gameTime.ElapsedGameTime.Milliseconds / FADE_TIME), 1);
             }
             else
             {
                 text = "Bitte noch etwas nach " + directionName[direction];
+                alpha = Math.Max(alpha - (gameTime.ElapsedGameTime.Milliseconds / FADE_TIME), 0);
             }
 
             float textWidth = font.MeasureString(text).X;
@@ -103,7 +108,9 @@ namespace SweetSpot.ScreenManagement.Screens
             SpriteBatch spriteBatch = screenManager.SpriteBatch;
             Viewport viewport = screenManager.GraphicsDevice.Viewport;
 
+            screenManager.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
+            spriteBatch.Draw(image, new Rectangle(0, 0, viewport.Width, viewport.Height), Color.White * alpha);
             spriteBatch.Draw(black, textBox, Color.White);
             if (viewerDetected)
                 spriteBatch.DrawString(font, text, textPosition, Color.White);
