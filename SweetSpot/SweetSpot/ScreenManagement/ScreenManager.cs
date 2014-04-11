@@ -63,7 +63,7 @@ namespace SweetSpot.ScreenManagement
         public void GenerateTestSession(ConvexHull sweetSpotBounds)
         {
             List<Screen> testSession = new List<Screen>();
-            List<Cue> cues = EnumUtil.GetValues<Cue>().ToList();
+            List<Cue> cues = EnumUtil.GetValues<Cue>().Skip(1).ToList();
             cues.Shuffle();
             int cueIndex = 0;
 
@@ -74,6 +74,13 @@ namespace SweetSpot.ScreenManagement
             testSession.AddRange(ScreenFactory.CreateSnellenTest(this));
             testSession.AddRange(ScreenFactory.CreateIshiharaTest(this));
             testSession.AddRange(ScreenFactory.CreatePelliRobsonTest(this));
+            testSession.Add(ScreenFactory.CreateTransitionScreen(this, "Demo"));
+            testSession.Add(ScreenFactory.CreateDemoScreen(this));
+            for (int i = 1; i <= TESTS_PER_CUE; i++)
+            {
+                testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Dry run {0}/{1}", i, TESTS_PER_CUE)));
+                testSession.Add(ScreenFactory.CreateTestScreen(this, Cue.Baseline, new Vector2()));
+            }
             foreach (Cue cue in cues)
             {
                 cueIndex++;

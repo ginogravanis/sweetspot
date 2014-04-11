@@ -26,17 +26,19 @@ namespace SweetSpot.ScreenManagement.Screens
         protected int testSubject;
         protected TimeSpan lastPositionCaptured;
         protected TimeSpan recordingIntervall = TimeSpan.FromMilliseconds(100);
+        protected bool shuffleItems;
 
         protected List<Texture2D> items;
         protected Texture2D shelfTexture;
         protected Texture2D separatorTexture;
         protected Rectangle separatorRect;
 
-        public ImageScreen(ScreenManager screenManager, string cue, Vector2 sweetSpot)
+        public ImageScreen(ScreenManager screenManager, string cue, Vector2 sweetSpot, bool shuffleItems = true)
             : base(screenManager)
         {
             this.cue = cue;
             this.sweetSpot = sweetSpot;
+            this.shuffleItems = shuffleItems;
             lastPositionCaptured = TimeSpan.FromSeconds(-1);
             items = new List<Texture2D>();
         }
@@ -137,7 +139,8 @@ namespace SweetSpot.ScreenManagement.Screens
             int verticalOffset = (int)Math.Round(viewport.Height * VERTICAL_ITEM_OFFSET);
             int verticalSpacing = (int)Math.Round(viewport.Height * VERTICAL_ITEM_SPACING);
             
-            items.Shuffle();
+            if (shuffleItems)
+                items.Shuffle();
             for (int i = 0; i < items.Count; i++)
             {
                 int x = ((i % ITEMS_PER_ROW) + 1) * horizontalSpacing + (i % ITEMS_PER_ROW) * itemWidth;
@@ -145,7 +148,8 @@ namespace SweetSpot.ScreenManagement.Screens
                 spriteBatch.Draw(items[i], new Rectangle(x, y, itemWidth, itemHeight), Color.White);
             }
 
-            items.ShuffleSubset(IMAGE_DIFFERENCES);
+            if (shuffleItems)
+                items.ShuffleSubset(IMAGE_DIFFERENCES);
             for (int i = 0; i < items.Count; i++)
             {
                 int x = ((i % ITEMS_PER_ROW) + 1) * horizontalSpacing + (i % ITEMS_PER_ROW) * itemWidth;

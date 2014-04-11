@@ -52,6 +52,13 @@ namespace SweetSpot.ScreenManagement
             return pelliRobsonTest;
         }
 
+        public static Screen CreateDemoScreen(ScreenManager screenManager)
+        {
+            bool shuffleItems = false;
+            Screen screen = new ImageScreen(screenManager, StringEnum.GetStringValue(Cue.Baseline), new Vector2(), shuffleItems);
+            return screen;
+        }
+
         public static Screen CreateSlideScreen(ScreenManager screenManager, string imagePath)
         {
             Texture2D image = screenManager.Game.Content.Load<Texture2D>(imagePath);
@@ -71,6 +78,9 @@ namespace SweetSpot.ScreenManagement
 
             switch (cue)
             {
+                case Cue.Baseline:
+                    screen = new ImageScreen(screenManager, StringEnum.GetStringValue(cue), new Vector2());
+                    break;
                 case Cue.BaselineArrow:
                     screen = new BaselineArrowScreen(screenManager, StringEnum.GetStringValue(cue), sweetSpot);
                     break;
