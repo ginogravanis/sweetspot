@@ -78,7 +78,7 @@ namespace SweetSpot.ScreenManagement
             testSession.Add(ScreenFactory.CreateDemoScreen(this));
             for (int i = 1; i <= TESTS_PER_CUE; i++)
             {
-                testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Dry run {0}/{1}", i, TESTS_PER_CUE)));
+                testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Dry run {0}", i, TESTS_PER_CUE)));
                 testSession.Add(ScreenFactory.CreateTestScreen(this, Cue.Baseline, new Vector2()));
             }
             foreach (Cue cue in cues)
@@ -87,7 +87,7 @@ namespace SweetSpot.ScreenManagement
                 for (int test = 1; test <= TESTS_PER_CUE; test++)
                 {
                     startingPosition = (TestSubject + cueIndex + test) % startingPositions.Length;
-                    testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Cue {0}/{1}\nTest {2}/{3}\nStart von {4}", cueIndex, cues.Count, test, TESTS_PER_CUE, startingPositions[startingPosition])));
+                    testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Cue {0}\nTest {2}\nStart von {4}", cueIndex, cues.Count, test, TESTS_PER_CUE, startingPositions[startingPosition])));
                     testSession.Add(ScreenFactory.CreateTestScreen(this, cue, sweetSpotBounds.GenerateInternalPoint()));
                 }
                 testSession.Add(ScreenFactory.CreateTransitionScreen(this, "Questionnaire"));
