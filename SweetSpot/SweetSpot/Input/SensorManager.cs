@@ -24,6 +24,11 @@ namespace SweetSpot.Input
         /// </summary>
         public float sweetSpotMargin = 2f;
 
+        /// <summary>
+        /// The radius of the sweetspot in meters.
+        /// </summary>
+        public float sweetSpotRadius = 0.1f;
+
         TimeSpan positionSmoothingTime = TimeSpan.FromMilliseconds(50);
 
         List<Sensor> sensors;
@@ -169,7 +174,9 @@ namespace SweetSpot.Input
 
         protected float distanceToSweetSpot(Vector2 position)
         {
-            return Math.Abs((sweetSpot - position).Length());
+            float rawDistance = Math.Abs((sweetSpot - position).Length());
+            float distance = Math.Max(rawDistance - sweetSpotRadius, 0);
+            return distance;
         }
 
         public Sensor GetSensor(SensorName name)
