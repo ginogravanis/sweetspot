@@ -138,6 +138,11 @@ namespace SweetSpot.Database
             return testID;
         }
 
+        public void TestCompleted(int test, int timestamp)
+        {
+            ExecuteNonQuery(String.Format("UPDATE {0} SET task_completed={1} WHERE id={2};", TABLE_TEST, timestamp, test));
+        }
+
         public void RecordUserPosition(int test, Vector2 position, int timestamp)
         {
             var positionRecord = new Dictionary<string, string>
