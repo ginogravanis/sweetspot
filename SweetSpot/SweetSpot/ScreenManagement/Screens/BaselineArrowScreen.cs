@@ -9,6 +9,7 @@ namespace SweetSpot.ScreenManagement.Screens
     {
         const int COMPASS_WIDTH = 405;
         const int COMPASS_HEIGHT = 200;
+        const float FADE_TIME = 200;    // in ms
 
         Texture2D black;
         Texture2D green;
@@ -22,6 +23,7 @@ namespace SweetSpot.ScreenManagement.Screens
         bool viewerDetected = false;
         bool targetReached = false;
         Effect perspectiveShader;
+        float alpha = 0;
 
         public BaselineArrowScreen(ScreenManager screenManager, string cue, Vector2 sweetSpot)
             : base(screenManager, cue, sweetSpot)
@@ -71,6 +73,11 @@ namespace SweetSpot.ScreenManagement.Screens
             compassOrientation = (float)(2*Math.PI - Math.Atan2(vectorToSweetspot.Y, vectorToSweetspot.X));
 
             targetReached = screenManager.Kinect.GetDistanceFromSweetSpot() == 0;
+
+            if (targetReached)
+                alpha = Math.Min(alpha + (gameTime.ElapsedGameTime.Milliseconds / FADE_TIME), 1);
+            else
+                alpha = Math.Max(alpha - (gameTime.ElapsedGameTime.Milliseconds / FADE_TIME), 0);
         }
 
         public override void Draw(GameTime gameTime)
@@ -79,7 +86,9 @@ namespace SweetSpot.ScreenManagement.Screens
             SpriteBatch spriteBatch = screenManager.SpriteBatch;
             Viewport viewport = screenManager.GraphicsDevice.Viewport;
 
+            screenManager.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
+            spriteBatch.Draw(image, new Rectangle(0, 0, viewport.Width, viewport.Height), Color.White * alpha);
             spriteBatch.Draw(black, compass, Color.White);
             spriteBatch.End();
             if (viewerDetected)
