@@ -44,8 +44,7 @@ namespace SweetSpot.ScreenManagement
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            AddScreen(ScreenFactory.CreateTransitionScreen(this, "Calibration"));
-            AddScreen(ScreenFactory.CreateCalibrationScreen(this));
+            Add(ScreenFactory.CreateCalibration(this));
         }
 
         protected override void UnloadContent()
@@ -54,7 +53,13 @@ namespace SweetSpot.ScreenManagement
                 screen.UnloadContent();
         }
 
-        public void AddScreen(Screen screen)
+        public void Add(IEnumerable<Screen> screens)
+        {
+            foreach (var screen in screens)
+                Add(screen);
+        }
+
+        public void Add(Screen screen)
         {
             screen.LoadContent();
             screens.Add(screen);
@@ -62,7 +67,6 @@ namespace SweetSpot.ScreenManagement
 
         public void GenerateTestSession(ConvexHull sweetSpotBounds)
         {
-            List<Screen> testSession = new List<Screen>();
             List<Cue> cues = EnumUtil.GetValues<Cue>().Skip(1).ToList();
             cues.Shuffle();
             int cueIndex = 0;
@@ -70,16 +74,15 @@ namespace SweetSpot.ScreenManagement
             string[] startingPositions = { "rechts", "links" };
             int startingPosition = 0;
 
-            testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Test subject {0}", TestSubject)));
-            testSession.AddRange(ScreenFactory.CreateSnellenTest(this));
-            testSession.AddRange(ScreenFactory.CreateIshiharaTest(this));
-            testSession.AddRange(ScreenFactory.CreatePelliRobsonTest(this));
-            testSession.Add(ScreenFactory.CreateTransitionScreen(this, "Demo"));
-            testSession.Add(ScreenFactory.CreateDemoScreen(this));
+            Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Test subject {0}", TestSubject)));
+            Add(ScreenFactory.CreateSnellenTest(this));
+            Add(ScreenFactory.CreateIshiharaTest(this));
+            Add(ScreenFactory.CreatePelliRobsonTest(this));
+            Add(ScreenFactory.CreateDemo(this));
             for (int i = 1; i <= TESTS_PER_CUE; i++)
             {
-                testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Dry run {0}", i, TESTS_PER_CUE)));
-                testSession.Add(ScreenFactory.CreateBaselineScreen(this));
+                Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Dry run {0}", i, TESTS_PER_CUE)));
+                Add(ScreenFactory.CreateBaselineScreen(this));
             }
             foreach (Cue cue in cues)
             {
@@ -87,17 +90,12 @@ namespace SweetSpot.ScreenManagement
                 for (int test = 1; test <= TESTS_PER_CUE; test++)
                 {
                     startingPosition = (TestSubject + cueIndex + test) % startingPositions.Length;
-                    testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Cue {0}\nTest {2}\nStart von {4}", cueIndex, cues.Count, test, TESTS_PER_CUE, startingPositions[startingPosition])));
-                    testSession.Add(ScreenFactory.CreateTestScreen(this, cue, sweetSpotBounds.GenerateInternalPoint()));
+                    Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Cue {0}\nTest {2}\nStart von {4}", cueIndex, cues.Count, test, TESTS_PER_CUE, startingPositions[startingPosition])));
+                    Add(ScreenFactory.CreateTestScreen(this, cue, sweetSpotBounds.GenerateInternalPoint()));
                 }
-                testSession.Add(ScreenFactory.CreateTransitionScreen(this, "Questionnaire"));
+                Add(ScreenFactory.CreateTransitionScreen(this, "Questionnaire"));
             }
-            testSession.Add(ScreenFactory.CreateTransitionScreen(this, "Thank you for participating!"));
-
-            foreach (Screen screen in testSession)
-            {
-                AddScreen(screen);
-            }
+            Add(ScreenFactory.CreateTransitionScreen(this, "Thank you for participating!"));
         }
 
         public void ToggleDebug()
