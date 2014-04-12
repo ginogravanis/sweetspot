@@ -44,7 +44,8 @@ namespace SweetSpot.ScreenManagement
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Add(ScreenFactory.CreateCalibration(this));
+            //Add(ScreenFactory.CreateCalibration(this));
+            GenerateTestSession(new ConvexHull());
         }
 
         protected override void UnloadContent()
@@ -61,7 +62,6 @@ namespace SweetSpot.ScreenManagement
 
         public void Add(Screen screen)
         {
-            screen.LoadContent();
             screens.Add(screen);
         }
 
@@ -105,14 +105,26 @@ namespace SweetSpot.ScreenManagement
 
         public override void Update(GameTime gameTime)
         {
-            if (CurrentScreen.Finished)
-                RemoveScreen();
-
-            if (!CurrentScreen.Initialized)
-                CurrentScreen.Initialize();
-
             Input.Update(gameTime);
             Kinect.Update(gameTime);
+
+            if (CurrentScreen.Finished)
+            {
+                RemoveScreen();
+                if (screens.Count == 0)
+                {
+                    Game.Exit();
+                    base.Update(gameTime);
+                    return;
+                }
+            }
+
+            if (!CurrentScreen.Initialized)
+            {
+                CurrentScreen.LoadContent();
+                CurrentScreen.Initialize();
+            }
+
             CurrentScreen.Update(gameTime);
         }
 
@@ -120,8 +132,6 @@ namespace SweetSpot.ScreenManagement
         {
             CurrentScreen.UnloadContent();
             screens.RemoveAt(0);
-            if (screens.Count == 0)
-                Game.Exit();
         }
 
         public override void Draw(GameTime gameTime)
