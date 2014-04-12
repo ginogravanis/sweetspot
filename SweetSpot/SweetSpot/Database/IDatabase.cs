@@ -18,6 +18,7 @@ namespace SweetSpot.Database
 
         int GetNewSubjectID();
 
+        int RecordTest(int testSubject, string cue);
         int RecordTest(int testSubject, string cue, Vector2 sweetSpot);
 
         void TestCompleted(int test, int timestamp);

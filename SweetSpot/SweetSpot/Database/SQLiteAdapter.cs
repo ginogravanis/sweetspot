@@ -120,6 +120,11 @@ namespace SweetSpot.Database
             return int.Parse(result) + 1;
         }
 
+        public int RecordTest(int testSubject, string cue)
+        {
+            return RecordTest(testSubject, cue, new Vector2());
+        }
+
         public int RecordTest(int testSubject, string cue, Vector2 sweetSpot)
         {
             int testID = GetNewTestID();

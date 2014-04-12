@@ -79,7 +79,7 @@ namespace SweetSpot.ScreenManagement
             for (int i = 1; i <= TESTS_PER_CUE; i++)
             {
                 testSession.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Dry run {0}", i, TESTS_PER_CUE)));
-                testSession.Add(ScreenFactory.CreateTestScreen(this, Cue.Baseline, new Vector2()));
+                testSession.Add(ScreenFactory.CreateBaselineScreen(this));
             }
             foreach (Cue cue in cues)
             {

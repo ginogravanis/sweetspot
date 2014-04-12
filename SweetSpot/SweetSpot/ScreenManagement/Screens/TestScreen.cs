@@ -20,29 +20,17 @@ namespace SweetSpot.ScreenManagement.Screens
         const float SEPARATOR_WIDTH = 0.00521f;             // as fraction from viewport width
 
         protected Texture2D image;
-        protected string cue;
-        protected Vector2 sweetSpot;
-        protected int test;
-        protected int testSubject;
-        protected TimeSpan recordingIntervall = TimeSpan.FromMilliseconds(100);
-        protected TimeSpan elapsedTime;
-        protected TimeSpan lastPositionCaptured;
         protected bool shuffleItems;
-        protected bool taskCompleted = false;
 
         protected List<Texture2D> items;
         protected Texture2D shelfTexture;
         protected Texture2D separatorTexture;
         protected Rectangle separatorRect;
 
-        public TestScreen(ScreenManager screenManager, string cue, Vector2 sweetSpot, bool shuffleItems = true)
+        public TestScreen(ScreenManager screenManager, bool shuffleItems = true)
             : base(screenManager)
         {
-            this.cue = cue;
-            this.sweetSpot = sweetSpot;
             this.shuffleItems = shuffleItems;
-            elapsedTime = TimeSpan.FromSeconds(0);
-            lastPositionCaptured = TimeSpan.FromSeconds(-1);
             items = new List<Texture2D>();
         }
 
@@ -82,10 +70,6 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void Initialize()
         {
             base.Initialize();
-            testSubject = screenManager.TestSubject;
-            test = screenManager.Database.RecordTest(testSubject, cue, sweetSpot);
-            screenManager.Kinect.sweetSpot = sweetSpot;
-
             Viewport viewport = screenManager.GraphicsDevice.Viewport;
             separatorRect = new Rectangle(
                 (int)((1 - SEPARATOR_WIDTH) * viewport.Width / 2),
@@ -96,14 +80,6 @@ namespace SweetSpot.ScreenManagement.Screens
             image = createBackgroundImage();
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-            elapsedTime += gameTime.ElapsedGameTime;
-            if (screenManager.Kinect.IsViewerActive() && recordingIntervalElapsed())
-                recordPosition();
-        }
-
         public override void Draw(GameTime gameTime)
         {
             SpriteBatch spriteBatch = screenManager.SpriteBatch;
@@ -112,17 +88,6 @@ namespace SweetSpot.ScreenManagement.Screens
             spriteBatch.Begin();
             spriteBatch.Draw(image, new Rectangle(0, 0, viewport.Width, viewport.Height), Color.White);
             spriteBatch.End();
-        }
-
-        protected bool recordingIntervalElapsed()
-        {
-            return lastPositionCaptured + recordingIntervall <= elapsedTime;
-        }
-
-        protected void recordPosition()
-        {
-            lastPositionCaptured = elapsedTime;
-            screenManager.Database.RecordUserPosition(test, screenManager.Kinect.GetViewerPosition(), (int)lastPositionCaptured.TotalMilliseconds);
         }
 
         protected Texture2D createBackgroundImage()
@@ -171,20 +136,6 @@ namespace SweetSpot.ScreenManagement.Screens
             image.SetData(colors);
 
             return image;
-        }
-
-        public override void SkipAction(GameTime gameTime)
-        {
-            if (taskCompleted)
-                base.SkipAction(gameTime);
-            else
-                markTaskAsCompleted();
-        }
-
-        protected void markTaskAsCompleted()
-        {
-            screenManager.Database.TestCompleted(test, (int)elapsedTime.TotalMilliseconds);
-            taskCompleted = true;
         }
     }
 }

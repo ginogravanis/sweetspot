@@ -90,12 +90,14 @@
     <Compile Include="Input\Calibrator.cs" />
     <Compile Include="ScreenManagement\Screens\Calibration\SensorCalibrationScreen.cs" />
     <Compile Include="ScreenManagement\Screens\EffectScreen.cs" />
+    <Compile Include="ScreenManagement\Screens\TaskScreen.cs" />
     <Compile Include="ScreenManagement\Screens\TestScreen.cs" />
     <Compile Include="ScreenManagement\Screens\BaselineTextScreen.cs" />
     <Compile Include="ScreenManagement\Screens\Calibration\SensorPanel.cs" />
     <Compile Include="ScreenManagement\ScreenFactory.cs" />
     <Compile Include="ScreenManagement\Screens\SlideScreen.cs" />
     <Compile Include="ScreenManagement\Screens\TimedSlideScreen.cs" />
+    <Compile Include="ScreenManagement\Screens\TrackingScreen.cs" />
     <Compile Include="ScreenManagement\Screens\TransitionScreen.cs" />
     <Compile Include="SweetSpot.cs" />
     <Compile Include="Util\ConvexHull.cs" />
