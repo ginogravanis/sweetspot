@@ -19,6 +19,14 @@ namespace SweetSpot.ScreenManagement
             return new AutoTransitionScreen(screenManager, caption);
         }
 
+        public static IEnumerable<Screen> CreateCalibration(ScreenManager screenManager)
+        {
+            var calibration = new List<Screen>();
+            calibration.Add(CreateTransitionScreen(screenManager, "Calibration"));
+            calibration.Add(CreateCalibrationScreen(screenManager));
+            return calibration;
+        }
+
         public static Screen CreateCalibrationScreen(ScreenManager screenManager)
         {
             return new SensorCalibrationScreen(screenManager);
@@ -50,6 +58,14 @@ namespace SweetSpot.ScreenManagement
             pelliRobsonTest.Add(CreateTransitionScreen(screenManager, "Pelli-Robson Test"));
             pelliRobsonTest.Add(CreateSlideScreen(screenManager, @"texture\vision\pelli-robson"));
             return pelliRobsonTest;
+        }
+
+        public static IEnumerable<Screen> CreateDemo(ScreenManager screenManager)
+        {
+            var demo = new List<Screen>();
+            demo.Add(CreateTransitionScreen(screenManager, "Demo"));
+            demo.Add(CreateDemoScreen(screenManager));
+            return demo;
         }
 
         public static Screen CreateDemoScreen(ScreenManager screenManager)
