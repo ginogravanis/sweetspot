@@ -4,6 +4,17 @@ using SweetSpot.ScreenManagement;
 
 namespace SweetSpot
 {
+    static class Program
+    {
+        static void Main(string[] args)
+        {
+            using (SweetSpot app = new SweetSpot())
+            {
+                app.Run();
+            }
+        }
+    }
+
     public class SweetSpot : Microsoft.Xna.Framework.Game
     {
         public SweetSpot()
@@ -21,12 +32,6 @@ namespace SweetSpot
             Components.Add(new ScreenManager(this));
         }
 
-        /// <summary>
-        /// Ermöglicht dem Spiel, alle Initialisierungen durchzuführen, die es benötigt, bevor die Ausführung gestartet wird.
-        /// Hier können erforderliche Dienste abgefragt und alle nicht mit Grafiken
-        /// verbundenen Inhalte geladen werden.  Bei Aufruf von base.Initialize werden alle Komponenten aufgezählt
-        /// sowie initialisiert.
-        /// </summary>
         protected override void Initialize()
         {
             base.Initialize();
