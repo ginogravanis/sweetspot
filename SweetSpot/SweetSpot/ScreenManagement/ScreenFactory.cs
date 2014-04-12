@@ -55,7 +55,7 @@ namespace SweetSpot.ScreenManagement
         public static Screen CreateDemoScreen(ScreenManager screenManager)
         {
             bool shuffleItems = false;
-            Screen screen = new TestScreen(screenManager, StringEnum.GetStringValue(Cue.Baseline), new Vector2(), shuffleItems);
+            Screen screen = new TestScreen(screenManager, shuffleItems);
             return screen;
         }
 
@@ -71,6 +71,11 @@ namespace SweetSpot.ScreenManagement
             return new TimedSlideScreen(screenManager, image, seconds);
         }
 
+        public static Screen CreateBaselineScreen(ScreenManager screenManager)
+        {
+            return new TaskScreen(screenManager, StringEnum.GetStringValue(Cue.Baseline));
+        }
+
         public static Screen CreateTestScreen(ScreenManager screenManager, Cue cue, Vector2 sweetSpot)
         {
             Screen screen;
@@ -79,7 +84,7 @@ namespace SweetSpot.ScreenManagement
             switch (cue)
             {
                 case Cue.Baseline:
-                    screen = new TestScreen(screenManager, StringEnum.GetStringValue(cue), new Vector2());
+                    screen = CreateBaselineScreen(screenManager);
                     break;
                 case Cue.BaselineArrow:
                     screen = new BaselineArrowScreen(screenManager, StringEnum.GetStringValue(cue), sweetSpot);

@@ -4,7 +4,7 @@ using SweetSpot.Input;
 
 namespace SweetSpot.ScreenManagement.Screens
 {
-    public class EffectScreen : TestScreen
+    public class EffectScreen : TrackingScreen
     {
         Effect effect;
         float currentEffectIntensity = 1f;

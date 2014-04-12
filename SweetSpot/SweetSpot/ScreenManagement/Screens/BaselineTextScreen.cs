@@ -6,7 +6,7 @@ using SweetSpot.Input;
 
 namespace SweetSpot.ScreenManagement.Screens
 {
-    class BaselineTextScreen : TestScreen
+    class BaselineTextScreen : TrackingScreen
     {
         const float FADE_TIME = 200;    // in ms
 

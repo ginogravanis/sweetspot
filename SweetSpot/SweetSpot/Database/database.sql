@@ -14,8 +14,8 @@ CREATE TABLE "test" (
 	"id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE,
 	"subject" INTEGER NOT NULL,
 	"cue" VARCHAR NOT NULL,
-	"sweetspot_x" VARCHAR NOT NULL,
-	"sweetspot_y" VARCHAR NOT NULL,
+	"sweetspot_x" VARCHAR,
+	"sweetspot_y" VARCHAR,
 	"begin" DATETIME NOT NULL  DEFAULT CURRENT_TIMESTAMP,
 	"begin_ms" INTEGER NOT NULL,
 	"task_completed" INTEGER

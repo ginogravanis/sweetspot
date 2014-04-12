@@ -5,7 +5,7 @@ using SweetSpot.Input;
 
 namespace SweetSpot.ScreenManagement.Screens
 {
-    class BaselineArrowScreen : TestScreen
+    class BaselineArrowScreen : TrackingScreen
     {
         const int COMPASS_WIDTH = 405;
         const int COMPASS_HEIGHT = 200;
