@@ -6,7 +6,7 @@ namespace SweetSpot.Database
 {
     public interface IDatabase
     {
-        IList<Vector2> LoadSweetSpotBounds();
+        IEnumerable<Vector2> LoadSweetSpotBounds();
 
         void SaveSweetSpotBounds(IEnumerable<Vector2> sweetSpotBounds);
 

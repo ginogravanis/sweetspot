@@ -14,7 +14,7 @@ namespace SweetSpot.ScreenManagement.Screens
         SensorPanel leftSensorPanel;
         SensorPanel rightSensorPanel;
         public ConvexHull sweetSpotBounds;
-        protected bool sweetSpotBoundsSaved = false;
+        protected bool unsavedSweetspotBounds = false;
 
         public SensorCalibrationScreen(ScreenManager screenManager)
             : base(screenManager)
@@ -111,7 +111,7 @@ namespace SweetSpot.ScreenManagement.Screens
             if (screenManager.Kinect.IsViewerActive())
             {
                 sweetSpotBounds.Add(screenManager.Kinect.GetViewerPosition());
-                sweetSpotBoundsSaved = false;
+                unsavedSweetspotBounds = true;
             }
         }
 
@@ -135,19 +135,16 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void SkipAction(GameTime gameTime)
         {
             base.SkipAction(gameTime);
-            if (!sweetSpotBoundsSaved)
+            if (unsavedSweetspotBounds)
                 screenManager.Database.SaveSweetSpotBounds(sweetSpotBounds.GetPoints());
             screenManager.GenerateTestSession(sweetSpotBounds);
         }
 
         protected void loadSweetSpotBounds()
         {
-            var savedBounds = screenManager.Database.LoadSweetSpotBounds();
-            if (savedBounds.Count > 0)
-            {
-                sweetSpotBounds.AddAll(savedBounds);
-                sweetSpotBoundsSaved = true;
-            }
+            var bounds = screenManager.Database.LoadSweetSpotBounds();
+            foreach (var point in bounds)
+                sweetSpotBounds.Add(point);
         }
     }
 }
