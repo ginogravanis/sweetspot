@@ -7,7 +7,7 @@ using SweetSpot.Input;
 
 namespace SweetSpot.Database
 {
-    public enum PersistenceStrategy { Immediate, Cached }
+    public enum PersistenceStrategy { Immediate, Buffered }
 
     class SQLiteAdapter : IDatabase, ICalibrationProvider
     {
@@ -16,20 +16,20 @@ namespace SweetSpot.Database
         const string TABLE_SWEETSPOT_BOUNDS = "sweetspot_bounds";
         const string TABLE_TEST = "test";
         const string TABLE_USER_POSITION = "user_position";
-        const int CACHE_SIZE = 1000;
+        const int BUFFER_SIZE = 1000;
 
         protected string db;
-        protected List<string> insertCache;
+        protected List<string> insertBuffer;
 
         public SQLiteAdapter()
         {
             db = "Data Source=" + FILENAME;
-            insertCache = new List<string>();
+            insertBuffer = new List<string>();
         }
 
         ~SQLiteAdapter()
         {
-            flushInsertCache();
+            flushInsertBuffer();
         }
 
         public bool HasCalibrationDataFor(string deviceID)
@@ -73,7 +73,7 @@ namespace SweetSpot.Database
             Insert(TABLE_CALIBRATION, data);
         }
 
-        public IList<Vector2> LoadSweetSpotBounds()
+        public IEnumerable<Vector2> LoadSweetSpotBounds()
         {
             string sql = String.Format("SELECT x, y FROM {0};", TABLE_SWEETSPOT_BOUNDS);
             DataTable table = ExecuteTableQuery(sql);
@@ -97,9 +97,8 @@ namespace SweetSpot.Database
                     {"x", point.X.ToString()},
                     {"y", point.Y.ToString()}
                 };
-                Insert(TABLE_SWEETSPOT_BOUNDS, points, PersistenceStrategy.Cached);
+                Insert(TABLE_SWEETSPOT_BOUNDS, points);
             }
-            flushInsertCache();
         }
 
         public int GetNewSubjectID()
@@ -158,16 +157,17 @@ namespace SweetSpot.Database
                 {"x", position.X.ToString()},
                 {"y", position.Y.ToString()}
             };
-            Insert(TABLE_USER_POSITION, positionRecord, PersistenceStrategy.Cached);
+            Insert(TABLE_USER_POSITION, positionRecord, PersistenceStrategy.Buffered);
         }
 
-        public void ExecuteCachedNonQuery(string sql)
+        public void ExecuteBufferedNonQuery(string sql)
         {
-            insertCache.Add(sql);
+            insertBuffer.Add(sql);
         }
 
         public void ExecuteNonQuery(string sql)
         {
+            flushInsertBuffer();
             try
             {
                 SQLiteConnection connection = new SQLiteConnection(db);
@@ -183,7 +183,7 @@ namespace SweetSpot.Database
             }
         }
 
-        public void ExecuteNonQueries(List<string> sqls)
+        public void ExecuteNonQueryBatch(IEnumerable<string> sqls)
         {
             try
             {
@@ -213,7 +213,7 @@ namespace SweetSpot.Database
 
         public string ExecuteScalarQuery(string sql)
         {
-            flushInsertCache();
+            flushInsertBuffer();
             try
             {
                 SQLiteConnection connection = new SQLiteConnection(db);
@@ -233,7 +233,7 @@ namespace SweetSpot.Database
 
         public DataTable ExecuteTableQuery(string sql)
         {
-            flushInsertCache();
+            flushInsertBuffer();
             DataTable table = new DataTable();
             try
             {
@@ -269,8 +269,8 @@ namespace SweetSpot.Database
 
             switch (caching)
             {
-                case PersistenceStrategy.Cached:
-                    ExecuteCachedNonQuery(sql);
+                case PersistenceStrategy.Buffered:
+                    ExecuteBufferedNonQuery(sql);
                     break;
                 case PersistenceStrategy.Immediate:
                     ExecuteNonQuery(sql);
@@ -283,17 +283,17 @@ namespace SweetSpot.Database
             ExecuteNonQuery(String.Format("DELETE FROM {0};", tableName));
         }
 
-        protected void cacheQuery(string sql)
+        protected void bufferQuery(string sql)
         {
-            insertCache.Add(sql);
-            if (insertCache.Count > CACHE_SIZE)
-                flushInsertCache();
+            insertBuffer.Add(sql);
+            if (insertBuffer.Count > BUFFER_SIZE)
+                flushInsertBuffer();
         }
 
-        protected void flushInsertCache()
+        protected void flushInsertBuffer()
         {
-            ExecuteNonQueries(insertCache);
-            insertCache.Clear();
+            ExecuteNonQueryBatch(insertBuffer);
+            insertBuffer.Clear();
         }
     }
 }
