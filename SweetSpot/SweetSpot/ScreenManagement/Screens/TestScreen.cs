@@ -8,16 +8,13 @@ namespace SweetSpot.ScreenManagement.Screens
 {
     public class TestScreen : Screen
     {
-        const int BG_IMAGE_WIDTH = 1920;
-        const int BG_IMAGE_HEIGHT = 1080;
         const int ITEMS_PER_ROW = 5;
         const int ITEM_ROWS = 5;
         const int IMAGE_DIFFERENCES = 3;
-        const float ITEM_WIDTH = 0.0625f;                   // as fraction from viewport width
-        const float ITEM_HEIGHT = 0.111111f;                // as fraction from viewport height
-        const float VERTICAL_ITEM_SPACING = 0.051852f;      // as fraction from viewport height
-        const float VERTICAL_ITEM_OFFSET = 0.13426f;        // as fraction from viewport height
-        const float SEPARATOR_WIDTH = 0.00521f;             // as fraction from viewport width
+        const float RELATIVE_ITEM_SIZE = 0.111111f;               // fraction from viewport height
+        const float RELATIVE_VERTICAL_ITEM_SPACING = 0.051852f;    // fraction from viewport height
+        const float RELATIVE_VERTICAL_ITEM_OFFSET = 0.13426f;      // fraction from viewport height
+        const float RELATIVE_SEPARATOR_WIDTH = 0.00521f;          // fraction from viewport width
 
         protected Texture2D image;
         protected bool shuffleItems;
@@ -72,9 +69,9 @@ namespace SweetSpot.ScreenManagement.Screens
             base.Initialize();
             Viewport viewport = screenManager.GraphicsDevice.Viewport;
             separatorRect = new Rectangle(
-                (int)((1 - SEPARATOR_WIDTH) * viewport.Width / 2),
+                (int)((1 - RELATIVE_SEPARATOR_WIDTH) * viewport.Width / 2),
                 0,
-                (int)(SEPARATOR_WIDTH * viewport.Width),
+                (int)(RELATIVE_SEPARATOR_WIDTH * viewport.Width),
                 viewport.Height
                 );
             image = createBackgroundImage();
@@ -102,28 +99,27 @@ namespace SweetSpot.ScreenManagement.Screens
             spriteBatch.Draw(shelfTexture, new Rectangle(0, 0, viewport.Width/2, viewport.Height), Color.White);
             spriteBatch.Draw(shelfTexture, new Rectangle(viewport.Width/2, 0, viewport.Width / 2, viewport.Height), Color.White);
             
-            int itemWidth = (int)Math.Round(viewport.Width * ITEM_WIDTH);
-            int itemHeight = (int)Math.Round(viewport.Height * ITEM_HEIGHT);
-            int horizontalSpacing = (int)Math.Round(((viewport.Width / 2f) - (ITEMS_PER_ROW * itemWidth)) / (ITEMS_PER_ROW + 1));
-            int verticalOffset = (int)Math.Round(viewport.Height * VERTICAL_ITEM_OFFSET);
-            int verticalSpacing = (int)Math.Round(viewport.Height * VERTICAL_ITEM_SPACING);
+            int itemSize = (int)Math.Round(viewport.Height * RELATIVE_ITEM_SIZE);
+            int horizontalSpacing = (int)Math.Round(((viewport.Width / 2f) - (ITEMS_PER_ROW * itemSize)) / (ITEMS_PER_ROW + 1));
+            int verticalOffset = (int)Math.Round(viewport.Height * RELATIVE_VERTICAL_ITEM_OFFSET);
+            int verticalSpacing = (int)Math.Round(viewport.Height * RELATIVE_VERTICAL_ITEM_SPACING);
             
             if (shuffleItems)
                 items.Shuffle();
             for (int i = 0; i < items.Count; i++)
             {
-                int x = ((i % ITEMS_PER_ROW) + 1) * horizontalSpacing + (i % ITEMS_PER_ROW) * itemWidth;
-                int y = verticalOffset + (i / ITEM_ROWS) * (verticalSpacing + itemHeight) - itemHeight;
-                spriteBatch.Draw(items[i], new Rectangle(x, y, itemWidth, itemHeight), Color.White);
+                int x = ((i % ITEMS_PER_ROW) + 1) * horizontalSpacing + (i % ITEMS_PER_ROW) * itemSize;
+                int y = verticalOffset + (i / ITEM_ROWS) * (verticalSpacing + itemSize) - itemSize;
+                spriteBatch.Draw(items[i], new Rectangle(x, y, itemSize, itemSize), Color.White);
             }
 
             if (shuffleItems)
                 items.ShuffleSubset(IMAGE_DIFFERENCES);
             for (int i = 0; i < items.Count; i++)
             {
-                int x = ((i % ITEMS_PER_ROW) + 1) * horizontalSpacing + (i % ITEMS_PER_ROW) * itemWidth;
-                int y = verticalOffset + (i / ITEM_ROWS) * (verticalSpacing + itemHeight) - itemHeight;
-                spriteBatch.Draw(items[i], new Rectangle(x + viewport.Width / 2, y, itemWidth, itemHeight), Color.White);
+                int x = ((i % ITEMS_PER_ROW) + 1) * horizontalSpacing + (i % ITEMS_PER_ROW) * itemSize;
+                int y = verticalOffset + (i / ITEM_ROWS) * (verticalSpacing + itemSize) - itemSize;
+                spriteBatch.Draw(items[i], new Rectangle(x + viewport.Width / 2, y, itemSize, itemSize), Color.White);
             }
 
             spriteBatch.Draw(separatorTexture, separatorRect, Color.White);
