@@ -1,3 +1,5 @@
+using System;
+using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SweetSpot.ScreenManagement;
@@ -10,7 +12,14 @@ namespace SweetSpot
         {
             using (SweetSpot app = new SweetSpot())
             {
-                app.Run();
+                try
+                {
+                    app.Run();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
             }
         }
     }
@@ -29,7 +38,7 @@ namespace SweetSpot
             graphics.PreferredBackBufferHeight = screenHeight;
             graphics.SynchronizeWithVerticalRetrace = true;
 
-            Components.Add(new ScreenManager(this));
+            Components.Add(new ScreenManager(this, Scene.Calibration));
         }
 
         protected override void Initialize()
