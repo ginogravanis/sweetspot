@@ -137,7 +137,6 @@ namespace SweetSpot.ScreenManagement.Screens
             base.SkipAction(gameTime);
             if (unsavedSweetspotBounds)
                 screenManager.Database.SaveSweetSpotBounds(sweetSpotBounds.GetPoints());
-            screenManager.GenerateTestSession(sweetSpotBounds);
         }
 
         protected void loadSweetSpotBounds()
