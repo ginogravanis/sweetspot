@@ -9,6 +9,8 @@ using SweetSpot.Util;
 
 namespace SweetSpot.ScreenManagement
 {
+    public enum Scene { Calibration, Tests };
+
     public class ScreenManager : DrawableGameComponent
     {
         public readonly int TESTS_PER_CUE = 5;
@@ -27,10 +29,11 @@ namespace SweetSpot.ScreenManagement
             : base(game)
         {
             Debug = false;
+            var db = new SQLiteAdapter();
             screens = new List<Screen>();
-            Kinect = new SensorManager();
+            Kinect = new SensorManager(db);
             Input = new InputManager();
-            Database = new SQLiteAdapter();
+            Database = db;
         }
 
         public override void Initialize()

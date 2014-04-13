@@ -111,14 +111,9 @@ namespace SweetSpot.ScreenManagement.Screens
             return activeUsers;
         }
 
-        public void Calibrate(float axisTilt, Vector3 offset)
-        {
-            sensor.Calibrate(axisTilt, offset);
-        }
-
         public void Calibrate(Tuple<float, Vector3> calibration)
         {
-            Calibrate(calibration.Item1, calibration.Item2);
+            sensor.Calibrate(calibration.Item1, calibration.Item2);
         }
 
         public string GetSensorID()

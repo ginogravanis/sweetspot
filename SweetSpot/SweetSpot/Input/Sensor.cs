@@ -12,14 +12,18 @@ namespace SweetSpot.Input
         protected TimeSpan lastSensorUpdate;
         protected TimeSpan positionSmoothingTime;
         protected Matrix TransformationMatrix;
+        protected ICalibrationProvider calibrationProvider;
+        public bool IsCalibrated { get; internal set; }
 
-        public Sensor(KinectSensor kinect)
+        public Sensor(KinectSensor kinect, ICalibrationProvider calibrationProvider)
         {
             sensor = kinect;
             activeUsers = new List<Skeleton>();
             positionSmoothingTime = TimeSpan.FromMilliseconds(50);
             TransformationMatrix = Matrix.Identity;
             lastSensorUpdate = TimeSpan.FromSeconds(-1);
+            this.calibrationProvider = calibrationProvider;
+            IsCalibrated = false;
         }
 
         ~Sensor()
@@ -37,6 +41,13 @@ namespace SweetSpot.Input
                 smoothingParameters.JitterRadius = 0.01f;
                 smoothingParameters.MaxDeviationRadius = 0.04f;
             };
+
+            if (calibrationProvider.HasCalibrationDataFor(GetDeviceID()))
+            {
+                var calibration = calibrationProvider.LoadCalibration(GetDeviceID());
+                Calibrate(calibration.Item1, calibration.Item2);
+                IsCalibrated = true;
+            }
 
             sensor.SkeletonStream.Enable(smoothingParameters);
             sensor.Start();
@@ -130,6 +141,7 @@ namespace SweetSpot.Input
             Matrix rotation = Matrix.CreateRotationZ(axisTilt);
             Matrix translation = Matrix.CreateTranslation(offset);
             TransformationMatrix = rotation * translation;
+            calibrationProvider.SaveCalibration(GetDeviceID(), axisTilt, offset);
         }
 
         public string GetDeviceID()

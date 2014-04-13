@@ -39,23 +39,23 @@ namespace SweetSpot.Input
         public static int MAX_SENSOR_COUNT = 2;
         public static float SENSOR_RANGE = 5.0f;
 
-        public SensorManager()
+        public SensorManager(ICalibrationProvider calibrationProvider)
         {
             sensors = new List<Sensor>();
             sweetSpot = new Vector2();
             lastViewerPosition = new Vector2();
             viewerLastSeen = TimeSpan.FromSeconds(-1);
             viewerActive = false;
-            initializeSensors();
+            initializeSensors(calibrationProvider);
         }
 
-        protected void initializeSensors()
+        protected void initializeSensors(ICalibrationProvider calibrationProvider)
         {
             foreach(KinectSensor candidate in KinectSensor.KinectSensors)
             {
                 if (candidate.Status == KinectStatus.Connected)
                 {
-                    Sensor sensor = new Sensor(candidate);
+                    Sensor sensor = new Sensor(candidate, calibrationProvider);
                     sensor.Initialize();
                     sensors.Add(sensor);
                 }
