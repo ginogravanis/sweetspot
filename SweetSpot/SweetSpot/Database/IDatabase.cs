@@ -6,12 +6,6 @@ namespace SweetSpot.Database
 {
     public interface IDatabase
     {
-        bool HasCalibrationDataFor(string deviceID);
-
-        Tuple<float, Vector3> LoadCalibration(string deviceID);
-
-        void SaveCalibration(string deviceID, float axisTilt, Vector3 translate);
-
         IList<Vector2> LoadSweetSpotBounds();
 
         void SaveSweetSpotBounds(IEnumerable<Vector2> sweetSpotBounds);

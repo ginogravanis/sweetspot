@@ -14,7 +14,6 @@ namespace SweetSpot.ScreenManagement.Screens
         SensorPanel leftSensorPanel;
         SensorPanel rightSensorPanel;
         public ConvexHull sweetSpotBounds;
-        protected bool calibrationFinished = false;
         protected bool sweetSpotBoundsSaved = false;
 
         public SensorCalibrationScreen(ScreenManager screenManager)
@@ -54,7 +53,6 @@ namespace SweetSpot.ScreenManagement.Screens
                 ));
             leftSensorPanel.LoadContent(Content);
             rightSensorPanel.LoadContent(Content);
-            loadCalibration();
             loadSweetSpotBounds();
         }
 
@@ -85,11 +83,8 @@ namespace SweetSpot.ScreenManagement.Screens
                         Tuple<Tuple<float, Vector3>, Tuple<float, Vector3>> calibrations = Calibrator.Calibrate(calibrator1, calibrator2);
                         Tuple<float, Vector3> calibration1 = calibrations.Item1;
                         Tuple<float, Vector3> calibration2 = calibrations.Item2;
-                        leftSensorPanel.Calibrate(calibration1.Item1, calibration1.Item2);
-                        rightSensorPanel.Calibrate(calibration2.Item1, calibration2.Item2);
-                        screenManager.Database.SaveCalibration(leftSensorPanel.GetSensorID(), calibration1.Item1, calibration1.Item2);
-                        screenManager.Database.SaveCalibration(rightSensorPanel.GetSensorID(), calibration2.Item1, calibration2.Item2);
-                        calibrationFinished = true;
+                        leftSensorPanel.Calibrate(calibration1);
+                        rightSensorPanel.Calibrate(calibration2);
                     }
                     catch (InvalidOperationException) { }
                 }
@@ -145,20 +140,6 @@ namespace SweetSpot.ScreenManagement.Screens
             screenManager.GenerateTestSession(sweetSpotBounds);
         }
 
-        protected void loadCalibration()
-        {
-            string leftSensorID = leftSensorPanel.GetSensorID();
-            string rightSensorID = rightSensorPanel.GetSensorID();
-
-            if (screenManager.Database.HasCalibrationDataFor(leftSensorID)
-                && screenManager.Database.HasCalibrationDataFor(rightSensorID))
-            {
-                leftSensorPanel.Calibrate(screenManager.Database.LoadCalibration(leftSensorID));
-                rightSensorPanel.Calibrate(screenManager.Database.LoadCalibration(rightSensorID));
-                calibrationFinished = true;
-            }
-        }
-
         protected void loadSweetSpotBounds()
         {
             var savedBounds = screenManager.Database.LoadSweetSpotBounds();
@@ -167,7 +148,6 @@ namespace SweetSpot.ScreenManagement.Screens
                 sweetSpotBounds.AddAll(savedBounds);
                 sweetSpotBoundsSaved = true;
             }
-            
         }
     }
 }

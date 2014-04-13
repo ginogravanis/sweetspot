@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using Microsoft.Xna.Framework;
+using SweetSpot.Input;
 
 namespace SweetSpot.Database
 {
     public enum PersistenceStrategy { Immediate, Cached }
 
-    class SQLiteAdapter : IDatabase
+    class SQLiteAdapter : IDatabase, ICalibrationProvider
     {
         const string FILENAME = "database.sqlite";
         const string TABLE_CALIBRATION = "calibration";

@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="Database\SQLiteAdapter.cs" />
     <Compile Include="Database\IDatabase.cs" />
+    <Compile Include="Input\ICalibrationProvider.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\Sensor.cs" />
     <Compile Include="Input\SensorManager.cs" />
