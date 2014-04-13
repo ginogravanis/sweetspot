@@ -1,3 +1,5 @@
+#define CALIBRATION_TARGET
+
 using System;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
@@ -38,7 +40,12 @@ namespace SweetSpot
             graphics.PreferredBackBufferHeight = screenHeight;
             graphics.SynchronizeWithVerticalRetrace = true;
 
+#if CALIBRATION_TARGET
+            IsMouseVisible = true;
             Components.Add(new ScreenManager(this, Scene.Calibration));
+#else
+            Components.Add(new ScreenManager(this, Scene.Tests));
+#endif
         }
 
         protected override void Initialize()

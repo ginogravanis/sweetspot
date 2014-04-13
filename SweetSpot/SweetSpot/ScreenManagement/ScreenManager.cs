@@ -23,9 +23,11 @@ namespace SweetSpot.ScreenManagement
         public Screen CurrentScreen { get { return screens[0]; } }
         public int TestSubject { get; internal set; }
 
+        protected Scene scene;
+
         protected IList<Screen> screens;
 
-        public ScreenManager(Game game)
+        public ScreenManager(Game game, Scene scene)
             : base(game)
         {
             Debug = false;
@@ -34,21 +36,31 @@ namespace SweetSpot.ScreenManagement
             Kinect = new SensorManager(db);
             Input = new InputManager();
             Database = db;
+            this.scene = scene;
         }
 
         public override void Initialize()
         {
             base.Initialize();
-            Kinect.sweetSpot = new Vector2(0f, 2f);
             TestSubject = Database.GetNewSubjectID();
+
+            switch (scene)
+            {
+                case Scene.Calibration:
+                    Add(ScreenFactory.CreateCalibration(this));
+                    break;
+                case Scene.Tests:
+                    ConvexHull sweetSpotBounds = new ConvexHull();
+                    foreach (var point in Database.LoadSweetSpotBounds())
+                        sweetSpotBounds.Add(point);
+                    GenerateTestSession(sweetSpotBounds);
+                    break;
+            }
         }
 
         protected override void LoadContent()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-
-            //Add(ScreenFactory.CreateCalibration(this));
-            GenerateTestSession(new ConvexHull());
         }
 
         protected override void UnloadContent()
