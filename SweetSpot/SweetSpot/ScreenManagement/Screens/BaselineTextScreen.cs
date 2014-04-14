@@ -6,19 +6,20 @@ using SweetSpot.Input;
 
 namespace SweetSpot.ScreenManagement.Screens
 {
-    class BaselineTextScreen : TrackingScreen
+    public class BaselineTextScreen : TrackingScreen
     {
         const float FADE_TIME = 200;    // in ms
 
-        Texture2D black;
-        Texture2D green;
-        Texture2D red;
-        SpriteFont font;
-        Rectangle textBox;
-        Vector2 textPosition;
-        string text = "";
-        bool viewerDetected = false;
-        float alpha = 0;
+        protected Texture2D black;
+        protected Texture2D green;
+        protected Texture2D red;
+        protected SpriteFont font;
+        protected Rectangle textBox;
+        protected Vector2 textPosition;
+        protected string text = "";
+        protected bool viewerDetected = false;
+        protected bool targetReached = false;
+        protected float alpha = 0;
 
         public enum Direction { Right, Forward, Left, Back }
         public Dictionary<Direction, string> directionName = new Dictionary<Direction, string>
@@ -61,7 +62,8 @@ namespace SweetSpot.ScreenManagement.Screens
             Vector2 vectorToSweetspot = screenManager.Kinect.GetVectorToSweetSpot();
             Direction direction = CalculateDominantDirection(vectorToSweetspot);
 
-            if (screenManager.Kinect.GetDistanceFromSweetSpot() == 0)
+            targetReached = screenManager.Kinect.GetDistanceFromSweetSpot() == 0;
+            if (taskCompleted || targetReached)
             {
                 text = "Stop!";
                 alpha = Math.Min(alpha + (gameTime.ElapsedGameTime.Milliseconds / FADE_TIME), 1);
