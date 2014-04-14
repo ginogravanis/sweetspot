@@ -16,7 +16,6 @@ namespace SweetSpot.Database
         const string TABLE_SWEETSPOT_BOUNDS = "sweetspot_bounds";
         const string TABLE_TEST = "test";
         const string TABLE_USER_POSITION = "user_position";
-        const int BUFFER_SIZE = 1000;
 
         protected string db;
         protected List<string> insertBuffer;
@@ -146,6 +145,7 @@ namespace SweetSpot.Database
         public void TestCompleted(int test, int timestamp)
         {
             ExecuteNonQuery(String.Format("UPDATE {0} SET task_completed={1} WHERE id={2};", TABLE_TEST, timestamp, test));
+            flushInsertBuffer();
         }
 
         public void RecordUserPosition(int test, Vector2 position, int timestamp)
@@ -167,7 +167,6 @@ namespace SweetSpot.Database
 
         public void ExecuteNonQuery(string sql)
         {
-            flushInsertBuffer();
             try
             {
                 SQLiteConnection connection = new SQLiteConnection(db);
@@ -213,7 +212,6 @@ namespace SweetSpot.Database
 
         public string ExecuteScalarQuery(string sql)
         {
-            flushInsertBuffer();
             try
             {
                 SQLiteConnection connection = new SQLiteConnection(db);
@@ -233,7 +231,6 @@ namespace SweetSpot.Database
 
         public DataTable ExecuteTableQuery(string sql)
         {
-            flushInsertBuffer();
             DataTable table = new DataTable();
             try
             {
@@ -286,8 +283,6 @@ namespace SweetSpot.Database
         protected void bufferQuery(string sql)
         {
             insertBuffer.Add(sql);
-            if (insertBuffer.Count > BUFFER_SIZE)
-                flushInsertBuffer();
         }
 
         protected void flushInsertBuffer()
