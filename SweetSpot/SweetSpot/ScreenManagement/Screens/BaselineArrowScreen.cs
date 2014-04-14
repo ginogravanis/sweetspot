@@ -5,25 +5,25 @@ using SweetSpot.Input;
 
 namespace SweetSpot.ScreenManagement.Screens
 {
-    class BaselineArrowScreen : TrackingScreen
+    public class BaselineArrowScreen : TrackingScreen
     {
         const int COMPASS_WIDTH = 405;
         const int COMPASS_HEIGHT = 200;
         const float FADE_TIME = 200;    // in ms
 
-        Texture2D black;
-        Texture2D green;
-        Texture2D red;
-        Texture2D arrow;
-        Texture2D checkMark;
-        Rectangle compass;
-        Rectangle arrowRect;
-        Rectangle checkMarkRect;
-        float compassOrientation;
-        bool viewerDetected = false;
-        bool targetReached = false;
-        Effect perspectiveShader;
-        float alpha = 0;
+        protected Texture2D black;
+        protected Texture2D green;
+        protected Texture2D red;
+        protected Texture2D arrow;
+        protected Texture2D checkMark;
+        protected Rectangle compass;
+        protected Rectangle arrowRect;
+        protected Rectangle checkMarkRect;
+        protected float compassOrientation;
+        protected bool viewerDetected = false;
+        protected bool targetReached = false;
+        protected Effect perspectiveShader;
+        protected float alpha = 0;
 
         public BaselineArrowScreen(ScreenManager screenManager, string cue, Vector2 sweetSpot)
             : base(screenManager, cue, sweetSpot)
@@ -73,7 +73,6 @@ namespace SweetSpot.ScreenManagement.Screens
             compassOrientation = (float)(2*Math.PI - Math.Atan2(vectorToSweetspot.Y, vectorToSweetspot.X));
 
             targetReached = screenManager.Kinect.GetDistanceFromSweetSpot() == 0;
-
             if (targetReached)
                 alpha = Math.Min(alpha + (gameTime.ElapsedGameTime.Milliseconds / FADE_TIME), 1);
             else
@@ -93,7 +92,7 @@ namespace SweetSpot.ScreenManagement.Screens
             spriteBatch.End();
             if (viewerDetected)
             {
-                if (targetReached)
+                if (taskCompleted || targetReached)
                 {
                     spriteBatch.Begin();
                     spriteBatch.Draw(checkMark, checkMarkRect, Color.White);
