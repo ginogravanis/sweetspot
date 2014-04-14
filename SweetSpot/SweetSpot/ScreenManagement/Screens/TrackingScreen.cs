@@ -30,7 +30,7 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
         {
             base.Update(gameTime);
-            if (screenManager.Kinect.IsViewerActive() && recordingIntervalElapsed())
+            if (!taskCompleted && recordingIntervalElapsed() && screenManager.Kinect.IsViewerActive())
                 recordPosition();
         }
 
