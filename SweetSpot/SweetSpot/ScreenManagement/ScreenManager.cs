@@ -108,7 +108,7 @@ namespace SweetSpot.ScreenManagement
                     Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Cue {0}\nTest {2}\nStart von {4}", cueIndex, cues.Count, test, TESTS_PER_CUE, startingPositions[startingPosition])));
                     Add(ScreenFactory.CreateTestScreen(this, cue, sweetSpotBounds.GenerateInternalPoint()));
                 }
-                Add(ScreenFactory.CreateTransitionScreen(this, "Questionnaire"));
+                Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Questionnaire {0}", cueIndex)));
             }
             Add(ScreenFactory.CreateTransitionScreen(this, "Thank you for participating!"));
         }
