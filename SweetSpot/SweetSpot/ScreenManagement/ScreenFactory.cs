@@ -46,7 +46,6 @@ namespace SweetSpot.ScreenManagement
             ishiharaTest.Add(CreateTransitionScreen(screenManager, "Ishihara Test"));
             for (int i = 1; i <= 17; i++)
             {
-                ishiharaTest.Add(CreateAutoTransitionScreen(screenManager, String.Format("Ishihara Plate {0}", i)));
                 ishiharaTest.Add(CreateTimedSlideScreen(screenManager, String.Format(@"texture\vision\ishihara\Plate{0}", i), 3));
             }
             return ishiharaTest;
