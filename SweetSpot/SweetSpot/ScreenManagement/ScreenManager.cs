@@ -20,12 +20,12 @@ namespace SweetSpot.ScreenManagement
         public InputManager Input { get; internal set; }
         public IDatabase Database { get; internal set; }
         public SpriteBatch SpriteBatch { get; internal set; }
-        public Screen CurrentScreen { get { return screens[0]; } }
+        public Screen CurrentScreen { get { return screens[currentScreen]; } }
         public int TestSubject { get; internal set; }
 
         protected Scene scene;
-
         protected IList<Screen> screens;
+        protected int currentScreen;
 
         public ScreenManager(Game game, Scene scene)
             : base(game)
@@ -53,9 +53,11 @@ namespace SweetSpot.ScreenManagement
                     ConvexHull sweetSpotBounds = new ConvexHull();
                     foreach (var point in Database.LoadSweetSpotBounds())
                         sweetSpotBounds.Add(point);
-                    GenerateTestSession(sweetSpotBounds);
+                    Add(GenerateTestSession(sweetSpotBounds));
                     break;
             }
+
+            currentScreen = 0;
         }
 
         protected override void LoadContent()
@@ -80,8 +82,9 @@ namespace SweetSpot.ScreenManagement
             screens.Add(screen);
         }
 
-        public void GenerateTestSession(ConvexHull sweetSpotBounds)
+        public IEnumerable<Screen> GenerateTestSession(ConvexHull sweetSpotBounds)
         {
+            List<Screen> screens = new List<Screen>();
             List<Cue> cues = EnumUtil.GetValues<Cue>().Skip(1).ToList();
             cues.Shuffle();
             int cueIndex = 0;
@@ -89,15 +92,15 @@ namespace SweetSpot.ScreenManagement
             string[] startingPositions = { "rechts", "links" };
             int startingPosition = 0;
 
-            Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Test subject {0}", TestSubject)));
-            Add(ScreenFactory.CreateSnellenTest(this));
-            Add(ScreenFactory.CreateIshiharaTest(this));
-            Add(ScreenFactory.CreatePelliRobsonTest(this));
-            Add(ScreenFactory.CreateDemo(this));
+            screens.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Test subject {0}", TestSubject)));
+            screens.AddRange(ScreenFactory.CreateSnellenTest(this));
+            screens.AddRange(ScreenFactory.CreateIshiharaTest(this));
+            screens.AddRange(ScreenFactory.CreatePelliRobsonTest(this));
+            screens.AddRange(ScreenFactory.CreateDemo(this));
             for (int i = 1; i <= TESTS_PER_CUE; i++)
             {
-                Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Dry run {0}", i, TESTS_PER_CUE)));
-                Add(ScreenFactory.CreateBaselineScreen(this));
+                screens.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Dry run {0}", i, TESTS_PER_CUE)));
+                screens.Add(ScreenFactory.CreateBaselineScreen(this));
             }
             foreach (Cue cue in cues)
             {
@@ -105,12 +108,14 @@ namespace SweetSpot.ScreenManagement
                 for (int test = 1; test <= TESTS_PER_CUE; test++)
                 {
                     startingPosition = (TestSubject + cueIndex + test) % startingPositions.Length;
-                    Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Cue {0}\nTest {2}\nStart von {4}", cueIndex, cues.Count, test, TESTS_PER_CUE, startingPositions[startingPosition])));
-                    Add(ScreenFactory.CreateTestScreen(this, cue, sweetSpotBounds.GenerateInternalPoint()));
+                    screens.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Cue {0}\nTest {2}\nStart von {4}", cueIndex, cues.Count, test, TESTS_PER_CUE, startingPositions[startingPosition])));
+                    screens.Add(ScreenFactory.CreateTestScreen(this, cue, sweetSpotBounds.GenerateInternalPoint()));
                 }
-                Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Questionnaire {0}", cueIndex)));
+                screens.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Questionnaire {0}", cueIndex)));
             }
-            Add(ScreenFactory.CreateTransitionScreen(this, "Thank you for participating!"));
+            screens.Add(ScreenFactory.CreateTransitionScreen(this, "Thank you for participating!"));
+
+            return screens;
         }
 
         public void ToggleDebug()
@@ -125,8 +130,8 @@ namespace SweetSpot.ScreenManagement
 
             if (CurrentScreen.Finished)
             {
-                RemoveScreen();
-                if (screens.Count == 0)
+                currentScreen += 1;
+                if (currentScreen >= screens.Count)
                 {
                     Game.Exit();
                     base.Update(gameTime);
@@ -141,12 +146,6 @@ namespace SweetSpot.ScreenManagement
             }
 
             CurrentScreen.Update(gameTime);
-        }
-
-        protected void RemoveScreen()
-        {
-            CurrentScreen.UnloadContent();
-            screens.RemoveAt(0);
         }
 
         public override void Draw(GameTime gameTime)
