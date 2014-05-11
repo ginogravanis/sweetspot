@@ -102,21 +102,16 @@ namespace SweetSpot.Database
 
         public int GetNewSubjectID()
         {
-            string sql = String.Format("SELECT COUNT(*) FROM {0};", TABLE_TEST);
-            string result = ExecuteScalarQuery(sql);
-            if (int.Parse(result) == 0)
-                return 1;
-
-            sql = String.Format("SELECT MAX(subject) FROM {0};", TABLE_TEST);
-            result = ExecuteScalarQuery(sql);
-            return int.Parse(result) + 1;
+            string sql = String.Format("SELECT COALESCE(MAX(subject), 0) FROM {0};", TABLE_TEST);
+            string maxSubjectID = ExecuteScalarQuery(sql);
+            return int.Parse(maxSubjectID) + 1;
         }
 
         public int GetNewTestID()
         {
-            string sql = String.Format("SELECT COUNT(*) FROM {0};", TABLE_TEST);
-            string result = ExecuteScalarQuery(sql);
-            return int.Parse(result) + 1;
+            string sql = String.Format("SELECT COALESCE(MAX(id), 0) FROM {0};", TABLE_TEST);
+            string maxTestID = ExecuteScalarQuery(sql);
+            return int.Parse(maxTestID) + 1;
         }
 
         public int RecordTest(int testSubject, string cue)
