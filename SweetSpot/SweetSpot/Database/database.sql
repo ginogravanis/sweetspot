@@ -27,15 +27,9 @@ CREATE TABLE "questionnaire" (
 CREATE TABLE "ranking" (
 	"test_subject" INTEGER NOT NULL,
 	"ranking_type" INTEGER NOT NULL,
-	"rank_1" VARCHAR,
-	"rank_2" VARCHAR,
-	"rank_3" VARCHAR,
-	"rank_4" VARCHAR,
-	"rank_5" VARCHAR,
-	"rank_6" VARCHAR,
-	"rank_7" VARCHAR,
-	"rank_8" VARCHAR,
-	PRIMARY KEY ("test_subject", "ranking_type")
+	"rank" INTEGER NOT NULL,
+	"cue" VARCHAR NOT NULL,
+	PRIMARY KEY ("test_subject", "ranking_type", "rank")
 	);
 CREATE TABLE "sweetspot_bounds" (
 	"x" VARCHAR DEFAULT (null),
