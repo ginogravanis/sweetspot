@@ -9,6 +9,7 @@ CREATE TABLE "calibration" (
 CREATE TABLE "demographics" (
 	"test_subject" INTEGER PRIMARY KEY  NOT NULL  UNIQUE,
 	"sex" INTEGER NOT NULL,
+	"age" INTEGER NOT NULL,
 	"profession" VARCHAR NOT NULL,
 	"has_kinect" BOOL NOT NULL,
 	"needs_aid" BOOL NOT NULL,
@@ -18,11 +19,12 @@ CREATE TABLE "demographics" (
 	"pelli_robson" INTEGER NOT NULL
 	);
 CREATE TABLE "questionnaire" (
-	"test_id" INTEGER NOT NULL,
-	"cue_number" INTEGER NOT NULL,
-	"question" INTEGER NOT NULL,
-	"answer" INTEGER NOT NULL,
-	PRIMARY KEY ("test_id", "cue_number", "question")
+	"test_subject" INTEGER NOT NULL,
+	"cue" VARCHAR NOT NULL,
+	"answer_1" INTEGER NOT NULL,
+	"answer_2" INTEGER NOT NULL,
+	"answer_3" INTEGER NOT NULL,
+	PRIMARY KEY ("test_subject", "cue")
 	);
 CREATE TABLE "ranking" (
 	"test_subject" INTEGER NOT NULL,
