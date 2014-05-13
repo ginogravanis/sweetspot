@@ -19,7 +19,7 @@ namespace SweetSpot.Input
         {
             sensor = kinect;
             activeUsers = new List<Skeleton>();
-            positionSmoothingTime = TimeSpan.FromMilliseconds(50);
+            positionSmoothingTime = TimeSpan.FromMilliseconds(200);
             TransformationMatrix = Matrix.Identity;
             lastSensorUpdate = TimeSpan.FromSeconds(-1);
             this.calibrationProvider = calibrationProvider;
@@ -85,7 +85,7 @@ namespace SweetSpot.Input
 
         protected Skeleton[] GetRawSkeletonData()
         {
-            using (SkeletonFrame frame = sensor.SkeletonStream.OpenNextFrame(10))
+            using (SkeletonFrame frame = sensor.SkeletonStream.OpenNextFrame(0))
             {
                 Skeleton[] skeletons;
                 if (null == frame)
