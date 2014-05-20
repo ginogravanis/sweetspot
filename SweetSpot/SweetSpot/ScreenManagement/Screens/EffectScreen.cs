@@ -14,8 +14,8 @@ namespace SweetSpot.ScreenManagement.Screens
         Texture2D green;
         Texture2D red;
 
-        public EffectScreen(ScreenManager screenManager, string cue, Vector2 sweetSpot, Effect effect)
-            : base(screenManager, cue, sweetSpot)
+        public EffectScreen(ScreenManager screenManager, string cue, Mapping mapping, Vector2 sweetSpot, Effect effect)
+            : base(screenManager, cue, mapping, sweetSpot)
         {
             this.effect = effect;
         }
@@ -44,7 +44,39 @@ namespace SweetSpot.ScreenManagement.Screens
 
                 if (distanceFromSweetSpot <= margin)
                 {
-                    targetEffectIntensity = distanceFromSweetSpot / margin;
+                    float x = distanceFromSweetSpot / margin;
+                    System.Diagnostics.Trace.WriteLine(mapping.ToString());
+                    switch (mapping)
+                    {
+                        case Mapping.Linear:
+                            targetEffectIntensity = x;
+                            break;
+                        case Mapping.QuickStart:
+                            targetEffectIntensity = (float)-System.Math.Sqrt(1 - System.Math.Pow(x, 2)) + 1;
+                            break;
+                        case Mapping.SlowStart:
+                            targetEffectIntensity = (float)System.Math.Sqrt(1 - System.Math.Pow(x - 1, 2));
+                            break;
+                        case Mapping.SCurve:
+                            targetEffectIntensity = (float)(System.Math.Pow(2 * (x - 0.5), 5) + (2 * (x - 0.5)) + 2) / 4;
+                            break;
+                        default:
+                            throw new System.ArgumentException("Invalid cue type.");
+                    }
+
+                    
+
+                    //float targetEffectIntensitySquare = (float)System.Math.Pow(x, 2); // = x^2
+                    //float targetEffectIntensityInvSquare = (float) - System.Math.Pow((x - 1), 2) + 1; // = -(x-1)^2 + 1
+
+                    /*
+                    System.Diagnostics.Trace.WriteLine( "linear="+System.Math.Round(targetEffectIntensityLinear*100)+
+                                                        //", square="+System.Math.Round(targetEffectIntensitySquare*100)+
+                                                        //", invSquare="+System.Math.Round(targetEffectIntensityInvSquare*100)+
+                                                        "slowStart="+System.Math.Round(targetEffectIntensitySlowStart*100)+
+                                                        "quickStart="+System.Math.Round(targetEffectIntensityQuickStart*100)+
+                                                        ", S=" + System.Math.Round(targetEffectIntensityS * 100));
+                    */
                 }
             }
 

@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SQLite;
 using Microsoft.Xna.Framework;
 using SweetSpot.Input;
+using SweetSpot.ScreenManagement;
 
 namespace SweetSpot.Database
 {
@@ -114,12 +115,12 @@ namespace SweetSpot.Database
             return int.Parse(maxTestID) + 1;
         }
 
-        public int RecordTest(int testSubject, string cue)
+        public int RecordTest(int testSubject, string cue, Mapping mapping)
         {
-            return RecordTest(testSubject, cue, new Vector2());
+            return RecordTest(testSubject, cue, mapping, new Vector2());
         }
 
-        public int RecordTest(int testSubject, string cue, Vector2 sweetSpot)
+        public int RecordTest(int testSubject, string cue, Mapping mapping, Vector2 sweetSpot)
         {
             int testID = GetNewTestID();
 
@@ -128,6 +129,7 @@ namespace SweetSpot.Database
                 {"id", testID.ToString()},
                 {"subject", testSubject.ToString()},
                 {"cue", cue},
+                {"mapping", mapping.ToString()},
                 {"sweetspot_x", sweetSpot.X.ToString()},
                 {"sweetspot_y", sweetSpot.Y.ToString()},
                 {"begin_ms", DateTime.Now.Millisecond.ToString()}
