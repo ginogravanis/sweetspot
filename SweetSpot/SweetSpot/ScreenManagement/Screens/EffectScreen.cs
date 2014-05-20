@@ -44,7 +44,7 @@ namespace SweetSpot.ScreenManagement.Screens
 
                 if (distanceFromSweetSpot <= margin)
                 {
-                    targetEffectIntensity = screenManager.Kinect.GetDistanceFromSweetSpot() / screenManager.Kinect.sweetSpotMargin;
+                    targetEffectIntensity = distanceFromSweetSpot / margin;
                 }
             }
 
