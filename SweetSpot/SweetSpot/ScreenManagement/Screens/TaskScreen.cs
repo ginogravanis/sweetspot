@@ -8,14 +8,16 @@ namespace SweetSpot.ScreenManagement.Screens
         protected int test;
         protected int testSubject;
         protected string cue;
+        protected Mapping mapping;
         protected bool taskCompleted = false;
         protected TimeSpan elapsedTime;
 
-        public TaskScreen(ScreenManager screenManager, string cue, bool shuffleItems=true)
+        public TaskScreen(ScreenManager screenManager, string cue, Mapping mapping, bool shuffleItems=true)
             : base(screenManager)
         {
             elapsedTime = TimeSpan.FromSeconds(0);
             this.cue = cue;
+            this.mapping = mapping;
         }
 
         public override void Initialize()
@@ -27,7 +29,7 @@ namespace SweetSpot.ScreenManagement.Screens
 
         protected virtual int initializeTest()
         {
-            return screenManager.Database.RecordTest(testSubject, cue);
+            return screenManager.Database.RecordTest(testSubject, cue, mapping);
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)

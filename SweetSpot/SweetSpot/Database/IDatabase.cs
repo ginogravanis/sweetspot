@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using SweetSpot.ScreenManagement;
 
 namespace SweetSpot.Database
 {
@@ -12,8 +12,8 @@ namespace SweetSpot.Database
 
         int GetNewSubjectID();
 
-        int RecordTest(int testSubject, string cue);
-        int RecordTest(int testSubject, string cue, Vector2 sweetSpot);
+        int RecordTest(int testSubject, string cue, Mapping mapping);
+        int RecordTest(int testSubject, string cue, Mapping mapping, Vector2 sweetSpot);
 
         void TestCompleted(int test, int timestamp);
 
