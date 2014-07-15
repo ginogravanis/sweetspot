@@ -30,8 +30,8 @@ namespace SweetSpot.ScreenManagement.Screens
             { Direction.Back, "hinten" }
         };
 
-        public BaselineTextScreen(ScreenManager screenManager, string cue, Vector2 sweetSpot)
-            : base(screenManager, cue, sweetSpot)
+        public BaselineTextScreen(ScreenManager screenManager, string cue, Mapping mapping, Vector2 sweetSpot)
+            : base(screenManager, cue, mapping, sweetSpot)
         {
         }
 

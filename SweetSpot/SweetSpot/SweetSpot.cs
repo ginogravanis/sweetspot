@@ -1,4 +1,4 @@
-#define CALIBRATION_TARGET
+//#define CALIBRATION_TARGET
 
 using System;
 using System.Windows.Forms;

@@ -13,7 +13,7 @@ namespace SweetSpot.ScreenManagement
 
     public class ScreenManager : DrawableGameComponent
     {
-        public readonly int TESTS_PER_CUE = 5;
+        public readonly int TESTS_PER_MAPPING = 5;
 
         public bool Debug { get; internal set; }
         public SensorManager Kinect { get; internal set; }
@@ -85,33 +85,42 @@ namespace SweetSpot.ScreenManagement
         public IEnumerable<Screen> GenerateTestSession(ConvexHull sweetSpotBounds)
         {
             List<Screen> screens = new List<Screen>();
-            List<Cue> cues = EnumUtil.GetValues<Cue>().Skip(1).ToList();
+            List<Cue> cues = new List<Cue>(); // = EnumUtil.GetValues<Cue>().Skip(1).ToList();
+            cues.Add(Cue.Pixelate);
+            cues.Add(Cue.Brightness);
             cues.Shuffle();
+            List<Mapping> mappings = EnumUtil.GetValues<Mapping>().ToList();
             int cueIndex = 0;
 
             string[] startingPositions = { "rechts", "links" };
             int startingPosition = 0;
 
             screens.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Test subject {0}", TestSubject)));
-            screens.AddRange(ScreenFactory.CreateSnellenTest(this));
-            screens.AddRange(ScreenFactory.CreateIshiharaTest(this));
-            screens.AddRange(ScreenFactory.CreatePelliRobsonTest(this));
+            //screens.AddRange(ScreenFactory.CreateSnellenTest(this));
+            //screens.AddRange(ScreenFactory.CreateIshiharaTest(this));
+            //screens.AddRange(ScreenFactory.CreatePelliRobsonTest(this));
             screens.AddRange(ScreenFactory.CreateDemo(this));
-            for (int i = 1; i <= TESTS_PER_CUE; i++)
+            for (int i = 1; i <= TESTS_PER_MAPPING; i++)
             {
-                screens.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Dry run {0}", i, TESTS_PER_CUE)));
+                screens.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Dry run {0}", i, TESTS_PER_MAPPING)));
                 screens.Add(ScreenFactory.CreateBaselineScreen(this));
             }
             foreach (Cue cue in cues)
             {
                 cueIndex++;
-                for (int test = 1; test <= TESTS_PER_CUE; test++)
+                int mappingIndex = 0;
+                mappings.Shuffle();
+                foreach (Mapping mapping in mappings)
                 {
-                    startingPosition = (TestSubject + cueIndex + test) % startingPositions.Length;
-                    screens.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Cue {0}\nTest {2}\nStart von {4}", cueIndex, cues.Count, test, TESTS_PER_CUE, startingPositions[startingPosition])));
-                    screens.Add(ScreenFactory.CreateTestScreen(this, cue, sweetSpotBounds.GenerateInternalPoint()));
+                    mappingIndex++;
+                    for (int test = 1; test <= TESTS_PER_MAPPING; test++)
+                    {
+                        startingPosition = (TestSubject + cueIndex + mappingIndex + test) % startingPositions.Length;
+                        screens.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Cue {0}\nMapping {2}\nTest {4}\nStart von {6}", cueIndex, cues.Count, mappingIndex, mappings.Count, test, TESTS_PER_MAPPING, startingPositions[startingPosition])));
+                        screens.Add(ScreenFactory.CreateTestScreen(this, cue, mapping, sweetSpotBounds.GenerateInternalPoint()));
+                    }
+                    screens.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Questionnaire {0}", (cueIndex-1) * mappings.Count + mappingIndex)));
                 }
-                screens.Add(ScreenFactory.CreateTransitionScreen(this, String.Format("Questionnaire {0}", cueIndex)));
             }
             screens.Add(ScreenFactory.CreateTransitionScreen(this, "Thank you for participating!"));
 
