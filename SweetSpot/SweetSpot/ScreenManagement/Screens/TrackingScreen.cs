@@ -9,8 +9,8 @@ namespace SweetSpot.ScreenManagement.Screens
         protected TimeSpan recordingIntervall = TimeSpan.FromMilliseconds(100);
         protected TimeSpan lastPositionCaptured;
 
-        public TrackingScreen(ScreenManager screenManager, string cue, Vector2 sweetSpot)
-            : base(screenManager, cue)
+        public TrackingScreen(ScreenManager screenManager, string cue, Mapping mapping, Vector2 sweetSpot)
+            : base(screenManager, cue, mapping)
         {
             this.sweetSpot = sweetSpot;
             lastPositionCaptured = TimeSpan.FromSeconds(-1);
@@ -24,7 +24,7 @@ namespace SweetSpot.ScreenManagement.Screens
 
         protected override int initializeTest()
         {
-            return screenManager.Database.RecordTest(testSubject, cue, sweetSpot);
+            return screenManager.Database.RecordTest(testSubject, cue, mapping, sweetSpot);
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)

@@ -25,8 +25,8 @@ namespace SweetSpot.ScreenManagement.Screens
         protected Effect perspectiveShader;
         protected float alpha = 0;
 
-        public BaselineArrowScreen(ScreenManager screenManager, string cue, Vector2 sweetSpot)
-            : base(screenManager, cue, sweetSpot)
+        public BaselineArrowScreen(ScreenManager screenManager, string cue, Mapping mapping, Vector2 sweetSpot)
+            : base(screenManager, cue, mapping, sweetSpot)
         { }
 
         public override void LoadContent()
