@@ -102,6 +102,7 @@
     <Compile Include="ScreenManagement\Screens\TrackingScreen.cs" />
     <Compile Include="ScreenManagement\Screens\TransitionScreen.cs" />
     <Compile Include="SweetSpot.cs" />
+    <Compile Include="Util\QuizItem.cs" />
     <Compile Include="Util\SweetSpotBounds.cs" />
     <Compile Include="Util\EnumUtil.cs" />
     <Compile Include="Util\Extensions.cs" />

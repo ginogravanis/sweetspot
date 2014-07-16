@@ -5,6 +5,7 @@ using System.Data.SQLite;
 using Microsoft.Xna.Framework;
 using SweetSpot.Input;
 using SweetSpot.ScreenManagement;
+using SweetSpot.Util;
 
 namespace SweetSpot.Database
 {
@@ -17,9 +18,12 @@ namespace SweetSpot.Database
         const string TABLE_SWEETSPOT_BOUNDS = "sweetspot_bounds";
         const string TABLE_TEST = "test";
         const string TABLE_USER_POSITION = "user_position";
+        const string TABLE_QUESTIONS = "questions";
 
         protected string db;
         protected List<string> insertBuffer;
+
+        protected int lastQuestionId = 0;
 
         public SQLiteAdapter()
         {
@@ -137,6 +141,23 @@ namespace SweetSpot.Database
             Insert(TABLE_TEST, test);
 
             return testID;
+        }
+
+        public QuizItem GetQuestion()
+        { 
+            string sql = String.Format("SELECT * FROM {0} WHERE ID > {1} OR ID= (SELECT MIN(ID) FROM {0}) LIMIT 1;",
+                TABLE_QUESTIONS, lastQuestionId);
+            DataTable table = ExecuteTableQuery(sql);
+
+            if (table.Rows.Count == 0) 
+                throw new ApplicationException("Cant find any questions");
+
+            DataRow row = table.Rows[0];
+            string question = row["questions"].ToString();
+            string answer = row["answer"].ToString();
+            lastQuestionId = Int32.Parse(row["id"].ToString());
+
+            return new QuizItem(question, answer);
         }
 
         public void TestCompleted(int test, int timestamp)
