@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace SweetSpot.Util
 {
-    public class ConvexHull
+    public class SweetSpotBounds
     {
         protected float left;
         protected float right;
@@ -26,7 +26,7 @@ namespace SweetSpot.Util
             return result;
         }
 
-        public ConvexHull()
+        public SweetSpotBounds()
         {
             rng = new Random();
         }

@@ -13,13 +13,13 @@ namespace SweetSpot.ScreenManagement.Screens
         Rectangle separator;
         SensorPanel leftSensorPanel;
         SensorPanel rightSensorPanel;
-        public ConvexHull sweetSpotBounds;
+        public SweetSpotBounds sweetSpotBounds;
         protected bool unsavedSweetspotBounds = false;
 
         public SensorCalibrationScreen(ScreenManager screenManager)
             : base(screenManager)
         {
-            sweetSpotBounds = new ConvexHull();
+            sweetSpotBounds = new SweetSpotBounds();
         }
 
         public override void LoadContent()

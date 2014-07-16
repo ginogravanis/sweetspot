@@ -50,7 +50,7 @@ namespace SweetSpot.ScreenManagement
                     Add(ScreenFactory.CreateCalibration(this));
                     break;
                 case Scene.Tests:
-                    ConvexHull sweetSpotBounds = new ConvexHull();
+                    SweetSpotBounds sweetSpotBounds = new SweetSpotBounds();
                     foreach (var point in Database.LoadSweetSpotBounds())
                         sweetSpotBounds.Add(point);
                     Add(GenerateTestSession(sweetSpotBounds));
@@ -82,7 +82,7 @@ namespace SweetSpot.ScreenManagement
             screens.Add(screen);
         }
 
-        public IEnumerable<Screen> GenerateTestSession(ConvexHull sweetSpotBounds)
+        public IEnumerable<Screen> GenerateTestSession(SweetSpotBounds sweetSpotBounds)
         {
             List<Screen> screens = new List<Screen>();
             List<Cue> cues = new List<Cue>(); // = EnumUtil.GetValues<Cue>().Skip(1).ToList();
