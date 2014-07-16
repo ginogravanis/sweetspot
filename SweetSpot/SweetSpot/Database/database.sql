@@ -6,33 +6,10 @@ CREATE TABLE "calibration" (
 	"translate_z" VARCHAR NOT NULL  DEFAULT (null),
 	"created" DATETIME NOT NULL  DEFAULT (CURRENT_TIMESTAMP)
 	);
-CREATE TABLE "demographics" (
-	"test_subject" INTEGER PRIMARY KEY  NOT NULL  UNIQUE,
-	"sex" INTEGER NOT NULL,
-	"age" INTEGER NOT NULL,
-	"profession" VARCHAR NOT NULL,
-	"has_kinect" BOOL NOT NULL,
-	"needs_aid" BOOL NOT NULL,
-	"wears_aid" BOOL NOT NULL,
-	"snellen" INTEGER NOT NULL,
-	"ishihara" INTEGER NOT NULL,
-	"pelli_robson" INTEGER NOT NULL
-	);
-CREATE TABLE "questionnaire" (
-	"test_subject" INTEGER NOT NULL,
-	"cue" VARCHAR NOT NULL,
-	"answer_1" INTEGER NOT NULL,
-	"answer_2" INTEGER NOT NULL,
-	"answer_3" INTEGER NOT NULL,
-	PRIMARY KEY ("test_subject", "cue")
-	);
-CREATE TABLE "ranking" (
-	"test_subject" INTEGER NOT NULL,
-	"ranking_type" INTEGER NOT NULL,
-	"rank" INTEGER NOT NULL,
-	"cue" VARCHAR NOT NULL,
-	PRIMARY KEY ("test_subject", "ranking_type", "rank")
-	);
+CREATE TABLE "questions" (
+	"id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE ,
+	"question" VARCHAR,
+	"answers" VARCHAR);
 CREATE TABLE "sweetspot_bounds" (
 	"x" VARCHAR DEFAULT (null),
 	"y" VARCHAR DEFAULT (null)

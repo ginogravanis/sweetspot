@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using SweetSpot.ScreenManagement;
+using SweetSpot.Util;
 
 namespace SweetSpot.Database
 {
@@ -14,6 +15,8 @@ namespace SweetSpot.Database
 
         int RecordTest(int testSubject, string cue, Mapping mapping);
         int RecordTest(int testSubject, string cue, Mapping mapping, Vector2 sweetSpot);
+
+        QuizItem GetQuestion();
 
         void TestCompleted(int test, int timestamp);
 
