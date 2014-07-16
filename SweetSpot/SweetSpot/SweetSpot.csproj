@@ -102,7 +102,7 @@
     <Compile Include="ScreenManagement\Screens\TrackingScreen.cs" />
     <Compile Include="ScreenManagement\Screens\TransitionScreen.cs" />
     <Compile Include="SweetSpot.cs" />
-    <Compile Include="Util\ConvexHull.cs" />
+    <Compile Include="Util\SweetSpotBounds.cs" />
     <Compile Include="Util\EnumUtil.cs" />
     <Compile Include="Util\Extensions.cs" />
     <Compile Include="Util\StringEnum.cs" />
