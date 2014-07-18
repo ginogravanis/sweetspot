@@ -86,7 +86,6 @@
     <Compile Include="ScreenManagement\Cue.cs" />
     <Compile Include="ScreenManagement\Screen.cs" />
     <Compile Include="ScreenManagement\ScreenManager.cs" />
-    <Compile Include="ScreenManagement\Screens\AutoTransitionScreen.cs" />
     <Compile Include="ScreenManagement\Screens\BaselineArrowScreen.cs" />
     <Compile Include="Input\Calibrator.cs" />
     <Compile Include="ScreenManagement\Screens\Calibration\SensorCalibrationScreen.cs" />
@@ -97,8 +96,6 @@
     <Compile Include="ScreenManagement\Screens\BaselineTextScreen.cs" />
     <Compile Include="ScreenManagement\Screens\Calibration\SensorPanel.cs" />
     <Compile Include="ScreenManagement\ScreenFactory.cs" />
-    <Compile Include="ScreenManagement\Screens\SlideScreen.cs" />
-    <Compile Include="ScreenManagement\Screens\TimedSlideScreen.cs" />
     <Compile Include="ScreenManagement\Screens\TrackingScreen.cs" />
     <Compile Include="ScreenManagement\Screens\TransitionScreen.cs" />
     <Compile Include="SweetSpot.cs" />
