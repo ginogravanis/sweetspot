@@ -4,31 +4,28 @@ namespace SweetSpot.ScreenManagement
 {
     public enum Cue
     {
-        [StringValue("Baseline")]
-        Baseline = 0,
-
         [StringValue("Arrow")]
-        BaselineArrow = 1,
+        BaselineArrow = 0,
 
         [StringValue("Text")]
-        BaselineText = 2,
+        BaselineText = 1,
 
         [StringValue("Brightness")]
-        Brightness = 3,
+        Brightness = 2,
 
         [StringValue("Contrast")]
-        Contrast = 4,
+        Contrast = 3,
 
         [StringValue("Saturation")]
-        Saturation = 5,
+        Saturation = 4,
 
         [StringValue("Pixelate")]
-        Pixelate = 6,
+        Pixelate = 5,
 
         [StringValue("Distort")]
-        Distort = 7,
+        Distort = 6,
 
         [StringValue("Jitter")]
-        Jitter = 8
+        Jitter = 7
     }
 }

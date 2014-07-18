@@ -63,20 +63,6 @@ namespace SweetSpot.ScreenManagement.Screens
                         default:
                             throw new System.ArgumentException("Invalid cue type.");
                     }
-
-                    
-
-                    //float targetEffectIntensitySquare = (float)System.Math.Pow(x, 2); // = x^2
-                    //float targetEffectIntensityInvSquare = (float) - System.Math.Pow((x - 1), 2) + 1; // = -(x-1)^2 + 1
-
-                    /*
-                    System.Diagnostics.Trace.WriteLine( "linear="+System.Math.Round(targetEffectIntensityLinear*100)+
-                                                        //", square="+System.Math.Round(targetEffectIntensitySquare*100)+
-                                                        //", invSquare="+System.Math.Round(targetEffectIntensityInvSquare*100)+
-                                                        "slowStart="+System.Math.Round(targetEffectIntensitySlowStart*100)+
-                                                        "quickStart="+System.Math.Round(targetEffectIntensityQuickStart*100)+
-                                                        ", S=" + System.Math.Round(targetEffectIntensityS * 100));
-                    */
                 }
             }
 
@@ -99,7 +85,7 @@ namespace SweetSpot.ScreenManagement.Screens
             effect.Parameters["elapsedTime"].SetValue((float)gameTime.TotalGameTime.TotalMilliseconds);
             effect.Parameters["effectIntensity"].SetValue(currentEffectIntensity);
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, null, null, null, effect);
-            spriteBatch.Draw(image, new Rectangle(0, 0, viewport.Width, viewport.Height), Color.White);
+            spriteBatch.Draw(image, imageRect, Color.White);
             spriteBatch.End();
 
             if (screenManager.Debug)

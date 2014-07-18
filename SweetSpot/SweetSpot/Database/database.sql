@@ -6,10 +6,11 @@ CREATE TABLE "calibration" (
 	"translate_z" VARCHAR NOT NULL  DEFAULT (null),
 	"created" DATETIME NOT NULL  DEFAULT (CURRENT_TIMESTAMP)
 	);
-CREATE TABLE "questions" (
-	"id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE ,
+CREATE TABLE "question" (
+	"id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE,
 	"question" VARCHAR,
-	"answers" VARCHAR);
+	"answer" VARCHAR
+    );
 CREATE TABLE "sweetspot_bounds" (
 	"x" VARCHAR DEFAULT (null),
 	"y" VARCHAR DEFAULT (null)

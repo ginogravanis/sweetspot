@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace SweetSpot.Util
+﻿namespace SweetSpot.Util
 {
     public class QuizItem
     {
-        public String Question { get; set; }
-        public String Answer { get; set; }
+        public int Id { get; internal set; }
+        public string Question { get; internal set; }
+        public string Answer { get; internal set; }
 
-        public QuizItem(String Question, String Answer)
+        public QuizItem(int id, string question, string answer)
         {
-            this.Question = Question;
-            this.Answer = Answer;
+            Question = question;
+            Answer = answer;
         }
     }
 }
