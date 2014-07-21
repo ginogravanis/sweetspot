@@ -5,7 +5,7 @@ namespace SweetSpot.ScreenManagement.Screens
 {
     public enum TransitionState { PreDelay, FadingIn, Active, FadingOut, PostDelay }
 
-    public class TransitionScreen : Screen
+    public class TitleScreen : Screen
     {
         protected SpriteFont font;
         protected string caption;
@@ -16,10 +16,10 @@ namespace SweetSpot.ScreenManagement.Screens
         const float FADE_TIME = 300;                // in ms
         const float DELAY = 300;                    // in ms
 
-        public TransitionScreen(ScreenManager screenManager, string caption)
+        public TitleScreen(ScreenManager screenManager)
             : base(screenManager)
         {
-            this.caption = caption;
+            this.caption = "Quiz";
             textPosition = new Vector2();
         }
 
@@ -80,7 +80,7 @@ namespace SweetSpot.ScreenManagement.Screens
 
                 case TransitionState.PostDelay:
                     if (timeSinceStateChange >= DELAY)
-                        ExitScreen(gameTime);
+                        NextScreen(gameTime);
                     break;
             }
         }
@@ -103,14 +103,10 @@ namespace SweetSpot.ScreenManagement.Screens
             spriteBatch.End();
         }
 
-        public override void SkipAction(GameTime gameTime)
+        public override void NextScreen(GameTime gameTime)
         {
-            if (TransitionState.Active == currentState)
-            {
-                changeState(TransitionState.FadingOut);
-            }
-            else
-                base.SkipAction(gameTime);
+            base.NextScreen(gameTime);
+            screenManager.NewGame();
         }
     }
 }

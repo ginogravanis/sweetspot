@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
+using SweetSpot.Database;
 
 namespace SweetSpot.Util
 {
@@ -26,9 +26,11 @@ namespace SweetSpot.Util
             return result;
         }
 
-        public SweetSpotBounds()
+        public SweetSpotBounds(IDatabase database)
         {
             rng = new Random();
+            foreach (var point in database.LoadSweetSpotBounds())
+                Add(point);
         }
 
         public bool Includes(Vector2 point)

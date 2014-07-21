@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,20 +16,20 @@ namespace SweetSpot.ScreenManagement
         public SensorManager Kinect { get; internal set; }
         public InputManager Input { get; internal set; }
         public IDatabase Database { get; internal set; }
+        public SweetSpotBounds SweetspotBounds { get; internal set; }
         public SpriteBatch SpriteBatch { get; internal set; }
-        public Screen CurrentScreen { get { return screens[currentScreen]; } }
+        public Screen CurrentScreen { get { return screens.First(); } }
         public int TestSubject { get; internal set; }
 
         protected Scene scene;
-        protected IList<Screen> screens;
-        protected int currentScreen;
+        protected LinkedList<Screen> screens;
 
         public ScreenManager(Game game, Scene scene)
             : base(game)
         {
             Debug = false;
             var db = new SQLiteAdapter();
-            screens = new List<Screen>();
+            screens = new LinkedList<Screen>();
             Kinect = new SensorManager(db);
             Input = new InputManager();
             Database = db;
@@ -45,17 +44,13 @@ namespace SweetSpot.ScreenManagement
             switch (scene)
             {
                 case Scene.Calibration:
-                    Add(ScreenFactory.CreateCalibration(this));
+                    Add(ScreenFactory.CreateCalibrationScreen(this));
                     break;
                 case Scene.Tests:
-                    SweetSpotBounds sweetSpotBounds = new SweetSpotBounds();
-                    foreach (var point in Database.LoadSweetSpotBounds())
-                        sweetSpotBounds.Add(point);
-                    Add(GenerateTestSession(sweetSpotBounds));
+                    SweetspotBounds = new SweetSpotBounds(Database);
+                    screens.AddLast(ScreenFactory.CreateTitleScreen(this));
                     break;
             }
-
-            currentScreen = 0;
         }
 
         protected override void LoadContent()
@@ -69,23 +64,9 @@ namespace SweetSpot.ScreenManagement
                 screen.UnloadContent();
         }
 
-        public void Add(IEnumerable<Screen> screens)
-        {
-            foreach (var screen in screens)
-                Add(screen);
-        }
-
         public void Add(Screen screen)
         {
-            screens.Add(screen);
-        }
-
-        public IEnumerable<Screen> GenerateTestSession(SweetSpotBounds sweetSpotBounds)
-        {
-            List<Screen> screens = new List<Screen>();
-            screens.Add(ScreenFactory.CreateTestScreen(this, Cue.Pixelate, Mapping.SCurve, sweetSpotBounds.GenerateInternalPoint()));
-            
-            return screens;
+            screens.AddLast(screen);
         }
 
         public void ToggleDebug()
@@ -100,13 +81,7 @@ namespace SweetSpot.ScreenManagement
 
             if (CurrentScreen.Finished)
             {
-                currentScreen += 1;
-                if (currentScreen >= screens.Count)
-                {
-                    Game.Exit();
-                    base.Update(gameTime);
-                    return;
-                }
+                screens.RemoveFirst();
             }
 
             if (!CurrentScreen.Initialized)
@@ -121,6 +96,21 @@ namespace SweetSpot.ScreenManagement
         public override void Draw(GameTime gameTime)
         {
             CurrentScreen.Draw(gameTime);
+        }
+
+        public void NewGame()
+        {
+            NextQuestion();
+        }
+
+        public void NextQuestion()
+        {
+            Add(ScreenFactory.CreateQuestionScreen(this, Cue.Pixelate, Mapping.SCurve, SweetspotBounds.GenerateInternalPoint()));
+        }
+
+        public void EndGame()
+        {
+            Add(ScreenFactory.CreateTitleScreen(this));
         }
     }
 }

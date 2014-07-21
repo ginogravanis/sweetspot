@@ -19,7 +19,7 @@ namespace SweetSpot.ScreenManagement.Screens
         public SensorCalibrationScreen(ScreenManager screenManager)
             : base(screenManager)
         {
-            sweetSpotBounds = new SweetSpotBounds();
+            sweetSpotBounds = new SweetSpotBounds(screenManager.Database);
         }
 
         public override void LoadContent()
@@ -132,9 +132,9 @@ namespace SweetSpot.ScreenManagement.Screens
             spriteBatch.End();
         }
 
-        public override void SkipAction(GameTime gameTime)
+        public override void NextScreen(GameTime gameTime)
         {
-            base.SkipAction(gameTime);
+            base.NextScreen(gameTime);
             if (unsavedSweetspotBounds)
                 screenManager.Database.SaveSweetSpotBounds(sweetSpotBounds.GetPoints());
         }

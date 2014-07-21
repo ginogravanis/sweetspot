@@ -40,7 +40,7 @@ namespace SweetSpot.ScreenManagement
                 screenManager.Game.Exit();
 
             if (screenManager.Input.IsKeyPressed(Keys.Space) || screenManager.Input.IsGamePadButtonPressed(Buttons.A))
-                SkipAction(gameTime);
+                NextScreen(gameTime);
 
             if (screenManager.Input.IsKeyPressed(Keys.F12) || screenManager.Input.IsGamePadButtonPressed(Buttons.RightTrigger))
                 screenManager.ToggleDebug();
@@ -51,12 +51,7 @@ namespace SweetSpot.ScreenManagement
             screenManager.Game.GraphicsDevice.Clear(background);
         }
 
-        public virtual void SkipAction(GameTime gameTime)
-        {
-            ExitScreen(gameTime);
-        }
-
-        public virtual void ExitScreen(GameTime gameTime)
+        public virtual void NextScreen(GameTime gameTime)
         {
             Finished = true;
         }
