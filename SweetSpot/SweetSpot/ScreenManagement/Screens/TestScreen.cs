@@ -31,7 +31,7 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void LoadContent()
         {
             base.LoadContent();
-            image = Content.Load<Texture2D>(@"texture\answers\" + answerImageFile);
+            image = Content.Load<Texture2D>(@"answers\" + answerImageFile);
             questionFont = Content.Load<SpriteFont>(@"font\segoe_36");
         }
 

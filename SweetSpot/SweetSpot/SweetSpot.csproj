@@ -107,7 +107,9 @@
     <Compile Include="Util\StringValueAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Database\database.sql" />
+    <Content Include="Database\database.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="SweetSpot.ico" />
   </ItemGroup>
   <ItemGroup>
