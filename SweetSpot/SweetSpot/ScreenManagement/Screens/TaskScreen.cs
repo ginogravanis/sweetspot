@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace SweetSpot.ScreenManagement.Screens
 {
@@ -36,14 +37,20 @@ namespace SweetSpot.ScreenManagement.Screens
         {
             base.Update(gameTime);
             elapsedTime += gameTime.ElapsedGameTime;
+
+            if (screenManager.Input.IsKeyPressed(Keys.T))
+            {
+                markTaskAsCompleted();
+            }
         }
 
-        public override void SkipAction(GameTime gameTime)
+        public override void NextScreen(GameTime gameTime)
         {
+            base.NextScreen(gameTime);
             if (taskCompleted)
-                base.SkipAction(gameTime);
+                screenManager.NextQuestion();
             else
-                markTaskAsCompleted();
+                screenManager.EndGame();
         }
 
         protected void markTaskAsCompleted()

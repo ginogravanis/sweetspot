@@ -34,4 +34,5 @@ CREATE TABLE IF NOT EXISTS "user_position" (
 	);
 
 INSERT OR IGNORE INTO question (id, question, answer) VALUES
-	(1, "What is the tallest building in Munich?", "1");
+	(1, "What is the tallest building in Munich?", "1"),
+	(2, "Different question!", "1");
