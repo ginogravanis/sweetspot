@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.IO;
+using System.Text;
 using Microsoft.Xna.Framework;
 using SweetSpot.Input;
 using SweetSpot.ScreenManagement;
@@ -14,6 +16,7 @@ namespace SweetSpot.Database
     class SQLiteAdapter : IDatabase, ICalibrationProvider
     {
         const string FILENAME = "database.sqlite";
+        const string SCHEMA_PATH = @"Database\database.sql";
         const string TABLE_CALIBRATION = "calibration";
         const string TABLE_SWEETSPOT_BOUNDS = "sweetspot_bounds";
         const string TABLE_TEST = "test";
@@ -29,11 +32,41 @@ namespace SweetSpot.Database
         {
             db = "Data Source=" + FILENAME;
             insertBuffer = new List<string>();
+            initializeDatabase();
         }
 
         ~SQLiteAdapter()
         {
             flushInsertBuffer();
+        }
+
+        protected void initializeDatabase()
+        {
+            string schema = readDatabaseSchema();
+            applyDatabaseSchema(schema);
+        }
+
+        protected string readDatabaseSchema()
+        {
+            StringBuilder sb = new StringBuilder();
+            using (StreamReader sr = new StreamReader(SCHEMA_PATH))
+            {
+                String line;
+                while ((line = sr.ReadLine()) != null)
+                    sb.AppendLine(line);
+            }
+
+            return sb.ToString();
+        }
+
+        protected void applyDatabaseSchema(string schema)
+        {
+            SQLiteConnection connection = new SQLiteConnection(db);
+            connection.Open();
+            SQLiteCommand command = connection.CreateCommand();
+            command.CommandText = schema;
+            object result = command.ExecuteNonQuery();
+            connection.Close();
         }
 
         public bool HasCalibrationDataFor(string deviceID)
