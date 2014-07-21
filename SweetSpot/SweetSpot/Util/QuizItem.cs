@@ -8,6 +8,7 @@
 
         public QuizItem(int id, string question, string answer)
         {
+            Id = id;
             Question = question;
             Answer = answer;
         }
