@@ -8,7 +8,7 @@ using SweetSpot.Util;
 
 namespace SweetSpot.ScreenManagement
 {
-    public enum Scene { Calibration, Tests };
+    public enum Scene { Calibration, Game };
 
     public class ScreenManager : DrawableGameComponent
     {
@@ -16,10 +16,10 @@ namespace SweetSpot.ScreenManagement
         public SensorManager Kinect { get; internal set; }
         public InputManager Input { get; internal set; }
         public IDatabase Database { get; internal set; }
-        public SweetSpotBounds SweetspotBounds { get; internal set; }
+        public SweetspotBounds SweetspotBounds { get; internal set; }
         public SpriteBatch SpriteBatch { get; internal set; }
         public Screen CurrentScreen { get { return screens.First(); } }
-        public int TestSubject { get; internal set; }
+        public int GameID { get; internal set; }
 
         protected Scene scene;
         protected LinkedList<Screen> screens;
@@ -39,15 +39,14 @@ namespace SweetSpot.ScreenManagement
         public override void Initialize()
         {
             base.Initialize();
-            TestSubject = Database.GetNewSubjectID();
 
             switch (scene)
             {
                 case Scene.Calibration:
                     Add(ScreenFactory.CreateCalibrationScreen(this));
                     break;
-                case Scene.Tests:
-                    SweetspotBounds = new SweetSpotBounds(Database);
+                case Scene.Game:
+                    SweetspotBounds = new SweetspotBounds(Database);
                     screens.AddLast(ScreenFactory.CreateTitleScreen(this));
                     break;
             }
@@ -69,6 +68,11 @@ namespace SweetSpot.ScreenManagement
             screens.AddLast(screen);
         }
 
+        protected void removeFirst()
+        {
+            screens.RemoveFirst();
+        }
+
         public void ToggleDebug()
         {
             Debug = !Debug;
@@ -81,7 +85,7 @@ namespace SweetSpot.ScreenManagement
 
             if (CurrentScreen.Finished)
             {
-                screens.RemoveFirst();
+                removeFirst();
             }
 
             if (!CurrentScreen.Initialized)
@@ -100,12 +104,18 @@ namespace SweetSpot.ScreenManagement
 
         public void NewGame()
         {
+            GameID = Database.GetNewGameID();
             NextQuestion();
         }
 
         public void NextQuestion()
         {
-            Add(ScreenFactory.CreateQuestionScreen(this, Cue.Pixelate, Mapping.SCurve, SweetspotBounds.GenerateInternalPoint()));
+            Add(ScreenFactory.CreateQuestionScreen(
+                this,
+                Cue.Pixelate,
+                Mapping.SCurve,
+                SweetspotBounds.GenerateSweetspot()
+                ));
         }
 
         public void EndGame()

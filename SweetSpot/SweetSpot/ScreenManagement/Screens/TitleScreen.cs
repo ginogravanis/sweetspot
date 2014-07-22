@@ -16,8 +16,8 @@ namespace SweetSpot.ScreenManagement.Screens
         const float FADE_TIME = 300;                // in ms
         const float DELAY = 300;                    // in ms
 
-        public TitleScreen(ScreenManager screenManager)
-            : base(screenManager)
+        public TitleScreen(ScreenManager sm)
+            : base(sm)
         {
             this.caption = "Quiz";
             textPosition = new Vector2();
@@ -27,7 +27,7 @@ namespace SweetSpot.ScreenManagement.Screens
         {
             base.LoadContent();
             font = Content.Load<SpriteFont>(@"font\segoe_72");
-            Viewport viewport = screenManager.GraphicsDevice.Viewport;
+            Viewport viewport = sm.GraphicsDevice.Viewport;
             Vector2 textSize = font.MeasureString(caption);
             textPosition = new Vector2((viewport.Width - textSize.X) / 2, (viewport.Height - textSize.Y) / 2);
         }
@@ -95,8 +95,8 @@ namespace SweetSpot.ScreenManagement.Screens
         {
             base.Draw(gameTime);
 
-            SpriteBatch spriteBatch = screenManager.SpriteBatch;
-            Viewport viewport = screenManager.GraphicsDevice.Viewport;
+            SpriteBatch spriteBatch = sm.SpriteBatch;
+            Viewport viewport = sm.GraphicsDevice.Viewport;
 
             spriteBatch.Begin();
             spriteBatch.DrawString(font, caption, textPosition, Color.Black * alpha);
@@ -106,7 +106,7 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void NextScreen(GameTime gameTime)
         {
             base.NextScreen(gameTime);
-            screenManager.NewGame();
+            sm.NewGame();
         }
     }
 }

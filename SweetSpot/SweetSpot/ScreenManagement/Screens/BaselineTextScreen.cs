@@ -30,8 +30,8 @@ namespace SweetSpot.ScreenManagement.Screens
             { Direction.Back, "hinten" }
         };
 
-        public BaselineTextScreen(ScreenManager screenManager, string cue, Mapping mapping, Vector2 sweetSpot)
-            : base(screenManager, cue, mapping, sweetSpot)
+        public BaselineTextScreen(ScreenManager sm, string cue, Mapping mapping, Vector2 sweetspot)
+            : base(sm, cue, mapping, sweetspot)
         {
         }
 
@@ -42,7 +42,7 @@ namespace SweetSpot.ScreenManagement.Screens
             green = Content.Load<Texture2D>("texture\\green");
             red = Content.Load<Texture2D>("texture\\red");
             font = Content.Load<SpriteFont>(@"font\segoe_36");
-            Viewport viewport = screenManager.GraphicsDevice.Viewport;
+            Viewport viewport = sm.GraphicsDevice.Viewport;
             int textBoxHeight = (int)font.MeasureString("W").Y;
             textBox = new Rectangle(0, viewport.Height - textBoxHeight, viewport.Width, textBoxHeight);
             textPosition = new Vector2(textBox.Center.X, textBox.Y);
@@ -52,17 +52,17 @@ namespace SweetSpot.ScreenManagement.Screens
         {
             base.Update(gameTime);
 
-            if (!screenManager.Kinect.IsViewerActive())
+            if (!sm.Kinect.IsViewerActive())
             {
                 viewerDetected = false;
                 return;
             }
 
             viewerDetected = true;
-            Vector2 vectorToSweetspot = screenManager.Kinect.GetVectorToSweetSpot();
+            Vector2 vectorToSweetspot = sm.Kinect.GetVectorToSweetspot();
             Direction direction = CalculateDominantDirection(vectorToSweetspot);
 
-            targetReached = screenManager.Kinect.GetDistanceFromSweetSpot() == 0;
+            targetReached = sm.Kinect.GetDistanceFromSweetspot() == 0;
             if (taskCompleted || targetReached)
             {
                 text = "Stop!";
@@ -107,10 +107,10 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            SpriteBatch spriteBatch = screenManager.SpriteBatch;
-            Viewport viewport = screenManager.GraphicsDevice.Viewport;
+            SpriteBatch spriteBatch = sm.SpriteBatch;
+            Viewport viewport = sm.GraphicsDevice.Viewport;
 
-            screenManager.GraphicsDevice.Clear(Color.Black);
+            sm.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
             spriteBatch.Draw(image, new Rectangle(0, 0, viewport.Width, viewport.Height), Color.White * alpha);
             spriteBatch.Draw(black, textBox, Color.White);
@@ -118,15 +118,15 @@ namespace SweetSpot.ScreenManagement.Screens
                 spriteBatch.DrawString(font, text, textPosition, Color.White);
             spriteBatch.End();
 
-            if (screenManager.Debug)
+            if (sm.Debug)
             {
                 // Overlay
-                Vector2 sweetSpotPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, screenManager.Kinect.sweetSpot);
-                Vector2 viewerPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, screenManager.Kinect.GetViewerPosition());
-                Rectangle sweetSpot = new Rectangle((int)sweetSpotPosition.X - 10, (int)sweetSpotPosition.Y - 10, 20, 20);
+                Vector2 sweetspotPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, sm.Kinect.sweetspot);
+                Vector2 viewerPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, sm.Kinect.GetViewerPosition());
+                Rectangle sweetspot = new Rectangle((int)sweetspotPosition.X - 10, (int)sweetspotPosition.Y - 10, 20, 20);
                 Rectangle viewer = new Rectangle((int)viewerPosition.X - 15, (int)viewerPosition.Y - 15, 30, 30);
                 spriteBatch.Begin();
-                spriteBatch.Draw(green, sweetSpot, Color.White);
+                spriteBatch.Draw(green, sweetspot, Color.White);
                 spriteBatch.Draw(red, viewer, Color.White);
                 spriteBatch.End();
             }

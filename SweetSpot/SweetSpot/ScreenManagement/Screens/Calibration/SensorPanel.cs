@@ -77,9 +77,9 @@ namespace SweetSpot.ScreenManagement.Screens
                 spriteBatch.Draw(white, makePositionMarker(point), Color.White);
             }
 
-            foreach (Vector2 sweetSpot in container.sweetSpotBounds.GetPoints())
+            foreach (Vector2 sweetspot in container.sweetspotBounds.GetPoints())
             {
-                spriteBatch.Draw(blue, makePositionMarker(sweetSpot), Color.White);
+                spriteBatch.Draw(blue, makePositionMarker(sweetspot), Color.White);
             }
 
             if (activeUsers)

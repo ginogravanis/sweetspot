@@ -25,8 +25,8 @@ namespace SweetSpot.ScreenManagement.Screens
         protected Effect perspectiveShader;
         protected float alpha = 0;
 
-        public BaselineArrowScreen(ScreenManager screenManager, string cue, Mapping mapping, Vector2 sweetSpot)
-            : base(screenManager, cue, mapping, sweetSpot)
+        public BaselineArrowScreen(ScreenManager sm, string cue, Mapping mapping, Vector2 sweetspot)
+            : base(sm, cue, mapping, sweetspot)
         { }
 
         public override void LoadContent()
@@ -38,7 +38,7 @@ namespace SweetSpot.ScreenManagement.Screens
             arrow = Content.Load<Texture2D>("texture\\arrow");
             checkMark = Content.Load<Texture2D>("texture\\checkmark");
             perspectiveShader = Content.Load<Effect>("shader\\PerspectiveShader");
-            Viewport viewport = screenManager.GraphicsDevice.Viewport;
+            Viewport viewport = sm.GraphicsDevice.Viewport;
             compass = new Rectangle(
                 viewport.Width - COMPASS_WIDTH,
                 viewport.Height - COMPASS_HEIGHT,
@@ -62,17 +62,17 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (!screenManager.Kinect.IsViewerActive())
+            if (!sm.Kinect.IsViewerActive())
             {
                 viewerDetected = false;
                 return;
             }
 
             viewerDetected = true;
-            Vector2 vectorToSweetspot = screenManager.Kinect.GetVectorToSweetSpot();
+            Vector2 vectorToSweetspot = sm.Kinect.GetVectorToSweetspot();
             compassOrientation = (float)(2*Math.PI - Math.Atan2(vectorToSweetspot.Y, vectorToSweetspot.X));
 
-            targetReached = screenManager.Kinect.GetDistanceFromSweetSpot() == 0;
+            targetReached = sm.Kinect.GetDistanceFromSweetspot() == 0;
             if (targetReached)
                 alpha = Math.Min(alpha + (gameTime.ElapsedGameTime.Milliseconds / FADE_TIME), 1);
             else
@@ -82,10 +82,10 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            SpriteBatch spriteBatch = screenManager.SpriteBatch;
-            Viewport viewport = screenManager.GraphicsDevice.Viewport;
+            SpriteBatch spriteBatch = sm.SpriteBatch;
+            Viewport viewport = sm.GraphicsDevice.Viewport;
 
-            screenManager.GraphicsDevice.Clear(Color.Black);
+            sm.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
             spriteBatch.Draw(image, new Rectangle(0, 0, viewport.Width, viewport.Height), Color.White * alpha);
             spriteBatch.Draw(black, compass, Color.White);
@@ -108,15 +108,15 @@ namespace SweetSpot.ScreenManagement.Screens
                 }
             }
 
-            if (screenManager.Debug)
+            if (sm.Debug)
             {
                 // Overlay
-                Vector2 sweetSpotPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, screenManager.Kinect.sweetSpot);
-                Vector2 viewerPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, screenManager.Kinect.GetViewerPosition());
-                Rectangle sweetSpot = new Rectangle((int)sweetSpotPosition.X - 10, (int)sweetSpotPosition.Y - 10, 20, 20);
+                Vector2 sweetspotPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, sm.Kinect.sweetspot);
+                Vector2 viewerPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, sm.Kinect.GetViewerPosition());
+                Rectangle sweetspot = new Rectangle((int)sweetspotPosition.X - 10, (int)sweetspotPosition.Y - 10, 20, 20);
                 Rectangle viewer = new Rectangle((int)viewerPosition.X - 15, (int)viewerPosition.Y - 15, 30, 30);
                 spriteBatch.Begin();
-                spriteBatch.Draw(green, sweetSpot, Color.White);
+                spriteBatch.Draw(green, sweetspot, Color.White);
                 spriteBatch.Draw(red, viewer, Color.White);
                 spriteBatch.End();
             }

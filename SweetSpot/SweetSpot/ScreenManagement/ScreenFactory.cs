@@ -9,17 +9,17 @@ namespace SweetSpot.ScreenManagement
 {
     public class ScreenFactory
     {
-        public static Screen CreateTitleScreen(ScreenManager screenManager)
+        public static Screen CreateTitleScreen(ScreenManager sm)
         {
-            return new TitleScreen(screenManager);
+            return new TitleScreen(sm);
         }
 
-        public static Screen CreateCalibrationScreen(ScreenManager screenManager)
+        public static Screen CreateCalibrationScreen(ScreenManager sm)
         {
-            return new SensorCalibrationScreen(screenManager);
+            return new SensorCalibrationScreen(sm);
         }
 
-        public static Screen CreateQuestionScreen(ScreenManager screenManager, Cue cue, Mapping mapping, Vector2 sweetSpot)
+        public static Screen CreateQuestionScreen(ScreenManager sm, Cue cue, Mapping mapping, Vector2 sweetspot)
         {
             Screen screen;
             Effect effect;
@@ -27,34 +27,34 @@ namespace SweetSpot.ScreenManagement
             switch (cue)
             {
                 case Cue.BaselineArrow:
-                    screen = new BaselineArrowScreen(screenManager, StringEnum.GetStringValue(cue), mapping, sweetSpot);
+                    screen = new BaselineArrowScreen(sm, StringEnum.GetStringValue(cue), mapping, sweetspot);
                     break;
                 case Cue.BaselineText:
-                    screen = new BaselineTextScreen(screenManager, StringEnum.GetStringValue(cue), mapping, sweetSpot);
+                    screen = new BaselineTextScreen(sm, StringEnum.GetStringValue(cue), mapping, sweetspot);
                     break;
                 case Cue.Brightness:
-                    effect = screenManager.Game.Content.Load<Effect>(@"shader\BrightnessShader");
-                    screen = new EffectScreen(screenManager, StringEnum.GetStringValue(cue), mapping, sweetSpot, effect);
+                    effect = sm.Game.Content.Load<Effect>(@"shader\BrightnessShader");
+                    screen = new EffectScreen(sm, StringEnum.GetStringValue(cue), mapping, sweetspot, effect);
                     break;
                 case Cue.Contrast:
-                    effect = screenManager.Game.Content.Load<Effect>(@"shader\ContrastShader");
-                    screen = new EffectScreen(screenManager, StringEnum.GetStringValue(cue), mapping, sweetSpot, effect);
+                    effect = sm.Game.Content.Load<Effect>(@"shader\ContrastShader");
+                    screen = new EffectScreen(sm, StringEnum.GetStringValue(cue), mapping, sweetspot, effect);
                     break;
                 case Cue.Saturation:
-                    effect = screenManager.Game.Content.Load<Effect>(@"shader\SaturationShader");
-                    screen = new EffectScreen(screenManager, StringEnum.GetStringValue(cue), mapping, sweetSpot, effect);
+                    effect = sm.Game.Content.Load<Effect>(@"shader\SaturationShader");
+                    screen = new EffectScreen(sm, StringEnum.GetStringValue(cue), mapping, sweetspot, effect);
                     break;
                 case Cue.Pixelate:
-                    effect = screenManager.Game.Content.Load<Effect>(@"shader\PixelateShader");
-                    screen = new EffectScreen(screenManager, StringEnum.GetStringValue(cue), mapping, sweetSpot, effect);
+                    effect = sm.Game.Content.Load<Effect>(@"shader\PixelateShader");
+                    screen = new EffectScreen(sm, StringEnum.GetStringValue(cue), mapping, sweetspot, effect);
                     break;
                 case Cue.Distort:
-                    effect = screenManager.Game.Content.Load<Effect>(@"shader\DistortShader");
-                    screen = new EffectScreen(screenManager, StringEnum.GetStringValue(cue), mapping, sweetSpot, effect);
+                    effect = sm.Game.Content.Load<Effect>(@"shader\DistortShader");
+                    screen = new EffectScreen(sm, StringEnum.GetStringValue(cue), mapping, sweetspot, effect);
                     break;
                 case Cue.Jitter:
-                    effect = screenManager.Game.Content.Load<Effect>(@"shader\JitterShader");
-                    screen = new EffectScreen(screenManager, StringEnum.GetStringValue(cue), mapping, sweetSpot, effect);
+                    effect = sm.Game.Content.Load<Effect>(@"shader\JitterShader");
+                    screen = new EffectScreen(sm, StringEnum.GetStringValue(cue), mapping, sweetspot, effect);
                     break;
                 default:
                     throw new ArgumentException("Invalid cue type.");

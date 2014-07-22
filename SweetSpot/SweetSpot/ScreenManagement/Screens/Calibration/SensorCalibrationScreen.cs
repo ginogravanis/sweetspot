@@ -13,20 +13,20 @@ namespace SweetSpot.ScreenManagement.Screens
         Rectangle separator;
         SensorPanel leftSensorPanel;
         SensorPanel rightSensorPanel;
-        public SweetSpotBounds sweetSpotBounds;
+        public SweetspotBounds sweetspotBounds;
         protected bool unsavedSweetspotBounds = false;
 
         public SensorCalibrationScreen(ScreenManager screenManager)
             : base(screenManager)
         {
-            sweetSpotBounds = new SweetSpotBounds(screenManager.Database);
+            sweetspotBounds = new SweetspotBounds(screenManager.Database);
         }
 
         public override void LoadContent()
         {
             base.LoadContent();
             white = Content.Load<Texture2D>("texture\\white");
-            Viewport viewport = screenManager.GraphicsDevice.Viewport;
+            Viewport viewport = sm.GraphicsDevice.Viewport;
             separator = new Rectangle(
                 viewport.Width/2,
                 0,
@@ -35,7 +35,7 @@ namespace SweetSpot.ScreenManagement.Screens
                 );
             leftSensorPanel = new SensorPanel(
                 this,
-                screenManager.Kinect.GetSensor(SensorName.One),
+                sm.Kinect.GetSensor(SensorName.One),
                 new Rectangle(
                     0,
                     0,
@@ -44,7 +44,7 @@ namespace SweetSpot.ScreenManagement.Screens
                 ));
             rightSensorPanel = new SensorPanel(
                 this,
-                screenManager.Kinect.GetSensor(SensorName.Two),
+                sm.Kinect.GetSensor(SensorName.Two),
                 new Rectangle(
                     viewport.Width / 2,
                     0,
@@ -53,7 +53,7 @@ namespace SweetSpot.ScreenManagement.Screens
                 ));
             leftSensorPanel.LoadContent(Content);
             rightSensorPanel.LoadContent(Content);
-            loadSweetSpotBounds();
+            loadSweetspotBounds();
         }
 
         public override void Update(GameTime gameTime)
@@ -62,7 +62,7 @@ namespace SweetSpot.ScreenManagement.Screens
             leftSensorPanel.Update(gameTime);
             rightSensorPanel.Update(gameTime);
 
-            if (screenManager.Input.IsGamePadButtonPressed(Buttons.B) || screenManager.Input.IsKeyPressed(Keys.F1))
+            if (sm.Input.IsGamePadButtonPressed(Buttons.B) || sm.Input.IsKeyPressed(Keys.F1))
             {
                 if (leftSensorPanel.HasActiveUsers() && rightSensorPanel.HasActiveUsers())
                 {
@@ -71,7 +71,7 @@ namespace SweetSpot.ScreenManagement.Screens
                 }
             }
 
-            if (screenManager.Input.IsGamePadButtonPressed(Buttons.Y) || screenManager.Input.IsKeyPressed(Keys.F2))
+            if (sm.Input.IsGamePadButtonPressed(Buttons.Y) || sm.Input.IsKeyPressed(Keys.F2))
             {
                 if (leftSensorPanel.HasEnoughReferencePoints() && rightSensorPanel.HasEnoughReferencePoints())
                 {
@@ -90,40 +90,40 @@ namespace SweetSpot.ScreenManagement.Screens
                 }
             }
 
-            if (screenManager.Input.IsGamePadButtonPressed(Buttons.X) || screenManager.Input.IsKeyPressed(Keys.F5))
+            if (sm.Input.IsGamePadButtonPressed(Buttons.X) || sm.Input.IsKeyPressed(Keys.F5))
             {
-                captureSweetSpot();
+                captureSweetspot();
             }
 
-            if (screenManager.Input.IsGamePadButtonPressed(Buttons.LeftTrigger) || screenManager.Input.IsKeyPressed(Keys.F6))
+            if (sm.Input.IsGamePadButtonPressed(Buttons.LeftTrigger) || sm.Input.IsKeyPressed(Keys.F6))
             {
-                clearSweetSpots();
+                clearSweetspots();
             }
 
-            if (screenManager.Input.IsGamePadButtonPressed(Buttons.LeftShoulder) || screenManager.Input.IsKeyPressed(Keys.F9))
+            if (sm.Input.IsGamePadButtonPressed(Buttons.LeftShoulder) || sm.Input.IsKeyPressed(Keys.F9))
             {
-                screenManager.Kinect.ResetSensorTilt();
+                sm.Kinect.ResetSensorTilt();
             }
         }
 
-        protected void captureSweetSpot()
+        protected void captureSweetspot()
         {
-            if (screenManager.Kinect.IsViewerActive())
+            if (sm.Kinect.IsViewerActive())
             {
-                sweetSpotBounds.Add(screenManager.Kinect.GetViewerPosition());
+                sweetspotBounds.Add(sm.Kinect.GetViewerPosition());
                 unsavedSweetspotBounds = true;
             }
         }
 
-        protected void clearSweetSpots()
+        protected void clearSweetspots()
         {
-            sweetSpotBounds.Clear();
+            sweetspotBounds.Clear();
         }
 
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch spriteBatch = screenManager.SpriteBatch;
-            GraphicsDevice graphics = screenManager.GraphicsDevice;
+            SpriteBatch spriteBatch = sm.SpriteBatch;
+            GraphicsDevice graphics = sm.GraphicsDevice;
             graphics.Clear(Color.Black);
             spriteBatch.Begin();
             leftSensorPanel.Draw(spriteBatch);
@@ -136,14 +136,14 @@ namespace SweetSpot.ScreenManagement.Screens
         {
             base.NextScreen(gameTime);
             if (unsavedSweetspotBounds)
-                screenManager.Database.SaveSweetSpotBounds(sweetSpotBounds.GetPoints());
+                sm.Database.SaveSweetspotBounds(sweetspotBounds.GetPoints());
         }
 
-        protected void loadSweetSpotBounds()
+        protected void loadSweetspotBounds()
         {
-            var bounds = screenManager.Database.LoadSweetSpotBounds();
+            var bounds = sm.Database.LoadSweetspotBounds();
             foreach (var point in bounds)
-                sweetSpotBounds.Add(point);
+                sweetspotBounds.Add(point);
         }
     }
 }
