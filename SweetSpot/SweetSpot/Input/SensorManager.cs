@@ -17,17 +17,17 @@ namespace SweetSpot.Input
         /// The y-coordinate corresponds to the user's position away from the sensor,
         /// 0 being the surface of the sensor.
         /// </summary>
-        public Vector2 sweetSpot { get; set; }
+        public Vector2 sweetspot { get; set; }
 
         /// <summary>
         /// The minumum interaction distance from the sweetspot in meters.
         /// </summary>
-        public float sweetSpotMargin = 2f;
+        public float sweetspotMargin = 2f;
 
         /// <summary>
         /// The radius of the sweetspot in meters.
         /// </summary>
-        public float sweetSpotRadius = 0.1f;
+        public float sweetspotRadius = 0.1f;
 
         TimeSpan positionSmoothingTime = TimeSpan.FromMilliseconds(50);
 
@@ -42,7 +42,7 @@ namespace SweetSpot.Input
         public SensorManager(ICalibrationProvider calibrationProvider)
         {
             sensors = new List<Sensor>();
-            sweetSpot = new Vector2();
+            sweetspot = new Vector2();
             lastViewerPosition = new Vector2();
             viewerLastSeen = TimeSpan.FromSeconds(-1);
             viewerActive = false;
@@ -142,14 +142,14 @@ namespace SweetSpot.Input
             if (positions.Count == 0)
                 throw new ApplicationException("User position not available.");
 
-            float shortestDistanceToSweetSpot = distanceToSweetSpot(positions[0]);
+            float shortestDistanceToSweetspot = distanceToSweetspot(positions[0]);
             Vector2 nearestUserPosition = positions[0];
             foreach (Vector2 position in positions.Skip(1))
             {
-                float newDistance = distanceToSweetSpot(position);
-                if (newDistance < shortestDistanceToSweetSpot)
+                float newDistance = distanceToSweetspot(position);
+                if (newDistance < shortestDistanceToSweetspot)
                 {
-                    shortestDistanceToSweetSpot = newDistance;
+                    shortestDistanceToSweetspot = newDistance;
                     nearestUserPosition = position;
                 }
             }
@@ -157,25 +157,25 @@ namespace SweetSpot.Input
             return nearestUserPosition;
         }
 
-        public Vector2 GetVectorToSweetSpot()
+        public Vector2 GetVectorToSweetspot()
         {
-            return vectorToSweetSpot(lastViewerPosition);
+            return vectorToSweetspot(lastViewerPosition);
         }
 
-        protected Vector2 vectorToSweetSpot(Vector2 position)
+        protected Vector2 vectorToSweetspot(Vector2 position)
         {
-            return sweetSpot - position;
+            return sweetspot - position;
         }
 
-        public float GetDistanceFromSweetSpot()
+        public float GetDistanceFromSweetspot()
         {
-            return distanceToSweetSpot(lastViewerPosition);
+            return distanceToSweetspot(lastViewerPosition);
         }
 
-        protected float distanceToSweetSpot(Vector2 position)
+        protected float distanceToSweetspot(Vector2 position)
         {
-            float rawDistance = Math.Abs((sweetSpot - position).Length());
-            float distance = Math.Max(rawDistance - sweetSpotRadius, 0);
+            float rawDistance = Math.Abs((sweetspot - position).Length());
+            float distance = Math.Max(rawDistance - sweetspotRadius, 0);
             return distance;
         }
 

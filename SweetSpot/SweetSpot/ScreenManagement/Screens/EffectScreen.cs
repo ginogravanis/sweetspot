@@ -14,8 +14,8 @@ namespace SweetSpot.ScreenManagement.Screens
         Texture2D green;
         Texture2D red;
 
-        public EffectScreen(ScreenManager screenManager, string cue, Mapping mapping, Vector2 sweetSpot, Effect effect)
-            : base(screenManager, cue, mapping, sweetSpot)
+        public EffectScreen(ScreenManager sm, string cue, Mapping mapping, Vector2 sweetspot, Effect effect)
+            : base(sm, cue, mapping, sweetspot)
         {
             this.effect = effect;
         }
@@ -37,14 +37,14 @@ namespace SweetSpot.ScreenManagement.Screens
         {
             targetEffectIntensity = 1.0f;
 
-            if (screenManager.Kinect.IsViewerActive())
+            if (sm.Kinect.IsViewerActive())
             {
-                float distanceFromSweetSpot = screenManager.Kinect.GetDistanceFromSweetSpot();
-                float margin = screenManager.Kinect.sweetSpotMargin;
+                float distanceFromSweetspot = sm.Kinect.GetDistanceFromSweetspot();
+                float margin = sm.Kinect.sweetspotMargin;
 
-                if (distanceFromSweetSpot <= margin)
+                if (distanceFromSweetspot <= margin)
                 {
-                    float x = distanceFromSweetSpot / margin;
+                    float x = distanceFromSweetspot / margin;
                     System.Diagnostics.Trace.WriteLine(mapping.ToString());
                     switch (mapping)
                     {
@@ -77,8 +77,8 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            SpriteBatch spriteBatch = screenManager.SpriteBatch;
-            Viewport viewport = screenManager.GraphicsDevice.Viewport;
+            SpriteBatch spriteBatch = sm.SpriteBatch;
+            Viewport viewport = sm.GraphicsDevice.Viewport;
 
             effect.Parameters["width"].SetValue(image.Width);
             effect.Parameters["height"].SetValue(image.Height);
@@ -88,15 +88,15 @@ namespace SweetSpot.ScreenManagement.Screens
             spriteBatch.Draw(image, imageRect, Color.White);
             spriteBatch.End();
 
-            if (screenManager.Debug)
+            if (sm.Debug)
             {
                 // Overlay
-                Vector2 sweetSpotPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, screenManager.Kinect.sweetSpot);
-                Vector2 viewerPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, screenManager.Kinect.GetViewerPosition());
-                Rectangle sweetSpot = new Rectangle((int)sweetSpotPosition.X - 10, (int)sweetSpotPosition.Y - 10, 20, 20);
+                Vector2 sweetspotPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, sm.Kinect.sweetspot);
+                Vector2 viewerPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, sm.Kinect.GetViewerPosition());
+                Rectangle sweetspot = new Rectangle((int)sweetspotPosition.X - 10, (int)sweetspotPosition.Y - 10, 20, 20);
                 Rectangle viewer = new Rectangle((int)viewerPosition.X - 15, (int)viewerPosition.Y - 15, 30, 30);
                 spriteBatch.Begin();
-                spriteBatch.Draw(green, sweetSpot, Color.White);
+                spriteBatch.Draw(green, sweetspot, Color.White);
                 spriteBatch.Draw(red, viewer, Color.White);
                 spriteBatch.End();
             }

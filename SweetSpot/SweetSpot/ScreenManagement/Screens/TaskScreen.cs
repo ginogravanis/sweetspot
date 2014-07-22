@@ -6,15 +6,14 @@ namespace SweetSpot.ScreenManagement.Screens
 {
     public class TaskScreen : TestScreen
     {
-        protected int test;
-        protected int testSubject;
+        protected int roundID;
         protected string cue;
         protected Mapping mapping;
         protected bool taskCompleted = false;
         protected TimeSpan elapsedTime;
 
-        public TaskScreen(ScreenManager screenManager, string cue, Mapping mapping, bool shuffleItems=true)
-            : base(screenManager)
+        public TaskScreen(ScreenManager sm, string cue, Mapping mapping)
+            : base(sm)
         {
             elapsedTime = TimeSpan.FromSeconds(0);
             this.cue = cue;
@@ -24,13 +23,7 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void Initialize()
         {
             base.Initialize();
-            testSubject = screenManager.TestSubject;
-            test = initializeTest();
-        }
-
-        protected virtual int initializeTest()
-        {
-            return screenManager.Database.RecordTest(testSubject, cue, mapping);
+            roundID = sm.Database.RecordRound(sm.GameID, cue, mapping);
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
@@ -38,7 +31,7 @@ namespace SweetSpot.ScreenManagement.Screens
             base.Update(gameTime);
             elapsedTime += gameTime.ElapsedGameTime;
 
-            if (screenManager.Input.IsKeyPressed(Keys.T))
+            if (sm.Input.IsKeyPressed(Keys.T))
             {
                 markTaskAsCompleted();
             }
@@ -48,14 +41,14 @@ namespace SweetSpot.ScreenManagement.Screens
         {
             base.NextScreen(gameTime);
             if (taskCompleted)
-                screenManager.NextQuestion();
+                sm.NextQuestion();
             else
-                screenManager.EndGame();
+                sm.EndGame();
         }
 
         protected void markTaskAsCompleted()
         {
-            screenManager.Database.TestCompleted(test, (int)elapsedTime.TotalMilliseconds);
+            sm.Database.RoundCompleted(roundID, (int)elapsedTime.TotalMilliseconds);
             taskCompleted = true;
         }
     }

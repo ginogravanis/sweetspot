@@ -5,7 +5,7 @@ using SweetSpot.Database;
 
 namespace SweetSpot.Util
 {
-    public class SweetSpotBounds
+    public class SweetspotBounds
     {
         protected float left;
         protected float right;
@@ -14,7 +14,7 @@ namespace SweetSpot.Util
         protected Random rng;
         protected bool initialized = false;
 
-        public Vector2 GenerateInternalPoint()
+        public Vector2 GenerateSweetspot()
         {
             float width = right - left;
             float depth = back - front;
@@ -26,10 +26,10 @@ namespace SweetSpot.Util
             return result;
         }
 
-        public SweetSpotBounds(IDatabase database)
+        public SweetspotBounds(IDatabase database)
         {
             rng = new Random();
-            foreach (var point in database.LoadSweetSpotBounds())
+            foreach (var point in database.LoadSweetspotBounds())
                 Add(point);
         }
 

@@ -12,7 +12,7 @@ namespace SweetSpot
     {
         static void Main(string[] args)
         {
-            using (SweetSpot app = new SweetSpot())
+            using (Sweetspot app = new Sweetspot())
             {
                 try
                 {
@@ -26,14 +26,14 @@ namespace SweetSpot
         }
     }
 
-    public class SweetSpot : Microsoft.Xna.Framework.Game
+    public class Sweetspot : Microsoft.Xna.Framework.Game
     {
-        public SweetSpot()
+        public Sweetspot()
         {
             int screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             int screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             Content.RootDirectory = "Content";
-            Window.Title = "SweetSpot 2.0";
+            Window.Title = "Sweetspot 2.0";
             GraphicsDeviceManager graphics = new GraphicsDeviceManager(this);
             graphics.IsFullScreen = true;
             graphics.PreferredBackBufferWidth = screenWidth;
@@ -44,7 +44,7 @@ namespace SweetSpot
             IsMouseVisible = true;
             Components.Add(new ScreenManager(this, Scene.Calibration));
 #else
-            Components.Add(new ScreenManager(this, Scene.Tests));
+            Components.Add(new ScreenManager(this, Scene.Game));
 #endif
         }
 

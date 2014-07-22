@@ -7,19 +7,19 @@ namespace SweetSpot.Database
 {
     public interface IDatabase
     {
-        IEnumerable<Vector2> LoadSweetSpotBounds();
+        IEnumerable<Vector2> LoadSweetspotBounds();
 
-        void SaveSweetSpotBounds(IEnumerable<Vector2> sweetSpotBounds);
+        void SaveSweetspotBounds(IEnumerable<Vector2> sweetspotBounds);
 
-        int GetNewSubjectID();
+        int GetNewGameID();
 
-        int RecordTest(int testSubject, string cue, Mapping mapping);
-        int RecordTest(int testSubject, string cue, Mapping mapping, Vector2 sweetSpot);
+        int RecordRound(int gameID, string cue, Mapping mapping);
+        void SetSweetspot(int roundID, Vector2 sweetspot);
 
         QuizItem GetQuestion();
 
-        void TestCompleted(int test, int timestamp);
+        void RoundCompleted(int roundID, int timestamp);
 
-        void RecordUserPosition(int test, Vector2 position, int timestamp);
+        void RecordUserPosition(int roundID, Vector2 position, int timestamp);
     }
 }

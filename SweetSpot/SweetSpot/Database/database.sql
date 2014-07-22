@@ -15,9 +15,9 @@ CREATE TABLE IF NOT EXISTS "sweetspot_bounds" (
 	"x" VARCHAR DEFAULT (null),
 	"y" VARCHAR DEFAULT (null)
 	);
-CREATE TABLE IF NOT EXISTS "test" (
-	"id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE,
-	"subject" INTEGER NOT NULL,
+CREATE TABLE IF NOT EXISTS "game_round" (
+	"round_id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE,
+	"game_id" INTEGER NOT NULL,
 	"cue" VARCHAR NOT NULL,
 	"mapping" VARCHAR NOT NULL,
 	"sweetspot_x" VARCHAR,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS "test" (
 	"task_completed" INTEGER
 	);
 CREATE TABLE IF NOT EXISTS "user_position" (
-	"test_id" INTEGER DEFAULT (null),
+	"round_id" INTEGER DEFAULT (null),
 	"timestamp" INTEGER,
 	"x" VARCHAR DEFAULT (null),
 	"y" VARCHAR DEFAULT (null)

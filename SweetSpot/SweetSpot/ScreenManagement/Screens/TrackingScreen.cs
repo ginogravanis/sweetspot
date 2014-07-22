@@ -5,33 +5,36 @@ namespace SweetSpot.ScreenManagement.Screens
 {
     public class TrackingScreen : TaskScreen
     {
-        protected Vector2 sweetSpot;
+        protected Vector2 sweetspot;
         protected TimeSpan recordingIntervall = TimeSpan.FromMilliseconds(100);
         protected TimeSpan lastPositionCaptured;
 
-        public TrackingScreen(ScreenManager screenManager, string cue, Mapping mapping, Vector2 sweetSpot)
-            : base(screenManager, cue, mapping)
+        public TrackingScreen(ScreenManager sm, string cue, Mapping mapping, Vector2 sweetspot)
+            : base(sm, cue, mapping)
         {
-            this.sweetSpot = sweetSpot;
+            this.sweetspot = sweetspot;
             lastPositionCaptured = TimeSpan.FromSeconds(-1);
         }
 
         public override void Initialize()
         {
             base.Initialize();
-            screenManager.Kinect.sweetSpot = sweetSpot;
-        }
-
-        protected override int initializeTest()
-        {
-            return screenManager.Database.RecordTest(testSubject, cue, mapping, sweetSpot);
+            sm.Kinect.sweetspot = sweetspot;
+            sm.Database.SetSweetspot(roundID, sweetspot);
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
         {
             base.Update(gameTime);
-            if (!taskCompleted && recordingIntervalElapsed() && screenManager.Kinect.IsViewerActive())
+            if (shouldRecordPosition())
                 recordPosition();
+        }
+
+        protected bool shouldRecordPosition()
+        {
+            return !taskCompleted &&
+                recordingIntervalElapsed() &&
+                sm.Kinect.IsViewerActive();
         }
 
         protected bool recordingIntervalElapsed()
@@ -42,7 +45,11 @@ namespace SweetSpot.ScreenManagement.Screens
         protected void recordPosition()
         {
             lastPositionCaptured = elapsedTime;
-            screenManager.Database.RecordUserPosition(test, screenManager.Kinect.GetViewerPosition(), (int)lastPositionCaptured.TotalMilliseconds);
+            sm.Database.RecordUserPosition(
+                roundID,
+                sm.Kinect.GetViewerPosition(),
+                (int)lastPositionCaptured.TotalMilliseconds
+                );
         }
     }
 }

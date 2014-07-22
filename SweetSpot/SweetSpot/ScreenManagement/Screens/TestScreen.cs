@@ -19,10 +19,10 @@ namespace SweetSpot.ScreenManagement.Screens
         protected int questionHeight;
         protected Vector2 questionPosition;
 
-        public TestScreen(ScreenManager screenManager)
-            : base(screenManager)
+        public TestScreen(ScreenManager sm)
+            : base(sm)
         {
-            QuizItem quizItem = screenManager.Database.GetQuestion();
+            QuizItem quizItem = sm.Database.GetQuestion();
             questionId = quizItem.Id;
             question = quizItem.Question;
             answerImageFile = quizItem.Answer;
@@ -38,7 +38,7 @@ namespace SweetSpot.ScreenManagement.Screens
         public override void Initialize()
         {
             base.Initialize();
-            Viewport viewport = screenManager.GraphicsDevice.Viewport;
+            Viewport viewport = sm.GraphicsDevice.Viewport;
 
             var questionBounds = questionFont.MeasureString(question);
             questionHeight = (int)questionBounds.Y + 2 * QUESTION_MARGIN;
@@ -46,14 +46,19 @@ namespace SweetSpot.ScreenManagement.Screens
             float questionY = QUESTION_MARGIN;
             questionPosition = new Vector2(questionX, questionY);
 
-            imageRect = new Rectangle(0, questionHeight, viewport.Width, viewport.Height - questionHeight);
+            imageRect = new Rectangle(
+                0,
+                questionHeight,
+                viewport.Width,
+                viewport.Height - questionHeight
+                );
         }
 
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch spriteBatch = screenManager.SpriteBatch;
-            Viewport viewport = screenManager.GraphicsDevice.Viewport;
-            screenManager.GraphicsDevice.Clear(Color.White);
+            SpriteBatch spriteBatch = sm.SpriteBatch;
+            Viewport viewport = sm.GraphicsDevice.Viewport;
+            sm.GraphicsDevice.Clear(Color.White);
 
             spriteBatch.Begin();
             spriteBatch.Draw(image, imageRect, Color.White);
