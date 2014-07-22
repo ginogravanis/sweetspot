@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über den folgenden 
 // Satz von Attributen kontrolliert. Ändern Sie diese Attributwerte, um die mit einer Assembly
 // verbundenen Informationen zu ändern.
-[assembly: AssemblyTitle("SweetSpot 2.0")]
-[assembly: AssemblyProduct("SweetSpot 2.0")]
+[assembly: AssemblyTitle("Sweetspot 2.0")]
+[assembly: AssemblyProduct("Sweetspot 2.0")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
