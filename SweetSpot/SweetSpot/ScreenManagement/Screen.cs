@@ -19,7 +19,7 @@ namespace SweetSpot.ScreenManagement
             background = Color.White;
         }
 
-        public ~Screen()
+        ~Screen()
         {
             UnloadContent();
         }
