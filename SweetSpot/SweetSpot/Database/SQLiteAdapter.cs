@@ -5,11 +5,11 @@ using System.Data.SQLite;
 using System.IO;
 using System.Text;
 using Microsoft.Xna.Framework;
-using SweetSpot.Input;
-using SweetSpot.ScreenManagement;
-using SweetSpot.Util;
+using Sweetspot.Input;
+using Sweetspot.ScreenManagement;
+using Sweetspot.Util;
 
-namespace SweetSpot.Database
+namespace Sweetspot.Database
 {
     public enum PersistenceStrategy { Immediate, Buffered }
 

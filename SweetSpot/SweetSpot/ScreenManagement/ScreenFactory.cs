@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SweetSpot.ScreenManagement.Screens;
-using SweetSpot.Util;
+using Sweetspot.ScreenManagement.Screens;
+using Sweetspot.Util;
 
-namespace SweetSpot.ScreenManagement
+namespace Sweetspot.ScreenManagement
 {
     public class ScreenFactory
     {

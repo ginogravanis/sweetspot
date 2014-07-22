@@ -1,4 +1,4 @@
-﻿namespace SweetSpot.Util
+﻿namespace Sweetspot.Util
 {
     public class QuizItem
     {

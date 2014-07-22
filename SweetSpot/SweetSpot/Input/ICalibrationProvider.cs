@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace SweetSpot.Input
+namespace Sweetspot.Input
 {
     public interface ICalibrationProvider
     {

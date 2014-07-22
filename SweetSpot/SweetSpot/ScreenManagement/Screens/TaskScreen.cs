@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace SweetSpot.ScreenManagement.Screens
+namespace Sweetspot.ScreenManagement.Screens
 {
     public class TaskScreen : TestScreen
     {

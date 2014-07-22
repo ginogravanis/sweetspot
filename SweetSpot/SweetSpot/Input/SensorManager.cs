@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 
-namespace SweetSpot.Input
+namespace Sweetspot.Input
 {
     public enum SensorName { One, Two }
 

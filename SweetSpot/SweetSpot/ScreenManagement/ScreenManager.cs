@@ -2,11 +2,11 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SweetSpot.Database;
-using SweetSpot.Input;
-using SweetSpot.Util;
+using Sweetspot.Database;
+using Sweetspot.Input;
+using Sweetspot.Util;
 
-namespace SweetSpot.ScreenManagement
+namespace Sweetspot.ScreenManagement
 {
     public enum Scene { Calibration, Game };
 

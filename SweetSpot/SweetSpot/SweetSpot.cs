@@ -4,9 +4,9 @@ using System;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SweetSpot.ScreenManagement;
+using Sweetspot.ScreenManagement;
 
-namespace SweetSpot
+namespace Sweetspot
 {
     static class Program
     {
