@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SweetSpot.Util
+namespace Sweetspot.Util
 {
     public static class EnumUtil
     {

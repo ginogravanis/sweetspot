@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010 Express for Windows Phone
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SweetSpot", "SweetSpot\SweetSpot\SweetSpot.csproj", "{EB7AC15E-59BE-40E4-BAA2-517BFA788062}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sweetspot", "Sweetspot\Sweetspot\Sweetspot.csproj", "{EB7AC15E-59BE-40E4-BAA2-517BFA788062}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "SweetSpot\SweetSpotContent\Data.contentproj", "{6B378293-700E-49A6-86F0-11D878458BFC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Sweetspot\SweetspotContent\Data.contentproj", "{6B378293-700E-49A6-86F0-11D878458BFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

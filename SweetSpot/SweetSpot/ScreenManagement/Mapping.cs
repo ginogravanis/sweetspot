@@ -1,6 +1,6 @@
-﻿using SweetSpot.Util;
+﻿using Sweetspot.Util;
 
-namespace SweetSpot.ScreenManagement
+namespace Sweetspot.ScreenManagement
 {
     public enum Mapping
     {

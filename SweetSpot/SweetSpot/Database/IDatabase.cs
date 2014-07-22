@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using SweetSpot.ScreenManagement;
-using SweetSpot.Util;
+using Sweetspot.ScreenManagement;
+using Sweetspot.Util;
 
-namespace SweetSpot.Database
+namespace Sweetspot.Database
 {
     public interface IDatabase
     {

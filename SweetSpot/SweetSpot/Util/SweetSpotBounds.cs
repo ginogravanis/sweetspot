@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using SweetSpot.Database;
+using Sweetspot.Database;
 
-namespace SweetSpot.Util
+namespace Sweetspot.Util
 {
     public class SweetspotBounds
     {

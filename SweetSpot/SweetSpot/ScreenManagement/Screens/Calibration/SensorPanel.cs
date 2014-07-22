@@ -4,9 +4,9 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using SweetSpot.Input;
+using Sweetspot.Input;
 
-namespace SweetSpot.ScreenManagement.Screens
+namespace Sweetspot.ScreenManagement.Screens
 {
     class SensorPanel
     {

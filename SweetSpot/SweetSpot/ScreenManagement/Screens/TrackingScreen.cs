@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace SweetSpot.ScreenManagement.Screens
+namespace Sweetspot.ScreenManagement.Screens
 {
     public class TrackingScreen : TaskScreen
     {

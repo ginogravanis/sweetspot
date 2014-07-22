@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace SweetSpot.Input
+namespace Sweetspot.Input
 {
     public class InputManager
     {

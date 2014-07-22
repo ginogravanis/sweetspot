@@ -7,8 +7,8 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SweetSpot</RootNamespace>
-    <AssemblyName>SweetSpot</AssemblyName>
+    <RootNamespace>Sweetspot</RootNamespace>
+    <AssemblyName>Sweetspot</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -17,7 +17,7 @@
     <XnaProfile>Reach</XnaProfile>
     <XnaCrossPlatformGroupID>de3dac39-d009-4404-91b4-44141beb1709</XnaCrossPlatformGroupID>
     <XnaOutputType>Game</XnaOutputType>
-    <ApplicationIcon>SweetSpot.ico</ApplicationIcon>
+    <ApplicationIcon>Sweetspot.ico</ApplicationIcon>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -98,9 +98,9 @@
     <Compile Include="ScreenManagement\ScreenFactory.cs" />
     <Compile Include="ScreenManagement\Screens\TrackingScreen.cs" />
     <Compile Include="ScreenManagement\Screens\TitleScreen.cs" />
-    <Compile Include="SweetSpot.cs" />
+    <Compile Include="Sweetspot.cs" />
     <Compile Include="Util\QuizItem.cs" />
-    <Compile Include="Util\SweetSpotBounds.cs" />
+    <Compile Include="Util\SweetspotBounds.cs" />
     <Compile Include="Util\EnumUtil.cs" />
     <Compile Include="Util\Extensions.cs" />
     <Compile Include="Util\StringEnum.cs" />
@@ -110,10 +110,10 @@
     <Content Include="Database\database.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SweetSpot.ico" />
+    <Content Include="Sweetspot.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SweetSpotContent\Data.contentproj">
+    <ProjectReference Include="..\SweetspotContent\Data.contentproj">
       <Name>Data %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
       <Project>{6B378293-700E-49A6-86F0-11D878458BFC}</Project>
