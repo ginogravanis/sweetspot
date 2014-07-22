@@ -20,7 +20,7 @@ namespace Sweetspot.ScreenManagement.Screens
         {
             base.Initialize();
             sm.Kinect.sweetspot = sweetspot;
-            sm.Database.SetSweetspot(roundID, sweetspot);
+            sm.Database.SetSweetspot(roundId, sweetspot);
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
@@ -46,7 +46,7 @@ namespace Sweetspot.ScreenManagement.Screens
         {
             lastPositionCaptured = elapsedTime;
             sm.Database.RecordUserPosition(
-                roundID,
+                roundId,
                 sm.Kinect.GetViewerPosition(),
                 (int)lastPositionCaptured.TotalMilliseconds
                 );

@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Media.Imaging;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 
 namespace Sweetspot.Input
+
 {
     public class Sensor
     {
+        const int BUFFER_TIME = 3;
+
         protected KinectSensor sensor;
         protected List<Skeleton> activeUsers;
         protected TimeSpan lastSensorUpdate;
@@ -14,6 +19,14 @@ namespace Sweetspot.Input
         protected Matrix TransformationMatrix;
         protected ICalibrationProvider calibrationProvider;
         public bool IsCalibrated { get; internal set; }
+
+        protected WriteableBitmap colorBitmap;
+        protected DepthImagePixel[] depthPixels;
+        protected byte[] colorPixels;
+        protected int counter = 0;
+        protected LinkedList<Tuple<WriteableBitmap, DateTime>> buffer = new LinkedList<Tuple<WriteableBitmap, DateTime>>();
+        protected LinkedList<Tuple<WriteableBitmap, DateTime>> expiredBuffer = new LinkedList<Tuple<WriteableBitmap, DateTime>>();
+        protected String[] timestamp = new String[0];
 
         public Sensor(KinectSensor kinect, ICalibrationProvider calibrationProvider)
         {
@@ -31,6 +44,14 @@ namespace Sweetspot.Input
             sensor.Stop();
         }
 
+        public override string ToString()
+        {
+            string deviceId = GetDeviceId();
+            deviceId = deviceId.Replace(@"\", "_");
+            deviceId = deviceId.Replace("&", "_");
+            return deviceId;
+        }
+
         public void Initialize()
         {
             TransformSmoothParameters smoothingParameters = new TransformSmoothParameters();
@@ -42,12 +63,18 @@ namespace Sweetspot.Input
                 smoothingParameters.MaxDeviationRadius = 0.04f;
             };
 
-            if (calibrationProvider.HasCalibrationDataFor(GetDeviceID()))
+            if (calibrationProvider.HasCalibrationDataFor(GetDeviceId()))
             {
-                var calibration = calibrationProvider.LoadCalibration(GetDeviceID());
+                var calibration = calibrationProvider.LoadCalibration(GetDeviceId());
                 Calibrate(calibration.Item1, calibration.Item2);
                 IsCalibrated = true;
             }
+
+            sensor.DepthStream.Enable(DepthImageFormat.Resolution320x240Fps30);
+            depthPixels = new DepthImagePixel[sensor.DepthStream.FramePixelDataLength];
+            colorPixels = new byte[sensor.DepthStream.FramePixelDataLength * sizeof(int)];
+            colorBitmap = new WriteableBitmap(sensor.DepthStream.FrameWidth, sensor.DepthStream.FrameHeight, 96.0, 96.0, System.Windows.Media.PixelFormats.Bgr32, null);
+            sensor.DepthFrameReady += SensorDepthFrameReady;
 
             sensor.SkeletonStream.Enable(smoothingParameters);
             sensor.Start();
@@ -141,10 +168,10 @@ namespace Sweetspot.Input
             Matrix rotation = Matrix.CreateRotationZ(axisTilt);
             Matrix translation = Matrix.CreateTranslation(offset);
             TransformationMatrix = rotation * translation;
-            calibrationProvider.SaveCalibration(GetDeviceID(), axisTilt, offset);
+            calibrationProvider.SaveCalibration(GetDeviceId(), axisTilt, offset);
         }
 
-        public string GetDeviceID()
+        public string GetDeviceId()
         {
             return sensor.DeviceConnectionId;
         }
@@ -159,6 +186,79 @@ namespace Sweetspot.Input
             {
                 Logger.Log("Can't change elevation angle, sensor not responding.");
             }
+        }
+
+        private void SensorDepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
+        {
+            using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
+            {
+                if (depthFrame != null)
+                {
+                    depthFrame.CopyDepthImagePixelDataTo(depthPixels);
+
+                    int minDepth = depthFrame.MinDepth;
+                    int maxDepth = depthFrame.MaxDepth;
+
+                    int colorPixelIndex = 0;
+
+                    for (int i = 0; i < depthPixels.Length; ++i)
+                    {
+                        short depth = depthPixels[i].Depth;
+                        byte intensity = (byte)(depth >= minDepth && depth <= maxDepth ? depth : 0);
+
+                        colorPixels[colorPixelIndex++] = intensity;
+                        colorPixels[colorPixelIndex++] = intensity;                  
+                        colorPixels[colorPixelIndex++] = intensity;
+                        ++colorPixelIndex;
+                    }
+
+                    colorBitmap.WritePixels(
+                        new Int32Rect(0, 0, colorBitmap.PixelWidth, colorBitmap.PixelHeight),
+                        colorPixels,
+                        colorBitmap.PixelWidth * sizeof(int),
+                        0);
+
+                    bufferFrame(colorBitmap);
+                }
+            }
+        }
+
+        protected void bufferFrame(WriteableBitmap frame)
+        {
+            WriteableBitmap currentFrame = frame.Clone();
+            buffer.AddLast(Tuple.Create(currentFrame, DateTime.Now));
+
+            while (isFirstFrameExpired())
+            {
+                expiredBuffer.AddLast(buffer.First.Value);
+                buffer.RemoveFirst();
+            }
+        }
+
+        public IEnumerable<Tuple<WriteableBitmap, DateTime>> GetNextFrames()
+        {
+            var nextFrames = new LinkedList<Tuple<WriteableBitmap, DateTime>>();
+            foreach (var frame in expiredBuffer)
+                nextFrames.AddLast(frame);
+            expiredBuffer.Clear();
+            return nextFrames;
+        }
+
+        public IEnumerable<Tuple<WriteableBitmap, DateTime>> GetRemainingFrames()
+        {
+            var remainingFrames = buffer;
+            buffer.Clear();
+            return remainingFrames;
+        }
+
+        protected bool isFirstFrameExpired()
+        {
+            DateTime timeNow = DateTime.Now;
+            DateTime bufferTime = buffer.First.Value.Item2;
+
+            var diffInSeconds = (timeNow - bufferTime).TotalSeconds;
+
+            return diffInSeconds > BUFFER_TIME;
         }
     }
 }

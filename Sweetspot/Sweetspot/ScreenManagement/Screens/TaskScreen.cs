@@ -6,7 +6,7 @@ namespace Sweetspot.ScreenManagement.Screens
 {
     public class TaskScreen : TestScreen
     {
-        protected int roundID;
+        protected int roundId;
         protected string cue;
         protected Mapping mapping;
         protected bool taskCompleted = false;
@@ -23,7 +23,7 @@ namespace Sweetspot.ScreenManagement.Screens
         public override void Initialize()
         {
             base.Initialize();
-            roundID = sm.Database.RecordRound(sm.GameID, cue, mapping);
+            roundId = sm.Database.RecordRound(sm.GameId, cue, mapping);
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
@@ -48,7 +48,7 @@ namespace Sweetspot.ScreenManagement.Screens
 
         protected void markTaskAsCompleted()
         {
-            sm.Database.RoundCompleted(roundID, (int)elapsedTime.TotalMilliseconds);
+            sm.Database.RoundCompleted(roundId, (int)elapsedTime.TotalMilliseconds);
             taskCompleted = true;
         }
     }

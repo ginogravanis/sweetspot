@@ -5,10 +5,10 @@ namespace Sweetspot.Input
 {
     public interface ICalibrationProvider
     {
-        bool HasCalibrationDataFor(string deviceID);
+        bool HasCalibrationDataFor(string deviceId);
 
-        Tuple<float, Vector3> LoadCalibration(string deviceID);
+        Tuple<float, Vector3> LoadCalibration(string deviceId);
 
-        void SaveCalibration(string deviceID, float axisTilt, Vector3 translate);
+        void SaveCalibration(string deviceId, float axisTilt, Vector3 translate);
     }
 }
