@@ -11,15 +11,15 @@ namespace Sweetspot.Database
 
         void SaveSweetspotBounds(IEnumerable<Vector2> sweetspotBounds);
 
-        int GetNewGameID();
+        int GetNewGameId();
 
-        int RecordRound(int gameID, string cue, Mapping mapping);
-        void SetSweetspot(int roundID, Vector2 sweetspot);
+        int RecordRound(int gameId, string cue, Mapping mapping);
+        void SetSweetspot(int roundId, Vector2 sweetspot);
 
         QuizItem GetQuestion();
 
-        void RoundCompleted(int roundID, int timestamp);
+        void RoundCompleted(int roundId, int timestamp);
 
-        void RecordUserPosition(int roundID, Vector2 position, int timestamp);
+        void RecordUserPosition(int roundId, Vector2 position, int timestamp);
     }
 }

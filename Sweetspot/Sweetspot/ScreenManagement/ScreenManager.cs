@@ -19,7 +19,7 @@ namespace Sweetspot.ScreenManagement
         public SweetspotBounds SweetspotBounds { get; internal set; }
         public SpriteBatch SpriteBatch { get; internal set; }
         public Screen CurrentScreen { get { return screens.First(); } }
-        public int GameID { get; internal set; }
+        public int GameId { get; internal set; }
 
         protected Scene scene;
         protected LinkedList<Screen> screens;
@@ -104,8 +104,9 @@ namespace Sweetspot.ScreenManagement
 
         public void NewGame()
         {
-            GameID = Database.GetNewGameID();
+            GameId = Database.GetNewGameId();
             NextQuestion();
+            Kinect.StartRecording(GameId);
         }
 
         public void NextQuestion()

@@ -69,17 +69,17 @@ namespace Sweetspot.Database
             connection.Close();
         }
 
-        public bool HasCalibrationDataFor(string deviceID)
+        public bool HasCalibrationDataFor(string deviceId)
         {
-            string sql = String.Format("SELECT COUNT(*) FROM {0} WHERE device_id='{1}';", TABLE_CALIBRATION, deviceID);
+            string sql = String.Format("SELECT COUNT(*) FROM {0} WHERE device_id='{1}';", TABLE_CALIBRATION, deviceId);
             string result = ExecuteScalarQuery(sql);
 
             return int.Parse(result) > 0;
         }
 
-        public Tuple<float, Vector3> LoadCalibration(string deviceID)
+        public Tuple<float, Vector3> LoadCalibration(string deviceId)
         {
-            string sql = String.Format("SELECT * FROM {0} WHERE device_id='{1}' ORDER BY created DESC;", TABLE_CALIBRATION, deviceID);
+            string sql = String.Format("SELECT * FROM {0} WHERE device_id='{1}' ORDER BY created DESC;", TABLE_CALIBRATION, deviceId);
             DataTable table = ExecuteTableQuery(sql);
             
             if (table.Rows.Count == 0)
@@ -94,14 +94,14 @@ namespace Sweetspot.Database
             return new Tuple<float, Vector3>(axisTilt, new Vector3(x, y, z));
         }
 
-        public void SaveCalibration(string deviceID, float axisTilt, Vector3 translate)
+        public void SaveCalibration(string deviceId, float axisTilt, Vector3 translate)
         {
-            string sql = String.Format("DELETE FROM {0} WHERE device_id='{1}';", TABLE_CALIBRATION, deviceID);
+            string sql = String.Format("DELETE FROM {0} WHERE device_id='{1}';", TABLE_CALIBRATION, deviceId);
             ExecuteNonQuery(sql);
 
             var data = new Dictionary<string, string>
             {
-                {"device_id", deviceID},
+                {"device_id", deviceId},
                 {"axis_tilt", axisTilt.ToString()},
                 {"translate_x", translate.X.ToString()},
                 {"translate_y", translate.Y.ToString()},
@@ -138,47 +138,47 @@ namespace Sweetspot.Database
             }
         }
 
-        public int GetNewGameID()
+        public int GetNewGameId()
         {
             string sql = String.Format("SELECT COALESCE(MAX(game_id), 0) FROM {0};", TABLE_ROUND);
-            string maxGameID = ExecuteScalarQuery(sql);
-            return int.Parse(maxGameID) + 1;
+            string maxGameId = ExecuteScalarQuery(sql);
+            return int.Parse(maxGameId) + 1;
         }
 
-        public int GetNewRoundID()
+        public int GetNewRoundId()
         {
             string sql = String.Format("SELECT COALESCE(MAX(round_id), 0) FROM {0};", TABLE_ROUND);
-            string maxRoundID = ExecuteScalarQuery(sql);
-            return int.Parse(maxRoundID) + 1;
+            string maxRoundId = ExecuteScalarQuery(sql);
+            return int.Parse(maxRoundId) + 1;
         }
 
-        public int RecordRound(int gameID, string cue, Mapping mapping)
+        public int RecordRound(int gameId, string cue, Mapping mapping)
         {
-            int roundID = GetNewRoundID();
+            int roundId = GetNewRoundId();
 
             var round = new Dictionary<string, string>
             {
-                {"round_id", roundID.ToString()},
-                {"game_id", gameID.ToString()},
+                {"round_id", roundId.ToString()},
+                {"game_id", gameId.ToString()},
                 {"cue", cue},
                 {"mapping", mapping.ToString()},
                 {"begin_ms", DateTime.Now.Millisecond.ToString()}
             };
             Insert(TABLE_ROUND, round);
 
-            return roundID;
+            return roundId;
         }
 
-        public void SetSweetspot(int roundID, Vector2 sweetspot)
+        public void SetSweetspot(int roundId, Vector2 sweetspot)
         {
             string sql = String.Format("UPDATE {0} SET sweetspot_x={1}, sweetspot_y={2} WHERE round_id={3}",
-                TABLE_ROUND, sweetspot.X.ToString(), sweetspot.Y.ToString(), roundID);
+                TABLE_ROUND, sweetspot.X.ToString(), sweetspot.Y.ToString(), roundId);
             ExecuteNonQuery(sql);
         }
 
         public QuizItem GetQuestion()
         { 
-            string sql = String.Format("SELECT * FROM {0} WHERE ID > {1} OR ID= (SELECT MIN(ID) FROM {0}) LIMIT 1;",
+            string sql = String.Format("SELECT * FROM {0} WHERE id > {1} OR id=(SELECT MIN(id) FROM {0}) LIMIT 1;",
                 TABLE_QUESTION, lastQuestionId);
             DataTable table = ExecuteTableQuery(sql);
 
@@ -194,17 +194,17 @@ namespace Sweetspot.Database
             return new QuizItem(id, question, answer);
         }
 
-        public void RoundCompleted(int roundID, int timestamp)
+        public void RoundCompleted(int roundId, int timestamp)
         {
-            ExecuteNonQuery(String.Format("UPDATE {0} SET task_completed={1} WHERE id={2};", TABLE_ROUND, timestamp, roundID));
+            ExecuteNonQuery(String.Format("UPDATE {0} SET task_completed={1} WHERE id={2};", TABLE_ROUND, timestamp, roundId));
             flushInsertBuffer();
         }
 
-        public void RecordUserPosition(int roundID, Vector2 position, int timestamp)
+        public void RecordUserPosition(int roundId, Vector2 position, int timestamp)
         {
             var positionRecord = new Dictionary<string, string>
             {
-                {"round_id", roundID.ToString()},
+                {"round_id", roundId.ToString()},
                 {"timestamp", timestamp.ToString()},
                 {"x", position.X.ToString()},
                 {"y", position.Y.ToString()}

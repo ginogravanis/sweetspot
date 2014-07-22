@@ -45,10 +45,14 @@ namespace Sweetspot.ScreenManagement
                 sm.Game.Exit();
 
             if (sm.Input.IsKeyPressed(Keys.Space) || sm.Input.IsGamePadButtonPressed(Buttons.A))
+            {
                 NextScreen(gameTime);
+            }
 
             if (sm.Input.IsKeyPressed(Keys.F12) || sm.Input.IsGamePadButtonPressed(Buttons.RightTrigger))
                 sm.ToggleDebug();
+
+
         }
 
         public virtual void Draw(GameTime gameTime)

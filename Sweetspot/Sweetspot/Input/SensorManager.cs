@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Windows.Media.Imaging;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 
@@ -10,6 +12,7 @@ namespace Sweetspot.Input
 
     public class SensorManager
     {
+        const string RECORDING_PATH = "Recordings";
         /// <summary>
         /// The position the user should optimally be standing relative to the sensor.
         /// The x-coordinate corresponds to the user's position parallel to the sensor,
@@ -38,6 +41,9 @@ namespace Sweetspot.Input
 
         public static int MAX_SENSOR_COUNT = 2;
         public static float SENSOR_RANGE = 5.0f;
+        protected int counter;
+        protected bool record = false;
+        protected int gameId;
 
         public SensorManager(ICalibrationProvider calibrationProvider)
         {
@@ -47,11 +53,13 @@ namespace Sweetspot.Input
             viewerLastSeen = TimeSpan.FromSeconds(-1);
             viewerActive = false;
             initializeSensors(calibrationProvider);
+            Directory.CreateDirectory(RECORDING_PATH);
+
         }
 
         protected void initializeSensors(ICalibrationProvider calibrationProvider)
         {
-            foreach(KinectSensor candidate in KinectSensor.KinectSensors)
+            foreach (KinectSensor candidate in KinectSensor.KinectSensors)
             {
                 if (candidate.Status == KinectStatus.Connected)
                 {
@@ -71,9 +79,7 @@ namespace Sweetspot.Input
         public void Update(GameTime gameTime)
         {
             foreach (Sensor sensor in sensors)
-            {
                 sensor.Update(gameTime);
-            }
 
             if (viewerPositionAvailable())
             {
@@ -82,12 +88,13 @@ namespace Sweetspot.Input
                 viewerActive = true;
             }
             else if (viewerRecentlySeen(gameTime))
-            {
                 viewerActive = true;
-            }
             else
-            {
                 viewerActive = false;
+
+            if (record) {
+                foreach (var sensor in sensors)
+                    writeMultipleFramesToDisk(computeSensorPath(sensor), sensor.GetNextFrames()); 
             }
         }
 
@@ -206,9 +213,68 @@ namespace Sweetspot.Input
 
         public static Vector2 WorldToScreenCoords(Rectangle bounds, Vector2 position)
         {
-            float x = bounds.Left + (bounds.Width / 2) + ((bounds.Width / 2f) * position.X / (SENSOR_RANGE/2f));
+            float x = bounds.Left + (bounds.Width / 2) + ((bounds.Width / 2f) * position.X / (SENSOR_RANGE / 2f));
             float y = bounds.Top + bounds.Height * (position.Y / SENSOR_RANGE);
             return new Vector2((int)Math.Round(x), (int)Math.Round(y));
+        }
+
+        protected void writeFrameToDisk(string folder, WriteableBitmap bitmap, DateTime time)
+        {
+            BitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(bitmap));
+
+            string formattedTime = time.ToString("hh'-'mm'-'ss");
+            string filename = Path.Combine(folder, formattedTime + " - " + counter + ".png");
+            counter++;
+
+            try
+            {
+                using (FileStream fs = new FileStream(filename, FileMode.Create))
+                {
+                    encoder.Save(fs);
+                }
+            }
+            catch (IOException)
+            {
+                Logger.Log("Can't save depth image.");
+            }
+        }
+
+        protected void writeMultipleFramesToDisk(string folder, IEnumerable<Tuple<WriteableBitmap, DateTime>> frames)
+        {
+            foreach (var frame in frames)
+                writeFrameToDisk(folder, frame.Item1, frame.Item2);
+        }
+
+        protected string computeGamePath()
+        {
+            return Path.Combine(RECORDING_PATH, "Game " + gameId);
+        }
+
+        protected string computeSensorPath(Sensor sensor)
+        {
+             return Path.Combine(computeGamePath(), sensor.ToString());
+        }
+
+        public void StartRecording(int gameId) 
+        {
+            record = true;
+            this.gameId = gameId;
+
+            foreach (Sensor sensor in sensors)
+            {
+                string sensorPath = Path.Combine(computeGamePath(), sensor.ToString());
+                Directory.CreateDirectory(sensorPath);
+            }
+        }
+
+        public void StopRecording()
+        {
+            record = false;
+            foreach (Sensor sensor in sensors)
+            {
+                writeMultipleFramesToDisk(computeSensorPath(sensor), sensor.GetRemainingFrames());
+            }
         }
     }
 }

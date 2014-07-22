@@ -116,9 +116,9 @@ namespace Sweetspot.ScreenManagement.Screens
             sensor.Calibrate(calibration.Item1, calibration.Item2);
         }
 
-        public string GetSensorID()
+        public string GetSensorId()
         {
-            return sensor.GetDeviceID();
+            return sensor.GetDeviceId();
         }
     }
 }
