@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Sweetspot.ScreenManagement.Screens
 {
@@ -7,29 +8,44 @@ namespace Sweetspot.ScreenManagement.Screens
 
     public class TitleScreen : Screen
     {
-        protected SpriteFont font;
-        protected string caption;
-        protected Vector2 textPosition;
+        protected SpriteFont titleFont;
+        protected SpriteFont instructionFont;
+        protected string titleText;
+        protected string instructionText;
+        protected Vector2 titlePosition;
+        protected Vector2 instructionPosition;
         protected TransitionState currentState;
         protected float alpha = 0f;
         protected float timeSinceStateChange = 0f;  // in ms
-        const float FADE_TIME = 300;                // in ms
+        const float FADE_TIME = 200;                // in ms
         const float DELAY = 300;                    // in ms
+        protected bool userActive = false;
 
         public TitleScreen(ScreenManager sm)
             : base(sm)
         {
-            this.caption = "Quiz";
-            textPosition = new Vector2();
+            titleText = "Quiz";
+            instructionText = "Step closer to play";
+            titlePosition = new Vector2();
         }
 
         public override void LoadContent()
         {
             base.LoadContent();
-            font = Content.Load<SpriteFont>(@"font\segoe_72");
+            titleFont = Content.Load<SpriteFont>(@"font\segoe_72");
+            instructionFont = Content.Load<SpriteFont>(@"font\segoe_36");
+
             Viewport viewport = sm.GraphicsDevice.Viewport;
-            Vector2 textSize = font.MeasureString(caption);
-            textPosition = new Vector2((viewport.Width - textSize.X) / 2, (viewport.Height - textSize.Y) / 2);
+            Vector2 titleTextSize = titleFont.MeasureString(titleText);
+            titlePosition = new Vector2(
+                (viewport.Width - titleTextSize.X) / 2,
+                (viewport.Height - titleTextSize.Y) / 2
+                );
+            Vector2 instructionTextSize = instructionFont.MeasureString(instructionText);
+            instructionPosition = new Vector2(
+                (viewport.Width - instructionTextSize.X) / 2,
+                (viewport.Height - instructionTextSize.Y + titleTextSize.Y) / 2 + 25
+                );
         }
 
         public override void Initialize()
@@ -41,7 +57,12 @@ namespace Sweetspot.ScreenManagement.Screens
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            userActive = sm.Kinect.IsViewerActive();
+            updateTransitionState(gameTime);
+        }
 
+        protected void updateTransitionState(GameTime gameTime)
+        {
             timeSinceStateChange += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
             switch (currentState)
@@ -64,6 +85,10 @@ namespace Sweetspot.ScreenManagement.Screens
                     break;
 
                 case TransitionState.Active:
+                    if (userActive)
+                    {
+                        changeState(TransitionState.FadingOut);
+                    }
                     break;
 
                 case TransitionState.FadingOut:
@@ -99,14 +124,25 @@ namespace Sweetspot.ScreenManagement.Screens
             Viewport viewport = sm.GraphicsDevice.Viewport;
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, caption, textPosition, Color.Black * alpha);
+            spriteBatch.DrawString(titleFont, titleText, titlePosition, Color.Black * alpha);
+            spriteBatch.DrawString(instructionFont, instructionText, instructionPosition, Color.Black * alpha);
             spriteBatch.End();
         }
 
         public override void NextScreen(GameTime gameTime)
         {
-            base.NextScreen(gameTime);
-            sm.NewGame();
+            switch (currentState)
+            {
+                case TransitionState.Active:
+                    changeState(TransitionState.FadingOut);
+                    break;
+                case TransitionState.PostDelay:
+                    base.NextScreen(gameTime);
+                    sm.NewGame();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
