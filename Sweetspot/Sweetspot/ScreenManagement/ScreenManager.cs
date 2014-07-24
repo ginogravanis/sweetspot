@@ -12,12 +12,12 @@ namespace Sweetspot.ScreenManagement
 
     public class ScreenManager : DrawableGameComponent
     {
-        public bool Debug { get; internal set; }
-        public SensorManager Kinect { get; internal set; }
-        public InputManager Input { get; internal set; }
-        public IDatabase Database { get; internal set; }
-        public SweetspotBounds SweetspotBounds { get; internal set; }
-        public SpriteBatch SpriteBatch { get; internal set; }
+        public bool Debug { get; protected set; }
+        public SensorManager Kinect { get; protected set; }
+        public InputManager Input { get; protected set; }
+        public IDatabase Database { get; protected set; }
+        public SweetspotBounds SweetspotBounds { get; protected set; }
+        public SpriteBatch SpriteBatch { get; protected set; }
         public Screen CurrentScreen { get { return screens.First(); } }
         public int GameId { get; internal set; }
 

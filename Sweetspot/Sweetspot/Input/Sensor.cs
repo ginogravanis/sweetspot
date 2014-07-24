@@ -18,7 +18,7 @@ namespace Sweetspot.Input
         protected TimeSpan positionSmoothingTime;
         protected Matrix TransformationMatrix;
         protected ICalibrationProvider calibrationProvider;
-        public bool IsCalibrated { get; internal set; }
+        public bool IsCalibrated { get; protected set; }
 
         protected WriteableBitmap colorBitmap;
         protected DepthImagePixel[] depthPixels;

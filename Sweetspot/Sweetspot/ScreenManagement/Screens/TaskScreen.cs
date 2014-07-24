@@ -9,7 +9,7 @@ namespace Sweetspot.ScreenManagement.Screens
         protected int roundId;
         protected string cue;
         protected Mapping mapping;
-        protected bool taskCompleted = false;
+        public bool TaskCompleted { get; protected set; }
         protected TimeSpan elapsedTime;
 
         public TaskScreen(ScreenManager sm, string cue, Mapping mapping)
@@ -18,6 +18,7 @@ namespace Sweetspot.ScreenManagement.Screens
             elapsedTime = TimeSpan.FromSeconds(0);
             this.cue = cue;
             this.mapping = mapping;
+            TaskCompleted = false;
         }
 
         public override void Initialize()
@@ -40,7 +41,7 @@ namespace Sweetspot.ScreenManagement.Screens
         public override void NextScreen(GameTime gameTime)
         {
             base.NextScreen(gameTime);
-            if (taskCompleted)
+            if (TaskCompleted)
                 sm.NextQuestion();
             else
                 sm.EndGame();
@@ -49,7 +50,7 @@ namespace Sweetspot.ScreenManagement.Screens
         protected void markTaskAsCompleted()
         {
             sm.Database.RoundCompleted(roundId, (int)elapsedTime.TotalMilliseconds);
-            taskCompleted = true;
+            TaskCompleted = true;
         }
     }
 }

@@ -6,9 +6,9 @@ namespace Sweetspot.ScreenManagement
 {
     public abstract class Screen
     {
-        public ContentManager Content { get; internal set; }
-        public bool Initialized { get; internal set; }
-        public bool Finished { get; internal set; }
+        public ContentManager Content { get; protected set; }
+        public bool Initialized { get; protected set; }
+        public bool Finished { get; protected set; }
 
         protected ScreenManager sm;
         protected Color background;

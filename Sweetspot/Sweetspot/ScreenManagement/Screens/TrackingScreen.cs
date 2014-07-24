@@ -32,7 +32,7 @@ namespace Sweetspot.ScreenManagement.Screens
 
         protected bool shouldRecordPosition()
         {
-            return !taskCompleted &&
+            return !TaskCompleted &&
                 recordingIntervalElapsed() &&
                 sm.Kinect.IsViewerActive();
         }
