@@ -92,7 +92,7 @@ namespace Sweetspot.ScreenManagement.Screens
             spriteBatch.End();
             if (viewerDetected)
             {
-                if (taskCompleted || targetReached)
+                if (TaskCompleted || targetReached)
                 {
                     spriteBatch.Begin();
                     spriteBatch.Draw(checkMark, checkMarkRect, Color.White);

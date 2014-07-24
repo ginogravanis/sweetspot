@@ -2,9 +2,9 @@
 {
     public class QuizItem
     {
-        public int Id { get; internal set; }
-        public string Question { get; internal set; }
-        public string Answer { get; internal set; }
+        public int Id { get; protected set; }
+        public string Question { get; protected set; }
+        public string Answer { get; protected set; }
 
         public QuizItem(int id, string question, string answer)
         {

@@ -63,7 +63,7 @@ namespace Sweetspot.ScreenManagement.Screens
             Direction direction = CalculateDominantDirection(vectorToSweetspot);
 
             targetReached = sm.Kinect.GetDistanceFromSweetspot() == 0;
-            if (taskCompleted || targetReached)
+            if (TaskCompleted || targetReached)
             {
                 text = "Stop!";
                 alpha = Math.Min(alpha + (gameTime.ElapsedGameTime.Milliseconds / FADE_TIME), 1);
