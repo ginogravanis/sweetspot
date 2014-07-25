@@ -196,7 +196,7 @@ namespace Sweetspot.Database
 
         public void RoundCompleted(int roundId, int timestamp)
         {
-            ExecuteNonQuery(String.Format("UPDATE {0} SET task_completed={1} WHERE id={2};", TABLE_ROUND, timestamp, roundId));
+            ExecuteNonQuery(String.Format("UPDATE {0} SET task_completed={1} WHERE round_id={2};", TABLE_ROUND, timestamp, roundId));
             flushInsertBuffer();
         }
 
