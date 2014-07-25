@@ -8,11 +8,11 @@ namespace Sweetspot.ScreenManagement.Screens
 {
     public class TestScreen : Screen
     {
-        const int QUESTION_MARGIN = 20;
+        const int QUESTION_TEXT_MARGIN = 20;
 
         protected int questionId;
-        protected string question;
-        protected string answerImageFile;
+        protected string questionText;
+        protected string answerFilename;
         protected Texture2D image;
         protected SpriteFont questionFont;
         protected Rectangle imageRect;
@@ -24,14 +24,14 @@ namespace Sweetspot.ScreenManagement.Screens
         {
             QuizItem quizItem = sm.Database.GetQuestion();
             questionId = quizItem.Id;
-            question = quizItem.Question;
-            answerImageFile = quizItem.Answer;
+            questionText = quizItem.Question;
+            answerFilename = quizItem.AnswerFilename;
         }
 
         public override void LoadContent()
         {
             base.LoadContent();
-            image = Content.Load<Texture2D>(@"answers\" + answerImageFile);
+            image = Content.Load<Texture2D>(@"answers\" + answerFilename);
             questionFont = Content.Load<SpriteFont>(@"font\segoe_36");
         }
 
@@ -40,10 +40,10 @@ namespace Sweetspot.ScreenManagement.Screens
             base.Initialize();
             Viewport viewport = sm.GraphicsDevice.Viewport;
 
-            var questionBounds = questionFont.MeasureString(question);
-            questionHeight = (int)questionBounds.Y + 2 * QUESTION_MARGIN;
+            var questionBounds = questionFont.MeasureString(questionText);
+            questionHeight = (int)questionBounds.Y + 2 * QUESTION_TEXT_MARGIN;
             float questionX = (viewport.Width - questionBounds.X) / 2;
-            float questionY = QUESTION_MARGIN;
+            float questionY = QUESTION_TEXT_MARGIN;
             questionPosition = new Vector2(questionX, questionY);
 
             imageRect = new Rectangle(
@@ -62,7 +62,7 @@ namespace Sweetspot.ScreenManagement.Screens
 
             spriteBatch.Begin();
             spriteBatch.Draw(image, imageRect, Color.White);
-            spriteBatch.DrawString(questionFont, question, questionPosition, Color.Black);
+            spriteBatch.DrawString(questionFont, questionText, questionPosition, Color.Black);
             spriteBatch.End();
         }
     }
