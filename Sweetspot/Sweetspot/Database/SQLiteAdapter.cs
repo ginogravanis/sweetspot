@@ -15,7 +15,7 @@ namespace Sweetspot.Database
 
     class SQLiteAdapter : IDatabase, ICalibrationProvider
     {
-        const string FILENAME = "database.sqlite";
+        const string FILENAME = @"Database\database.sqlite";
         const string SCHEMA_PATH = @"Database\database.sql";
         const string TABLE_CALIBRATION = "calibration";
         const string TABLE_SWEETSPOT_BOUNDS = "sweetspot_bounds";

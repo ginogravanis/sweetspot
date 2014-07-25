@@ -46,10 +46,7 @@ namespace Sweetspot.Input
 
         public override string ToString()
         {
-            string deviceId = GetDeviceId();
-            deviceId = deviceId.Replace(@"\", "_");
-            deviceId = deviceId.Replace("&", "_");
-            return deviceId;
+            return GetDeviceId().Replace('\\', '_').Replace('&', '_');
         }
 
         public void Initialize()
@@ -173,7 +170,7 @@ namespace Sweetspot.Input
 
         public string GetDeviceId()
         {
-            return sensor.DeviceConnectionId;
+            return sensor.UniqueKinectId;
         }
 
         public void ResetSensorTilt()
