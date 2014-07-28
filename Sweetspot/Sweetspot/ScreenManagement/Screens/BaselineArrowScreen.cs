@@ -1,9 +1,10 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Sweetspot.Input;
+using SweetspotApp.Input;
+using SweetspotApp.Util;
 
-namespace Sweetspot.ScreenManagement.Screens
+namespace SweetspotApp.ScreenManagement.Screens
 {
     public class BaselineArrowScreen : TrackingScreen
     {
@@ -25,7 +26,7 @@ namespace Sweetspot.ScreenManagement.Screens
         protected Effect perspectiveShader;
         protected float alpha = 0;
 
-        public BaselineArrowScreen(ScreenManager sm, string cue, Mapping mapping, Vector2 sweetspot)
+        public BaselineArrowScreen(ScreenManager sm, string cue, Mapping mapping, Sweetspot sweetspot)
             : base(sm, cue, mapping, sweetspot)
         { }
 
@@ -69,10 +70,11 @@ namespace Sweetspot.ScreenManagement.Screens
             }
 
             viewerDetected = true;
-            Vector2 vectorToSweetspot = sm.Kinect.GetVectorToSweetspot();
+            Vector2 userPosition = sm.Kinect.GetViewerPosition();
+            Vector2 vectorToSweetspot = sm.Kinect.sweetspot.GetVectorToSweetspot(userPosition);
             compassOrientation = (float)(2*Math.PI - Math.Atan2(vectorToSweetspot.Y, vectorToSweetspot.X));
 
-            targetReached = sm.Kinect.GetDistanceFromSweetspot() == 0;
+            targetReached = sm.Kinect.sweetspot.GetDistanceFromSweetspot(userPosition) == 0;
             if (targetReached)
                 alpha = Math.Min(alpha + (gameTime.ElapsedGameTime.Milliseconds / FADE_TIME), 1);
             else
@@ -111,8 +113,8 @@ namespace Sweetspot.ScreenManagement.Screens
             if (sm.Debug)
             {
                 // Overlay
-                Vector2 sweetspotPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, sm.Kinect.sweetspot);
-                Vector2 viewerPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, sm.Kinect.GetViewerPosition());
+                Vector2 sweetspotPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, sm.Kinect.sweetspot.Position);
+                Vector2 viewerPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, sm.Kinect.GetViewerPosition());
                 Rectangle sweetspot = new Rectangle((int)sweetspotPosition.X - 10, (int)sweetspotPosition.Y - 10, 20, 20);
                 Rectangle viewer = new Rectangle((int)viewerPosition.X - 15, (int)viewerPosition.Y - 15, 30, 30);
                 spriteBatch.Begin();

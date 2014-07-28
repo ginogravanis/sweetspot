@@ -1,4 +1,4 @@
-﻿namespace Sweetspot.Util
+﻿namespace SweetspotApp.Util
 {
     public class StringValueAttribute : System.Attribute
     {

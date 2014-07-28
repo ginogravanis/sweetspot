@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Sweetspot.ScreenManagement.Screens
+namespace SweetspotApp.ScreenManagement.Screens
 {
     public enum TransitionState { PreDelay, FadingIn, Active, FadingOut, PostDelay }
 

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Sweetspot.Util;
+using SweetspotApp.Util;
 
-namespace Sweetspot.ScreenManagement.Screens
+namespace SweetspotApp.ScreenManagement.Screens
 {
     public class TestScreen : Screen
     {

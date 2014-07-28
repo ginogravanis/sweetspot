@@ -2,10 +2,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Sweetspot.Input;
-using Sweetspot.Util;
+using SweetspotApp.Input;
+using SweetspotApp.Util;
 
-namespace Sweetspot.ScreenManagement.Screens
+namespace SweetspotApp.ScreenManagement.Screens
 {
     class SensorCalibrationScreen : Screen
     {

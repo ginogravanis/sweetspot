@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Sweetspot.Database;
+using SweetspotApp.Database;
+using SweetspotApp.Input;
 
-namespace Sweetspot.Util
+namespace SweetspotApp.Util
 {
     public class SweetspotBounds
     {
+        protected readonly int MAX_ROUNDS = 100;
         protected float left;
         protected float right;
         protected float front;
@@ -14,16 +16,11 @@ namespace Sweetspot.Util
         protected Random rng;
         protected bool initialized = false;
 
-        public Vector2 GenerateSweetspot()
+        public static Vector2 WorldToScreenCoords(Rectangle bounds, Vector2 position)
         {
-            float width = right - left;
-            float depth = back - front;
-
-            float x = (float)rng.NextDouble() * width + left;
-            float y = (float)rng.NextDouble() * depth + front;
-            Vector2 result = new Vector2((float)x, (float)y);
-
-            return result;
+            float x = bounds.Left + (bounds.Width / 2) + ((bounds.Width / 2f) * position.X / (SensorManager.SENSOR_RANGE / 2f));
+            float y = bounds.Top + bounds.Height * (position.Y / SensorManager.SENSOR_RANGE);
+            return new Vector2((int)Math.Round(x), (int)Math.Round(y));
         }
 
         public SweetspotBounds(IDatabase database)
@@ -31,6 +28,36 @@ namespace Sweetspot.Util
             rng = new Random();
             foreach (var point in database.LoadSweetspotBounds())
                 Add(point);
+        }
+
+        public Sweetspot GenerateRandomSweetspot()
+        {
+            float width = right - left;
+            float depth = back - front;
+
+            float x = (float)rng.NextDouble() * width + left;
+            float y = (float)rng.NextDouble() * depth + front;
+            Sweetspot result = new Sweetspot((float)x, (float)y);
+
+            return result;
+        }
+
+        public Sweetspot GenerateSweetspot(Vector2 userPosition)
+        {
+            Sweetspot candidate;
+            int roundsRemaining = MAX_ROUNDS;
+
+            do
+            {
+                candidate = GenerateRandomSweetspot();
+                roundsRemaining--;
+            }
+            while (candidate.IsUserTooCloseToSweetspot(userPosition) && roundsRemaining > 0);
+
+            if (roundsRemaining <= 0)
+                Logger.Log(String.Format("Exhausted {0} rounds of sweetspot generation.", MAX_ROUNDS));
+
+            return candidate;
         }
 
         public bool Includes(Vector2 point)

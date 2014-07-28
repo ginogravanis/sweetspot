@@ -1,15 +1,16 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using SweetspotApp.Util;
 
-namespace Sweetspot.ScreenManagement.Screens
+namespace SweetspotApp.ScreenManagement.Screens
 {
     public class TrackingScreen : TaskScreen
     {
-        protected Vector2 sweetspot;
+        protected Sweetspot sweetspot;
         protected TimeSpan recordingIntervall = TimeSpan.FromMilliseconds(100);
         protected TimeSpan lastPositionCaptured;
 
-        public TrackingScreen(ScreenManager sm, string cue, Mapping mapping, Vector2 sweetspot)
+        public TrackingScreen(ScreenManager sm, string cue, Mapping mapping, Sweetspot sweetspot)
             : base(sm, cue, mapping)
         {
             this.sweetspot = sweetspot;

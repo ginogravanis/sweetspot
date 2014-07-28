@@ -5,7 +5,7 @@ using System.Windows.Media.Imaging;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 
-namespace Sweetspot.Input
+namespace SweetspotApp.Input
 
 {
     public class Sensor

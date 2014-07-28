@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Sweetspot.ScreenManagement;
-using Sweetspot.Util;
+using SweetspotApp.ScreenManagement;
+using SweetspotApp.Util;
 
-namespace Sweetspot.Database
+namespace SweetspotApp.Database
 {
     public interface IDatabase
     {
@@ -14,7 +14,7 @@ namespace Sweetspot.Database
         int GetNewGameId();
 
         int RecordRound(int gameId, string cue, Mapping mapping);
-        void SetSweetspot(int roundId, Vector2 sweetspot);
+        void SetSweetspot(int roundId, Sweetspot sweetspot);
 
         QuizItem GetQuestion();
 

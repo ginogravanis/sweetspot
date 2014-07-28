@@ -1,6 +1,6 @@
-﻿using Sweetspot.Util;
+﻿using SweetspotApp.Util;
 
-namespace Sweetspot.ScreenManagement
+namespace SweetspotApp.ScreenManagement
 {
     public enum Cue
     {

@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Sweetspot.Input;
+using SweetspotApp.Input;
+using SweetspotApp.Util;
 
-namespace Sweetspot.ScreenManagement.Screens
+namespace SweetspotApp.ScreenManagement.Screens
 {
     public class EffectScreen : TrackingScreen
     {
@@ -14,7 +15,7 @@ namespace Sweetspot.ScreenManagement.Screens
         Texture2D green;
         Texture2D red;
 
-        public EffectScreen(ScreenManager sm, string cue, Mapping mapping, Vector2 sweetspot, Effect effect)
+        public EffectScreen(ScreenManager sm, string cue, Mapping mapping, Sweetspot sweetspot, Effect effect)
             : base(sm, cue, mapping, sweetspot)
         {
             this.effect = effect;
@@ -39,8 +40,8 @@ namespace Sweetspot.ScreenManagement.Screens
 
             if (sm.Kinect.IsViewerActive())
             {
-                float distanceFromSweetspot = sm.Kinect.GetDistanceFromSweetspot();
-                float margin = sm.Kinect.sweetspotMargin;
+                float distanceFromSweetspot = sm.Kinect.sweetspot.GetDistanceFromSweetspot(sm.Kinect.GetViewerPosition());
+                float margin = sm.Kinect.sweetspot.MARGIN;
 
                 if (distanceFromSweetspot <= margin)
                 {
@@ -91,8 +92,8 @@ namespace Sweetspot.ScreenManagement.Screens
             if (sm.Debug)
             {
                 // Overlay
-                Vector2 sweetspotPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, sm.Kinect.sweetspot);
-                Vector2 viewerPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, sm.Kinect.GetViewerPosition());
+                Vector2 sweetspotPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, sm.Kinect.sweetspot.Position);
+                Vector2 viewerPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, sm.Kinect.GetViewerPosition());
                 Rectangle sweetspot = new Rectangle((int)sweetspotPosition.X - 10, (int)sweetspotPosition.Y - 10, 20, 20);
                 Rectangle viewer = new Rectangle((int)viewerPosition.X - 15, (int)viewerPosition.Y - 15, 30, 30);
                 spriteBatch.Begin();
