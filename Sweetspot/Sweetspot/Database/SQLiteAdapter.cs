@@ -5,11 +5,11 @@ using System.Data.SQLite;
 using System.IO;
 using System.Text;
 using Microsoft.Xna.Framework;
-using Sweetspot.Input;
-using Sweetspot.ScreenManagement;
-using Sweetspot.Util;
+using SweetspotApp.Input;
+using SweetspotApp.ScreenManagement;
+using SweetspotApp.Util;
 
-namespace Sweetspot.Database
+namespace SweetspotApp.Database
 {
     public enum PersistenceStrategy { Immediate, Buffered }
 
@@ -169,7 +169,7 @@ namespace Sweetspot.Database
             return roundId;
         }
 
-        public void SetSweetspot(int roundId, Vector2 sweetspot)
+        public void SetSweetspot(int roundId, Sweetspot sweetspot)
         {
             string sql = String.Format("UPDATE {0} SET sweetspot_x={1}, sweetspot_y={2} WHERE round_id={3}",
                 TABLE_ROUND, sweetspot.X.ToString(), sweetspot.Y.ToString(), roundId);

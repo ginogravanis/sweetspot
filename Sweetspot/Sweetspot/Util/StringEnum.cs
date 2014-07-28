@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Sweetspot.Util
+namespace SweetspotApp.Util
 {
     public static class StringEnum
     {

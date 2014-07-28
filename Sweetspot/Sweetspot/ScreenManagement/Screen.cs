@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
 
-namespace Sweetspot.ScreenManagement
+namespace SweetspotApp.ScreenManagement
 {
     public abstract class Screen
     {

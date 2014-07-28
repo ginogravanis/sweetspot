@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Sweetspot.ScreenManagement.Screens;
-using Sweetspot.Util;
+using SweetspotApp.ScreenManagement.Screens;
+using SweetspotApp.Util;
 
-namespace Sweetspot.ScreenManagement
+namespace SweetspotApp.ScreenManagement
 {
     public class ScreenFactory
     {
@@ -19,7 +19,7 @@ namespace Sweetspot.ScreenManagement
             return new SensorCalibrationScreen(sm);
         }
 
-        public static Screen CreateQuestionScreen(ScreenManager sm, Cue cue, Mapping mapping, Vector2 sweetspot)
+        public static Screen CreateQuestionScreen(ScreenManager sm, Cue cue, Mapping mapping, Sweetspot sweetspot)
         {
             Screen screen;
             Effect effect;

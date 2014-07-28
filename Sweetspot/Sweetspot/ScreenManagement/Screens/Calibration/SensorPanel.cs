@@ -4,9 +4,10 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Sweetspot.Input;
+using SweetspotApp.Input;
+using SweetspotApp.Util;
 
-namespace Sweetspot.ScreenManagement.Screens
+namespace SweetspotApp.ScreenManagement.Screens
 {
     class SensorPanel
     {
@@ -43,7 +44,7 @@ namespace Sweetspot.ScreenManagement.Screens
 
         protected Rectangle makePositionMarker(Vector2 position)
         {
-            Vector2 screenPosition = SensorManager.WorldToScreenCoords(bounds, position);
+            Vector2 screenPosition = SweetspotBounds.WorldToScreenCoords(bounds, position);
 
             return new Rectangle(
                 (int)screenPosition.X - MARKER_SIZE / 2,

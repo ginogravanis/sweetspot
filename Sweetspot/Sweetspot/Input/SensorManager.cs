@@ -5,8 +5,9 @@ using System.Linq;
 using System.Windows.Media.Imaging;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
+using SweetspotApp.Util;
 
-namespace Sweetspot.Input
+namespace SweetspotApp.Input
 {
     public enum SensorName { One, Two }
 
@@ -20,17 +21,7 @@ namespace Sweetspot.Input
         /// The y-coordinate corresponds to the user's position away from the sensor,
         /// 0 being the surface of the sensor.
         /// </summary>
-        public Vector2 sweetspot { get; set; }
-
-        /// <summary>
-        /// The minumum interaction distance from the sweetspot in meters.
-        /// </summary>
-        public float sweetspotMargin = 2f;
-
-        /// <summary>
-        /// The radius of the sweetspot in meters.
-        /// </summary>
-        public float sweetspotRadius = 0.1f;
+        public Sweetspot sweetspot { get; set; }
 
         TimeSpan positionSmoothingTime = TimeSpan.FromMilliseconds(50);
 
@@ -48,13 +39,12 @@ namespace Sweetspot.Input
         public SensorManager(ICalibrationProvider calibrationProvider)
         {
             sensors = new List<Sensor>();
-            sweetspot = new Vector2();
+            sweetspot = new Sweetspot();
             lastViewerPosition = new Vector2();
             viewerLastSeen = TimeSpan.FromSeconds(-1);
             viewerActive = false;
             initializeSensors(calibrationProvider);
             Directory.CreateDirectory(RECORDING_PATH);
-
         }
 
         protected void initializeSensors(ICalibrationProvider calibrationProvider)
@@ -149,11 +139,11 @@ namespace Sweetspot.Input
             if (positions.Count == 0)
                 throw new ApplicationException("User position not available.");
 
-            float shortestDistanceToSweetspot = distanceToSweetspot(positions[0]);
+            float shortestDistanceToSweetspot = sweetspot.GetDistanceFromSweetspot(positions[0]);
             Vector2 nearestUserPosition = positions[0];
             foreach (Vector2 position in positions.Skip(1))
             {
-                float newDistance = distanceToSweetspot(position);
+                float newDistance = sweetspot.GetDistanceFromSweetspot(position);
                 if (newDistance < shortestDistanceToSweetspot)
                 {
                     shortestDistanceToSweetspot = newDistance;
@@ -162,28 +152,6 @@ namespace Sweetspot.Input
             }
 
             return nearestUserPosition;
-        }
-
-        public Vector2 GetVectorToSweetspot()
-        {
-            return vectorToSweetspot(lastViewerPosition);
-        }
-
-        protected Vector2 vectorToSweetspot(Vector2 position)
-        {
-            return sweetspot - position;
-        }
-
-        public float GetDistanceFromSweetspot()
-        {
-            return distanceToSweetspot(lastViewerPosition);
-        }
-
-        protected float distanceToSweetspot(Vector2 position)
-        {
-            float rawDistance = Math.Abs((sweetspot - position).Length());
-            float distance = Math.Max(rawDistance - sweetspotRadius, 0);
-            return distance;
         }
 
         public Sensor GetSensor(SensorName name)
@@ -209,13 +177,6 @@ namespace Sweetspot.Input
             {
                 sensor.ResetSensorTilt();
             }
-        }
-
-        public static Vector2 WorldToScreenCoords(Rectangle bounds, Vector2 position)
-        {
-            float x = bounds.Left + (bounds.Width / 2) + ((bounds.Width / 2f) * position.X / (SENSOR_RANGE / 2f));
-            float y = bounds.Top + bounds.Height * (position.Y / SENSOR_RANGE);
-            return new Vector2((int)Math.Round(x), (int)Math.Round(y));
         }
 
         protected void writeFrameToDisk(string folder, WriteableBitmap bitmap, DateTime time)

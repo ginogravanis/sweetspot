@@ -2,11 +2,11 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Sweetspot.Database;
-using Sweetspot.Input;
-using Sweetspot.Util;
+using SweetspotApp.Database;
+using SweetspotApp.Input;
+using SweetspotApp.Util;
 
-namespace Sweetspot.ScreenManagement
+namespace SweetspotApp.ScreenManagement
 {
     public enum Scene { Calibration, Game };
 
@@ -115,7 +115,7 @@ namespace Sweetspot.ScreenManagement
                 this,
                 Cue.Pixelate,
                 Mapping.SCurve,
-                SweetspotBounds.GenerateSweetspot()
+                SweetspotBounds.GenerateSweetspot(Kinect.GetViewerPosition())
                 ));
         }
 

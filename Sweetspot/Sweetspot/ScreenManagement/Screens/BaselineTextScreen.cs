@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Sweetspot.Input;
+using SweetspotApp.Input;
+using SweetspotApp.Util;
 
-namespace Sweetspot.ScreenManagement.Screens
+namespace SweetspotApp.ScreenManagement.Screens
 {
     public class BaselineTextScreen : TrackingScreen
     {
@@ -30,7 +31,7 @@ namespace Sweetspot.ScreenManagement.Screens
             { Direction.Back, "hinten" }
         };
 
-        public BaselineTextScreen(ScreenManager sm, string cue, Mapping mapping, Vector2 sweetspot)
+        public BaselineTextScreen(ScreenManager sm, string cue, Mapping mapping, Sweetspot sweetspot)
             : base(sm, cue, mapping, sweetspot)
         {
         }
@@ -59,10 +60,11 @@ namespace Sweetspot.ScreenManagement.Screens
             }
 
             viewerDetected = true;
-            Vector2 vectorToSweetspot = sm.Kinect.GetVectorToSweetspot();
+            Vector2 userPosition = sm.Kinect.GetViewerPosition();
+            Vector2 vectorToSweetspot = sm.Kinect.sweetspot.GetVectorToSweetspot(userPosition);
             Direction direction = CalculateDominantDirection(vectorToSweetspot);
 
-            targetReached = sm.Kinect.GetDistanceFromSweetspot() == 0;
+            targetReached = sm.Kinect.sweetspot.GetDistanceFromSweetspot(userPosition) == 0;
             if (TaskCompleted || targetReached)
             {
                 text = "Stop!";
@@ -121,8 +123,8 @@ namespace Sweetspot.ScreenManagement.Screens
             if (sm.Debug)
             {
                 // Overlay
-                Vector2 sweetspotPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, sm.Kinect.sweetspot);
-                Vector2 viewerPosition = SensorManager.WorldToScreenCoords(viewport.Bounds, sm.Kinect.GetViewerPosition());
+                Vector2 sweetspotPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, sm.Kinect.sweetspot.Position);
+                Vector2 viewerPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, sm.Kinect.GetViewerPosition());
                 Rectangle sweetspot = new Rectangle((int)sweetspotPosition.X - 10, (int)sweetspotPosition.Y - 10, 20, 20);
                 Rectangle viewer = new Rectangle((int)viewerPosition.X - 15, (int)viewerPosition.Y - 15, 30, 30);
                 spriteBatch.Begin();

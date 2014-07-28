@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
-namespace Sweetspot.Input
+namespace SweetspotApp.Input
 {
     class Calibrator
     {

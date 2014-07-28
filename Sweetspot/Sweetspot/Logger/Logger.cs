@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using Sweetspot.Util;
+using SweetspotApp.Util;
 
-namespace Sweetspot
+namespace SweetspotApp
 {
     public static class Logger
     {

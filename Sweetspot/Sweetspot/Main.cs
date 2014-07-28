@@ -4,15 +4,15 @@ using System;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Sweetspot.ScreenManagement;
+using SweetspotApp.ScreenManagement;
 
-namespace Sweetspot
+namespace SweetspotApp
 {
     static class Program
     {
         static void Main(string[] args)
         {
-            using (Sweetspot app = new Sweetspot())
+            using (Main app = new Main())
             {
                 try
                 {
@@ -26,9 +26,9 @@ namespace Sweetspot
         }
     }
 
-    public class Sweetspot : Microsoft.Xna.Framework.Game
+    public class Main : Microsoft.Xna.Framework.Game
     {
-        public Sweetspot()
+        public Main()
         {
             int screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             int screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
