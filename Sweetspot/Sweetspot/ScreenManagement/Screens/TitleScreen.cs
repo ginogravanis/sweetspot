@@ -57,7 +57,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            userActive = sm.Kinect.IsViewerActive();
+            userActive = sm.Kinect.IsUserActive();
             updateTransitionState(gameTime);
         }
 

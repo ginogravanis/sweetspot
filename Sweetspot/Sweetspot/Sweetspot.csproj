@@ -82,8 +82,8 @@
     <Compile Include="Database\IDatabase.cs" />
     <Compile Include="Input\ICalibrationProvider.cs" />
     <Compile Include="Input\InputManager.cs" />
-    <Compile Include="Input\Sensor.cs" />
-    <Compile Include="Input\SensorManager.cs" />
+    <Compile Include="Input\Kinect.cs" />
+    <Compile Include="Input\KinectManager.cs" />
     <Compile Include="Logger\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScreenManagement\Cue.cs" />

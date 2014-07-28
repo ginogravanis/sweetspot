@@ -38,9 +38,9 @@ namespace SweetspotApp.ScreenManagement.Screens
         {
             targetEffectIntensity = 1.0f;
 
-            if (sm.Kinect.IsViewerActive())
+            if (sm.Kinect.IsUserActive())
             {
-                float distanceFromSweetspot = sm.Kinect.sweetspot.GetDistanceFromSweetspot(sm.Kinect.GetViewerPosition());
+                float distanceFromSweetspot = sm.Kinect.sweetspot.GetDistanceFromSweetspot(sm.Kinect.GetUserPosition());
                 float margin = sm.Kinect.sweetspot.MARGIN;
 
                 if (distanceFromSweetspot <= margin)
@@ -93,12 +93,12 @@ namespace SweetspotApp.ScreenManagement.Screens
             {
                 // Overlay
                 Vector2 sweetspotPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, sm.Kinect.sweetspot.Position);
-                Vector2 viewerPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, sm.Kinect.GetViewerPosition());
+                Vector2 userPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, sm.Kinect.GetUserPosition());
                 Rectangle sweetspot = new Rectangle((int)sweetspotPosition.X - 10, (int)sweetspotPosition.Y - 10, 20, 20);
-                Rectangle viewer = new Rectangle((int)viewerPosition.X - 15, (int)viewerPosition.Y - 15, 30, 30);
+                Rectangle user = new Rectangle((int)userPosition.X - 15, (int)userPosition.Y - 15, 30, 30);
                 spriteBatch.Begin();
                 spriteBatch.Draw(green, sweetspot, Color.White);
-                spriteBatch.Draw(red, viewer, Color.White);
+                spriteBatch.Draw(red, user, Color.White);
                 spriteBatch.End();
             }
         }

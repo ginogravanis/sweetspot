@@ -18,7 +18,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected Rectangle textBox;
         protected Vector2 textPosition;
         protected string text = "";
-        protected bool viewerDetected = false;
+        protected bool userDetected = false;
         protected bool targetReached = false;
         protected float alpha = 0;
 
@@ -53,14 +53,14 @@ namespace SweetspotApp.ScreenManagement.Screens
         {
             base.Update(gameTime);
 
-            if (!sm.Kinect.IsViewerActive())
+            if (!sm.Kinect.IsUserActive())
             {
-                viewerDetected = false;
+                userDetected = false;
                 return;
             }
 
-            viewerDetected = true;
-            Vector2 userPosition = sm.Kinect.GetViewerPosition();
+            userDetected = true;
+            Vector2 userPosition = sm.Kinect.GetUserPosition();
             Vector2 vectorToSweetspot = sm.Kinect.sweetspot.GetVectorToSweetspot(userPosition);
             Direction direction = CalculateDominantDirection(vectorToSweetspot);
 
@@ -116,7 +116,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             spriteBatch.Begin();
             spriteBatch.Draw(image, new Rectangle(0, 0, viewport.Width, viewport.Height), Color.White * alpha);
             spriteBatch.Draw(black, textBox, Color.White);
-            if (viewerDetected)
+            if (userDetected)
                 spriteBatch.DrawString(font, text, textPosition, Color.White);
             spriteBatch.End();
 
@@ -124,12 +124,12 @@ namespace SweetspotApp.ScreenManagement.Screens
             {
                 // Overlay
                 Vector2 sweetspotPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, sm.Kinect.sweetspot.Position);
-                Vector2 viewerPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, sm.Kinect.GetViewerPosition());
+                Vector2 userPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, sm.Kinect.GetUserPosition());
                 Rectangle sweetspot = new Rectangle((int)sweetspotPosition.X - 10, (int)sweetspotPosition.Y - 10, 20, 20);
-                Rectangle viewer = new Rectangle((int)viewerPosition.X - 15, (int)viewerPosition.Y - 15, 30, 30);
+                Rectangle userRect = new Rectangle((int)userPosition.X - 15, (int)userPosition.Y - 15, 30, 30);
                 spriteBatch.Begin();
                 spriteBatch.Draw(green, sweetspot, Color.White);
-                spriteBatch.Draw(red, viewer, Color.White);
+                spriteBatch.Draw(red, userRect, Color.White);
                 spriteBatch.End();
             }
         }

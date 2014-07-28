@@ -108,9 +108,9 @@ namespace SweetspotApp.ScreenManagement.Screens
 
         protected void captureSweetspot()
         {
-            if (sm.Kinect.IsViewerActive())
+            if (sm.Kinect.IsUserActive())
             {
-                sweetspotBounds.Add(sm.Kinect.GetViewerPosition());
+                sweetspotBounds.Add(sm.Kinect.GetUserPosition());
                 unsavedSweetspotBounds = true;
             }
         }

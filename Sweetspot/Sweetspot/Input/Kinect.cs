@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 namespace SweetspotApp.Input
 
 {
-    public class Sensor
+    public class Kinect
     {
         const int BUFFER_TIME = 3;
 
@@ -28,7 +28,7 @@ namespace SweetspotApp.Input
         protected LinkedList<Tuple<WriteableBitmap, DateTime>> expiredBuffer = new LinkedList<Tuple<WriteableBitmap, DateTime>>();
         protected String[] timestamp = new String[0];
 
-        public Sensor(KinectSensor kinect, ICalibrationProvider calibrationProvider)
+        public Kinect(KinectSensor kinect, ICalibrationProvider calibrationProvider)
         {
             sensor = kinect;
             activeUsers = new List<Skeleton>();
@@ -39,7 +39,7 @@ namespace SweetspotApp.Input
             IsCalibrated = false;
         }
 
-        ~Sensor()
+        ~Kinect()
         {
             sensor.Stop();
         }

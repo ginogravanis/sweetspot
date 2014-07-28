@@ -11,7 +11,7 @@ namespace SweetspotApp.Input
 {
     public enum SensorName { One, Two }
 
-    public class SensorManager
+    public class KinectManager
     {
         const string RECORDING_PATH = "Recordings";
         /// <summary>
@@ -25,10 +25,10 @@ namespace SweetspotApp.Input
 
         TimeSpan positionSmoothingTime = TimeSpan.FromMilliseconds(50);
 
-        List<Sensor> sensors;
-        Vector2 lastViewerPosition;
-        TimeSpan viewerLastSeen;
-        bool viewerActive;
+        List<Kinect> sensors;
+        Vector2 lastUserPosition;
+        TimeSpan userLastSeen;
+        bool userActive;
 
         public static int MAX_SENSOR_COUNT = 2;
         public static float SENSOR_RANGE = 5.0f;
@@ -36,13 +36,13 @@ namespace SweetspotApp.Input
         protected bool record = false;
         protected int gameId;
 
-        public SensorManager(ICalibrationProvider calibrationProvider)
+        public KinectManager(ICalibrationProvider calibrationProvider)
         {
-            sensors = new List<Sensor>();
+            sensors = new List<Kinect>();
             sweetspot = new Sweetspot();
-            lastViewerPosition = new Vector2();
-            viewerLastSeen = TimeSpan.FromSeconds(-1);
-            viewerActive = false;
+            lastUserPosition = new Vector2();
+            userLastSeen = TimeSpan.FromSeconds(-1);
+            userActive = false;
             initializeSensors(calibrationProvider);
             Directory.CreateDirectory(RECORDING_PATH);
         }
@@ -53,13 +53,13 @@ namespace SweetspotApp.Input
             {
                 if (candidate.Status == KinectStatus.Connected)
                 {
-                    Sensor sensor = new Sensor(candidate, calibrationProvider);
+                    Kinect sensor = new Kinect(candidate, calibrationProvider);
                     sensor.Initialize();
                     sensors.Add(sensor);
                 }
             }
 
-            int maxSensors = SensorManager.MAX_SENSOR_COUNT;
+            int maxSensors = KinectManager.MAX_SENSOR_COUNT;
             if (sensors.Count > maxSensors)
             {
                 sensors.RemoveRange(maxSensors, sensors.Count - maxSensors);
@@ -68,19 +68,19 @@ namespace SweetspotApp.Input
 
         public void Update(GameTime gameTime)
         {
-            foreach (Sensor sensor in sensors)
+            foreach (Kinect sensor in sensors)
                 sensor.Update(gameTime);
 
-            if (viewerPositionAvailable())
+            if (userPositionAvailable())
             {
-                lastViewerPosition = calculateViewerPosition();
-                viewerLastSeen = gameTime.TotalGameTime;
-                viewerActive = true;
+                lastUserPosition = calculateUserPosition();
+                userLastSeen = gameTime.TotalGameTime;
+                userActive = true;
             }
-            else if (viewerRecentlySeen(gameTime))
-                viewerActive = true;
+            else if (userRecentlySeen(gameTime))
+                userActive = true;
             else
-                viewerActive = false;
+                userActive = false;
 
             if (record) {
                 foreach (var sensor in sensors)
@@ -88,19 +88,19 @@ namespace SweetspotApp.Input
             }
         }
 
-        public bool IsViewerActive()
+        public bool IsUserActive()
         {
-            return viewerActive;
+            return userActive;
         }
 
-        public Vector2 GetViewerPosition()
+        public Vector2 GetUserPosition()
         {
-            return lastViewerPosition;
+            return lastUserPosition;
         }
 
-        protected bool viewerPositionAvailable()
+        protected bool userPositionAvailable()
         {
-            foreach (Sensor sensor in sensors)
+            foreach (Kinect sensor in sensors)
             {
                 if (sensor.HasActiveUsers())
                     return true;
@@ -108,12 +108,12 @@ namespace SweetspotApp.Input
             return false;
         }
 
-        protected bool viewerRecentlySeen(GameTime gameTime)
+        protected bool userRecentlySeen(GameTime gameTime)
         {
-            return viewerLastSeen > gameTime.TotalGameTime - positionSmoothingTime;
+            return userLastSeen > gameTime.TotalGameTime - positionSmoothingTime;
         }
 
-        protected Vector2 calculateViewerPosition()
+        protected Vector2 calculateUserPosition()
         {
             if (sensors.Count == 2
                 && sensors[0].GetActiveUserCount() == 1
@@ -126,15 +126,15 @@ namespace SweetspotApp.Input
             else
             {
                 List<Vector2> positions = new List<Vector2>();
-                foreach (Sensor sensor in sensors)
+                foreach (Kinect sensor in sensors)
                 {
                     positions.AddRange(sensor.GetUserPositions());
                 }
-                return getNearestViewer(positions);
+                return getNearestUser(positions);
             }
         }
 
-        protected Vector2 getNearestViewer(List<Vector2> positions)
+        protected Vector2 getNearestUser(List<Vector2> positions)
         {
             if (positions.Count == 0)
                 throw new ApplicationException("User position not available.");
@@ -154,14 +154,14 @@ namespace SweetspotApp.Input
             return nearestUserPosition;
         }
 
-        public Sensor GetSensor(SensorName name)
+        public Kinect GetSensor(SensorName name)
         {
             if (sensors.Count == 0)
                 throw new ApplicationException("No sensor connected!");
 
-            Sensor sensorOne = sensors.First<Sensor>();
-            Sensor sensorTwo = sensors.Last<Sensor>();
-            Sensor result = sensorOne;
+            Kinect sensorOne = sensors.First<Kinect>();
+            Kinect sensorTwo = sensors.Last<Kinect>();
+            Kinect result = sensorOne;
 
             if (sensors.Count > 1 && name == SensorName.Two)
             {
@@ -173,7 +173,7 @@ namespace SweetspotApp.Input
 
         public void ResetSensorTilt()
         {
-            foreach (Sensor sensor in sensors)
+            foreach (Kinect sensor in sensors)
             {
                 sensor.ResetSensorTilt();
             }
@@ -212,7 +212,7 @@ namespace SweetspotApp.Input
             return Path.Combine(RECORDING_PATH, "Game " + gameId);
         }
 
-        protected string computeSensorPath(Sensor sensor)
+        protected string computeSensorPath(Kinect sensor)
         {
              return Path.Combine(computeGamePath(), sensor.ToString());
         }
@@ -222,7 +222,7 @@ namespace SweetspotApp.Input
             record = true;
             this.gameId = gameId;
 
-            foreach (Sensor sensor in sensors)
+            foreach (Kinect sensor in sensors)
             {
                 string sensorPath = Path.Combine(computeGamePath(), sensor.ToString());
                 Directory.CreateDirectory(sensorPath);
@@ -232,7 +232,7 @@ namespace SweetspotApp.Input
         public void StopRecording()
         {
             record = false;
-            foreach (Sensor sensor in sensors)
+            foreach (Kinect sensor in sensors)
             {
                 writeMultipleFramesToDisk(computeSensorPath(sensor), sensor.GetRemainingFrames());
             }
