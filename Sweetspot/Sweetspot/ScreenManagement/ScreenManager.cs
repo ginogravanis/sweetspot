@@ -13,7 +13,7 @@ namespace SweetspotApp.ScreenManagement
     public class ScreenManager : DrawableGameComponent
     {
         public bool Debug { get; protected set; }
-        public SensorManager Kinect { get; protected set; }
+        public KinectManager Kinect { get; protected set; }
         public InputManager Input { get; protected set; }
         public IDatabase Database { get; protected set; }
         public SweetspotBounds SweetspotBounds { get; protected set; }
@@ -30,7 +30,7 @@ namespace SweetspotApp.ScreenManagement
             Debug = false;
             var db = new SQLiteAdapter();
             screens = new LinkedList<Screen>();
-            Kinect = new SensorManager(db);
+            Kinect = new KinectManager(db);
             Input = new InputManager();
             Database = db;
             this.scene = scene;
@@ -115,7 +115,7 @@ namespace SweetspotApp.ScreenManagement
                 this,
                 Cue.Pixelate,
                 Mapping.SCurve,
-                SweetspotBounds.GenerateSweetspot(Kinect.GetViewerPosition())
+                SweetspotBounds.GenerateSweetspot(Kinect.GetUserPosition())
                 ));
         }
 

@@ -35,7 +35,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         {
             return !TaskCompleted &&
                 recordingIntervalElapsed() &&
-                sm.Kinect.IsViewerActive();
+                sm.Kinect.IsUserActive();
         }
 
         protected bool recordingIntervalElapsed()
@@ -48,7 +48,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             lastPositionCaptured = elapsedTime;
             sm.Database.RecordUserPosition(
                 roundId,
-                sm.Kinect.GetViewerPosition(),
+                sm.Kinect.GetUserPosition(),
                 (int)lastPositionCaptured.TotalMilliseconds
                 );
         }

@@ -18,8 +18,8 @@ namespace SweetspotApp.Util
 
         public static Vector2 WorldToScreenCoords(Rectangle bounds, Vector2 position)
         {
-            float x = bounds.Left + (bounds.Width / 2) + ((bounds.Width / 2f) * position.X / (SensorManager.SENSOR_RANGE / 2f));
-            float y = bounds.Top + bounds.Height * (position.Y / SensorManager.SENSOR_RANGE);
+            float x = bounds.Left + (bounds.Width / 2) + ((bounds.Width / 2f) * position.X / (KinectManager.SENSOR_RANGE / 2f));
+            float y = bounds.Top + bounds.Height * (position.Y / KinectManager.SENSOR_RANGE);
             return new Vector2((int)Math.Round(x), (int)Math.Round(y));
         }
 
