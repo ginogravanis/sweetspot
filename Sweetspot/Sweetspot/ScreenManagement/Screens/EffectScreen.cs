@@ -41,12 +41,11 @@ namespace SweetspotApp.ScreenManagement.Screens
             if (sm.Kinect.IsUserActive())
             {
                 float distanceFromSweetspot = sm.Kinect.sweetspot.GetDistanceFromSweetspot(sm.Kinect.GetUserPosition());
-                float margin = sm.Kinect.sweetspot.MARGIN;
+                float margin = sm.Kinect.sweetspot.MAX_INTERACTION_RADIUS;
 
                 if (distanceFromSweetspot <= margin)
                 {
                     float x = distanceFromSweetspot / margin;
-                    System.Diagnostics.Trace.WriteLine(mapping.ToString());
                     switch (mapping)
                     {
                         case Mapping.Linear:

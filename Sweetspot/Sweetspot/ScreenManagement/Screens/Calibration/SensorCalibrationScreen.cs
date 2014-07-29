@@ -132,9 +132,9 @@ namespace SweetspotApp.ScreenManagement.Screens
             spriteBatch.End();
         }
 
-        public override void NextScreen(GameTime gameTime)
+        public override void NextScreen()
         {
-            base.NextScreen(gameTime);
+            base.NextScreen();
             if (unsavedSweetspotBounds)
                 sm.Database.SaveSweetspotBounds(sweetspotBounds.GetPoints());
         }

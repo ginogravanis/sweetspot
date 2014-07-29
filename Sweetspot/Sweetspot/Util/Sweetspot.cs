@@ -1,24 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace SweetspotApp.Util
 {
     public class Sweetspot
     {
-        protected readonly float SAFTEY_RADIUS = 0.4f;
-
-        /// <summary>
-        /// The minumum interaction distance from the sweetspot in meters.
-        /// </summary>
+        // Following numbers in meters.
         public readonly float MAX_INTERACTION_RADIUS = 2f;
-
-        /// <summary>
-        /// The radius of the sweetspot in meters.
-        /// </summary>
         public readonly float RADIUS = 0.1f;
+
+        // Following numbers in percent of MAX_INTERACTION_RADIUS.
+        public readonly float ANSWER_RADIUS = 0.02f;
+        protected readonly float SAFTEY_RADIUS = 0.2f;
 
         public Vector2 Position { get; set; }
 
@@ -44,6 +37,11 @@ namespace SweetspotApp.Util
         public Sweetspot(float x, float y)
         {
             Position = new Vector2(x, y);
+        }
+
+        public bool IsUserAnswering(Vector2 userPosition)
+        {
+            return isUserWithin(userPosition, ANSWER_RADIUS);
         }
 
         public bool IsUserTooCloseToSweetspot (Vector2 userPosition)
