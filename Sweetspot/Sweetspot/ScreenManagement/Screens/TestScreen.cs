@@ -58,7 +58,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         {
             SpriteBatch spriteBatch = sm.SpriteBatch;
             Viewport viewport = sm.GraphicsDevice.Viewport;
-            sm.GraphicsDevice.Clear(Color.White);
+            sm.GraphicsDevice.Clear(background);
 
             spriteBatch.Begin();
             spriteBatch.Draw(image, imageRect, Color.White);

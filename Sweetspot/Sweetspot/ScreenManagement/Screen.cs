@@ -46,7 +46,7 @@ namespace SweetspotApp.ScreenManagement
 
             if (sm.Input.IsKeyPressed(Keys.Space) || sm.Input.IsGamePadButtonPressed(Buttons.A))
             {
-                NextScreen(gameTime);
+                NextScreen();
             }
 
             if (sm.Input.IsKeyPressed(Keys.F12) || sm.Input.IsGamePadButtonPressed(Buttons.RightTrigger))
@@ -60,7 +60,7 @@ namespace SweetspotApp.ScreenManagement
             sm.Game.GraphicsDevice.Clear(background);
         }
 
-        public virtual void NextScreen(GameTime gameTime)
+        public virtual void NextScreen()
         {
             Finished = true;
         }

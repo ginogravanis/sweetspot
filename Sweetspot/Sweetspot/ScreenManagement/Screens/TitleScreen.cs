@@ -8,6 +8,9 @@ namespace SweetspotApp.ScreenManagement.Screens
 
     public class TitleScreen : Screen
     {
+        static readonly float FADE_TIME = 200;                // in ms
+        static readonly float DELAY = 300;                    // in ms
+
         protected SpriteFont titleFont;
         protected SpriteFont instructionFont;
         protected string titleText;
@@ -17,8 +20,6 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected TransitionState currentState;
         protected float alpha = 0f;
         protected float timeSinceStateChange = 0f;  // in ms
-        const float FADE_TIME = 200;                // in ms
-        const float DELAY = 300;                    // in ms
         protected bool userActive = false;
 
         public TitleScreen(ScreenManager sm)
@@ -105,8 +106,9 @@ namespace SweetspotApp.ScreenManagement.Screens
 
                 case TransitionState.PostDelay:
                     if (timeSinceStateChange >= DELAY)
-                        NextScreen(gameTime);
+                        NextScreen();
                     break;
+
             }
         }
 
@@ -129,7 +131,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             spriteBatch.End();
         }
 
-        public override void NextScreen(GameTime gameTime)
+        public override void NextScreen()
         {
             switch (currentState)
             {
@@ -137,7 +139,7 @@ namespace SweetspotApp.ScreenManagement.Screens
                     changeState(TransitionState.FadingOut);
                     break;
                 case TransitionState.PostDelay:
-                    base.NextScreen(gameTime);
+                    base.NextScreen();
                     sm.NewGame();
                     break;
                 default:
