@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using SweetspotApp.Database;
 using SweetspotApp.Input;
 using SweetspotApp.Util;
+using System;
 
 namespace SweetspotApp.ScreenManagement
 {
@@ -24,6 +25,9 @@ namespace SweetspotApp.ScreenManagement
         protected Scene scene;
         protected LinkedList<Screen> screens;
 
+        protected LinkedList<Tuple<Cue, Mapping>> effectList = new LinkedList<Tuple<Cue, Mapping>>();
+        protected LinkedListNode<Tuple<Cue, Mapping>> effectListNode;
+
         public GameController(Game game, Scene scene)
             : base(game)
         {
@@ -39,6 +43,15 @@ namespace SweetspotApp.ScreenManagement
         public override void Initialize()
         {
             base.Initialize();
+
+            Cue[] cues = { Cue.Pixelate, Cue.Brightness, Cue.Contrast, Cue.BaselineText, Cue.BaselineArrow };
+            Mapping[] mappings = { Mapping.SCurve };
+            
+            foreach (var cue in cues)
+                foreach (var mapping in mappings)
+                    effectList.AddLast(Tuple.Create(cue, mapping));
+
+            effectListNode = effectList.First;
 
             switch (scene)
             {
@@ -119,14 +132,16 @@ namespace SweetspotApp.ScreenManagement
         {
             Add(ScreenFactory.CreateQuestionScreen(
                 this,
-                Cue.Pixelate,
-                Mapping.SCurve,
+                effectListNode.Value.Item1,
+                effectListNode.Value.Item2,
                 SweetspotBounds.GenerateSweetspot(Kinect.GetUserPosition())
                 ));
+
         }
 
         public void EndGame()
         {
+            effectListNode = effectListNode.NextOrFirst();
             Add(ScreenFactory.CreateTitleScreen(this));
         }
     }
