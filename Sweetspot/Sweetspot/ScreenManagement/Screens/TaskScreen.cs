@@ -4,14 +4,17 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
-    public enum TaskState { Active, Completing, Aborting }
+    public enum TaskState { Active, Completing, GracePeriod, Aborting }
 
     public class TaskScreen : TestScreen
     {
-        protected static readonly Color TASK_COMPLETE_COLOR = Color.SpringGreen;
-        protected static readonly Color TASK_ABORT_COLOR = Color.Salmon;
+        protected static readonly Color TASK_ACTIVE_COLOR = Color.White;
+        protected static readonly Color TASK_COMPLETE_COLOR = Color.Chartreuse;
+        protected static readonly Color TASK_ABORT_COLOR = Color.MediumVioletRed;
+        protected static readonly Color TASK_GRACE_COLOR = Color.Teal;
         protected static readonly double TASK_COMPLETE_TIME = 5f;       // in seconds
         protected static readonly double TASK_ABORT_TIME = 5f;        // in seconds
+        protected static readonly double TASK_GRACE_TIME = 2.5f;        // in seconds
 
         public bool TaskCompleted { get; protected set; }
 
@@ -20,6 +23,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected Mapping mapping;
         protected TimeSpan elapsedTime;
         protected double timeSinceStateChange = 0f;     // in seconds
+        protected double completionTimerSnapshot = 0f;     // in seconds
         protected TaskState currentState;
 
         public TaskScreen(ScreenManager sm, string cue, Mapping mapping)
@@ -48,7 +52,6 @@ namespace SweetspotApp.ScreenManagement.Screens
                 case TaskState.Active:
                     if (isUserAnswering())
                     {
-                        background = TASK_COMPLETE_COLOR;
                         changeState(TaskState.Completing);
                     }
                     else if (!sm.Kinect.IsUserActive())
@@ -58,16 +61,26 @@ namespace SweetspotApp.ScreenManagement.Screens
                 case TaskState.Completing:
                     if (!isUserAnswering())
                     {
-                        background = Color.White;
-                        changeState(TaskState.Active);
+                        completionTimerSnapshot = timeSinceStateChange;
+                        changeState(TaskState.GracePeriod);
                     }
-                    if (timeSinceStateChange >= TASK_COMPLETE_TIME)
+                    else if (timeSinceStateChange >= TASK_COMPLETE_TIME)
                     {
                         markTaskAsCompleted();
                         NextScreen();
                     }
                     break;
 
+                case TaskState.GracePeriod:
+                    if (timeSinceStateChange >= TASK_GRACE_TIME)
+                    {
+                        completionTimerSnapshot = 0f;
+                        changeState(TaskState.Active);
+                    }
+                    else if (isUserAnswering())
+                        changeState(TaskState.Completing);
+                    break;
+                    
                 case TaskState.Aborting:
                     if (sm.Kinect.IsUserActive())
                         changeState(TaskState.Active);
@@ -82,6 +95,22 @@ namespace SweetspotApp.ScreenManagement.Screens
         {
             currentState = newState;
             timeSinceStateChange = 0f;
+            switch (newState)
+            {
+                case TaskState.Active:
+                    background = TASK_ACTIVE_COLOR;
+                    break;
+                case TaskState.Completing:
+                    background = TASK_COMPLETE_COLOR;
+                    timeSinceStateChange = completionTimerSnapshot;
+                    break;
+                case TaskState.Aborting:
+                    background = TASK_ABORT_COLOR;
+                    break;
+                case TaskState.GracePeriod:
+                    background = TASK_GRACE_COLOR;
+                    break;
+            }
         }
 
         public override void NextScreen()

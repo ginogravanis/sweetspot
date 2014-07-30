@@ -51,8 +51,6 @@ namespace SweetspotApp.ScreenManagement
 
             if (sm.Input.IsKeyPressed(Keys.F12) || sm.Input.IsGamePadButtonPressed(Buttons.RightTrigger))
                 sm.ToggleDebug();
-
-
         }
 
         public virtual void Draw(GameTime gameTime)
