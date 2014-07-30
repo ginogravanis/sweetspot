@@ -42,7 +42,7 @@ namespace SweetspotApp
 
 #if CALIBRATION_TARGET
             IsMouseVisible = true;
-            Components.Add(new ScreenManager(this, Scene.Calibration));
+            Components.Add(new GameController(this, Scene.Calibration));
 #else
             Components.Add(new GameController(this, Scene.Game));
 #endif

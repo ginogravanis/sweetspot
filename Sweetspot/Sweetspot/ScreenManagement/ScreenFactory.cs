@@ -14,7 +14,7 @@ namespace SweetspotApp.ScreenManagement
 
         public static Screen CreateCalibrationScreen(GameController sm)
         {
-            return new SensorCalibrationScreen(sm);
+            return new CalibrationScreen(sm);
         }
 
         public static Screen CreateQuestionScreen(GameController sm, Cue cue, Mapping mapping, Sweetspot sweetspot)
