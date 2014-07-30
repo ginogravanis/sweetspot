@@ -6,15 +6,16 @@ namespace SweetspotApp.ScreenManagement.Screens
 {
     public class TrackingScreen : TaskScreen
     {
+        protected static readonly TimeSpan RECORDING_INTERVAL = TimeSpan.FromMilliseconds(100);
+
         protected Sweetspot sweetspot;
-        protected TimeSpan recordingIntervall = TimeSpan.FromMilliseconds(100);
-        protected TimeSpan lastPositionCaptured;
+        protected TimeSpan lastCaptureTime;
 
         public TrackingScreen(ScreenManager sm, string cue, Mapping mapping, Sweetspot sweetspot)
             : base(sm, cue, mapping)
         {
             this.sweetspot = sweetspot;
-            lastPositionCaptured = TimeSpan.FromSeconds(-1);
+            lastCaptureTime = TimeSpan.FromSeconds(-1);
         }
 
         public override void Initialize()
@@ -40,16 +41,16 @@ namespace SweetspotApp.ScreenManagement.Screens
 
         protected bool recordingIntervalElapsed()
         {
-            return lastPositionCaptured + recordingIntervall <= elapsedTime;
+            return lastCaptureTime + RECORDING_INTERVAL <= elapsedTime;
         }
 
         protected void recordPosition()
         {
-            lastPositionCaptured = elapsedTime;
+            lastCaptureTime = elapsedTime;
             sm.Database.RecordUserPosition(
                 roundId,
                 sm.Kinect.GetUserPosition(),
-                (int)lastPositionCaptured.TotalMilliseconds
+                (int)lastCaptureTime.TotalMilliseconds
                 );
         }
     }
