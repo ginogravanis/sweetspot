@@ -88,7 +88,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScreenManagement\Cue.cs" />
     <Compile Include="ScreenManagement\Screen.cs" />
-    <Compile Include="ScreenManagement\ScreenManager.cs" />
+    <Compile Include="ScreenManagement\GameController.cs" />
     <Compile Include="ScreenManagement\Screens\BaselineArrowScreen.cs" />
     <Compile Include="Input\Calibrator.cs" />
     <Compile Include="ScreenManagement\Screens\Calibration\SensorCalibrationScreen.cs" />

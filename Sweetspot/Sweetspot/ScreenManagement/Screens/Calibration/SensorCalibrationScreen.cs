@@ -16,7 +16,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         public SweetspotBounds sweetspotBounds;
         protected bool unsavedSweetspotBounds = false;
 
-        public SensorCalibrationScreen(ScreenManager screenManager)
+        public SensorCalibrationScreen(GameController screenManager)
             : base(screenManager)
         {
             sweetspotBounds = new SweetspotBounds(screenManager.Database);

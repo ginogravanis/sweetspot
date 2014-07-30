@@ -15,13 +15,13 @@ namespace SweetspotApp.Database
 
     class SQLiteAdapter : IDatabase, ICalibrationProvider
     {
-        const string FILENAME = @"Database\database.sqlite";
-        const string SCHEMA_PATH = @"Database\database.sql";
-        const string TABLE_CALIBRATION = "calibration";
-        const string TABLE_SWEETSPOT_BOUNDS = "sweetspot_bounds";
-        const string TABLE_ROUND = "game_round";
-        const string TABLE_USER_POSITION = "user_position";
-        const string TABLE_QUESTION = "question";
+        protected static readonly string FILENAME = @"Database\database.sqlite";
+        protected static readonly string SCHEMA_PATH = @"Database\database.sql";
+        protected static readonly string TABLE_CALIBRATION = "calibration";
+        protected static readonly string TABLE_SWEETSPOT_BOUNDS = "sweetspot_bounds";
+        protected static readonly string TABLE_ROUND = "game_round";
+        protected static readonly string TABLE_USER_POSITION = "user_position";
+        protected static readonly string TABLE_QUESTION = "question";
 
         protected string db;
         protected List<string> insertBuffer;

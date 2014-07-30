@@ -10,7 +10,7 @@ namespace SweetspotApp.ScreenManagement
 {
     public enum Scene { Calibration, Game };
 
-    public class ScreenManager : DrawableGameComponent
+    public class GameController : DrawableGameComponent
     {
         public bool Debug { get; protected set; }
         public KinectManager Kinect { get; protected set; }
@@ -24,7 +24,7 @@ namespace SweetspotApp.ScreenManagement
         protected Scene scene;
         protected LinkedList<Screen> screens;
 
-        public ScreenManager(Game game, Scene scene)
+        public GameController(Game game, Scene scene)
             : base(game)
         {
             Debug = false;

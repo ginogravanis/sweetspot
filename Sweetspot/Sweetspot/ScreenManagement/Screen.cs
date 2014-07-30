@@ -10,10 +10,10 @@ namespace SweetspotApp.ScreenManagement
         public bool Initialized { get; protected set; }
         public bool Finished { get; protected set; }
 
-        protected ScreenManager sm;
+        protected GameController sm;
         protected Color background;
 
-        public Screen(ScreenManager sm)
+        public Screen(GameController sm)
         {
             this.sm = sm;
             background = Color.White;

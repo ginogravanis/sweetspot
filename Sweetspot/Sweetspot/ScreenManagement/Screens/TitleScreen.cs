@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
@@ -22,7 +21,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected float timeSinceStateChange = 0f;  // in ms
         protected bool userActive = false;
 
-        public TitleScreen(ScreenManager sm)
+        public TitleScreen(GameController sm)
             : base(sm)
         {
             titleText = "Quiz";

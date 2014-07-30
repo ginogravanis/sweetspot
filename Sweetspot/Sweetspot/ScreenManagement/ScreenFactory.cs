@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SweetspotApp.ScreenManagement.Screens;
 using SweetspotApp.Util;
@@ -9,17 +7,17 @@ namespace SweetspotApp.ScreenManagement
 {
     public class ScreenFactory
     {
-        public static Screen CreateTitleScreen(ScreenManager sm)
+        public static Screen CreateTitleScreen(GameController sm)
         {
             return new TitleScreen(sm);
         }
 
-        public static Screen CreateCalibrationScreen(ScreenManager sm)
+        public static Screen CreateCalibrationScreen(GameController sm)
         {
             return new SensorCalibrationScreen(sm);
         }
 
-        public static Screen CreateQuestionScreen(ScreenManager sm, Cue cue, Mapping mapping, Sweetspot sweetspot)
+        public static Screen CreateQuestionScreen(GameController sm, Cue cue, Mapping mapping, Sweetspot sweetspot)
         {
             Screen screen;
             Effect effect;

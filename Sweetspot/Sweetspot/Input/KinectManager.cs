@@ -13,7 +13,10 @@ namespace SweetspotApp.Input
 
     public class KinectManager
     {
-        const string RECORDING_PATH = "Recordings";
+        public static readonly int MAX_SENSOR_COUNT = 2;
+        public static readonly float SENSOR_RANGE = 5.0f;
+        protected static readonly string RECORDING_PATH = "Recordings";
+
         /// <summary>
         /// The position the user should optimally be standing relative to the sensor.
         /// The x-coordinate corresponds to the user's position parallel to the sensor,
@@ -23,17 +26,13 @@ namespace SweetspotApp.Input
         /// </summary>
         public Sweetspot sweetspot { get; set; }
 
-        TimeSpan positionSmoothingTime = TimeSpan.FromMilliseconds(50);
-
-        List<Kinect> sensors;
-        Vector2 lastUserPosition;
-        TimeSpan userLastSeen;
-        bool userActive;
-
-        public static int MAX_SENSOR_COUNT = 2;
-        public static float SENSOR_RANGE = 5.0f;
-        protected int counter;
+        protected TimeSpan positionSmoothingTime = TimeSpan.FromMilliseconds(50);
+        protected TimeSpan userLastSeen;
+        protected List<Kinect> sensors;
+        protected Vector2 lastUserPosition;
+        protected bool userActive;
         protected bool record = false;
+        protected int counter;
         protected int gameId;
 
         public KinectManager(ICalibrationProvider calibrationProvider)

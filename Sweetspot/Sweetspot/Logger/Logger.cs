@@ -6,7 +6,7 @@ namespace SweetspotApp
 {
     public static class Logger
     {
-        const string FILENAME = "sweetspot.log";
+        public static readonly string FILENAME = "sweetspot.log";
 
         public static void Log(string msg)
         {

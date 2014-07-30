@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SweetspotApp.Util;
 
@@ -8,7 +6,7 @@ namespace SweetspotApp.ScreenManagement.Screens
 {
     public class TestScreen : Screen
     {
-        const int QUESTION_TEXT_MARGIN = 20;
+        protected static readonly int QUESTION_TEXT_MARGIN = 20;
 
         protected int questionId;
         protected string questionText;
@@ -19,7 +17,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected int questionHeight;
         protected Vector2 questionPosition;
 
-        public TestScreen(ScreenManager sm)
+        public TestScreen(GameController sm)
             : base(sm)
         {
             QuizItem quizItem = sm.Database.GetQuestion();

@@ -11,6 +11,8 @@ namespace SweetspotApp.ScreenManagement.Screens
 {
     class SensorPanel
     {
+        protected static readonly int MARKER_SIZE = 20;
+
         protected SensorCalibrationScreen container;
         protected Texture2D green;
         protected Texture2D red;
@@ -18,7 +20,6 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected Texture2D white;
         protected Rectangle bounds;
         protected Rectangle sensorRect;
-        protected const int MARKER_SIZE = 20;
 
         protected Kinect sensor;
         protected bool activeUsers = false;
