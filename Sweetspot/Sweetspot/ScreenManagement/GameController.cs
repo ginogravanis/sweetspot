@@ -88,6 +88,12 @@ namespace SweetspotApp.ScreenManagement
                 removeFirst();
             }
 
+            if (screens.Count == 0)
+            {
+                Game.Exit();
+                return;
+            }
+            
             if (!CurrentScreen.Initialized)
             {
                 CurrentScreen.LoadContent();

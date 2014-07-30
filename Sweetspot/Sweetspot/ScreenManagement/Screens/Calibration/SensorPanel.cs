@@ -13,7 +13,7 @@ namespace SweetspotApp.ScreenManagement.Screens
     {
         protected static readonly int MARKER_SIZE = 20;
 
-        protected SensorCalibrationScreen container;
+        protected CalibrationScreen container;
         protected Texture2D green;
         protected Texture2D red;
         protected Texture2D blue;
@@ -27,7 +27,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected List<Vector2> userPositions;
         protected Calibrator calibrator;
 
-        public SensorPanel(SensorCalibrationScreen container, Kinect sensor, Rectangle screenBounds)
+        public SensorPanel(CalibrationScreen container, Kinect sensor, Rectangle screenBounds)
         {
             this.container = container;
             this.sensor = sensor;

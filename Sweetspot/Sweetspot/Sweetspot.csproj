@@ -91,7 +91,7 @@
     <Compile Include="ScreenManagement\GameController.cs" />
     <Compile Include="ScreenManagement\Screens\BaselineArrowScreen.cs" />
     <Compile Include="Input\Calibrator.cs" />
-    <Compile Include="ScreenManagement\Screens\Calibration\SensorCalibrationScreen.cs" />
+    <Compile Include="ScreenManagement\Screens\Calibration\CalibrationScreen.cs" />
     <Compile Include="ScreenManagement\Mapping.cs" />
     <Compile Include="ScreenManagement\Screens\EffectScreen.cs" />
     <Compile Include="ScreenManagement\Screens\TaskScreen.cs" />

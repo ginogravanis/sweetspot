@@ -7,7 +7,7 @@ using SweetspotApp.Util;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
-    class SensorCalibrationScreen : Screen
+    class CalibrationScreen : Screen
     {
         Texture2D white;
         Rectangle separator;
@@ -16,7 +16,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         public SweetspotBounds sweetspotBounds;
         protected bool unsavedSweetspotBounds = false;
 
-        public SensorCalibrationScreen(GameController screenManager)
+        public CalibrationScreen(GameController screenManager)
             : base(screenManager)
         {
             sweetspotBounds = new SweetspotBounds(screenManager.Database);
