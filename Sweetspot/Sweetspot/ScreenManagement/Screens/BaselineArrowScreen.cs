@@ -1,16 +1,15 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SweetspotApp.Input;
 using SweetspotApp.Util;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
     public class BaselineArrowScreen : TrackingScreen
     {
-        const int COMPASS_WIDTH = 405;
-        const int COMPASS_HEIGHT = 200;
-        const float FADE_TIME = 200;    // in ms
+        protected static readonly int COMPASS_WIDTH = 405;
+        protected static readonly int COMPASS_HEIGHT = 200;
+        protected static readonly float FADE_TIME = 200;    // in ms
 
         protected Texture2D black;
         protected Texture2D green;
@@ -26,7 +25,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected Effect perspectiveShader;
         protected float alpha = 0;
 
-        public BaselineArrowScreen(ScreenManager sm, string cue, Mapping mapping, Sweetspot sweetspot)
+        public BaselineArrowScreen(GameController sm, string cue, Mapping mapping, Sweetspot sweetspot)
             : base(sm, cue, mapping, sweetspot)
         { }
 

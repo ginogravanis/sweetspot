@@ -44,7 +44,7 @@ namespace SweetspotApp
             IsMouseVisible = true;
             Components.Add(new ScreenManager(this, Scene.Calibration));
 #else
-            Components.Add(new ScreenManager(this, Scene.Game));
+            Components.Add(new GameController(this, Scene.Game));
 #endif
         }
 

@@ -26,7 +26,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected double completionTimerSnapshot = 0f;     // in seconds
         protected TaskState currentState;
 
-        public TaskScreen(ScreenManager sm, string cue, Mapping mapping)
+        public TaskScreen(GameController sm, string cue, Mapping mapping)
             : base(sm)
         {
             elapsedTime = TimeSpan.FromSeconds(0);

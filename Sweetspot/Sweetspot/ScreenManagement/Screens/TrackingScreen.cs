@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using SweetspotApp.Util;
 
 namespace SweetspotApp.ScreenManagement.Screens
@@ -11,7 +10,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected Sweetspot sweetspot;
         protected TimeSpan lastCaptureTime;
 
-        public TrackingScreen(ScreenManager sm, string cue, Mapping mapping, Sweetspot sweetspot)
+        public TrackingScreen(GameController sm, string cue, Mapping mapping, Sweetspot sweetspot)
             : base(sm, cue, mapping)
         {
             this.sweetspot = sweetspot;

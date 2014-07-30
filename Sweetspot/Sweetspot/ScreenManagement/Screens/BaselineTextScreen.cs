@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SweetspotApp.Input;
 using SweetspotApp.Util;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
     public class BaselineTextScreen : TrackingScreen
     {
-        const float FADE_TIME = 200;    // in ms
+        protected static readonly float FADE_TIME = 200;    // in ms
 
         protected Texture2D black;
         protected Texture2D green;
@@ -31,7 +30,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             { Direction.Back, "hinten" }
         };
 
-        public BaselineTextScreen(ScreenManager sm, string cue, Mapping mapping, Sweetspot sweetspot)
+        public BaselineTextScreen(GameController sm, string cue, Mapping mapping, Sweetspot sweetspot)
             : base(sm, cue, mapping, sweetspot)
         {
         }

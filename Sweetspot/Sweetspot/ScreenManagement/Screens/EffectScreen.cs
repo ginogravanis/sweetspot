@@ -1,21 +1,21 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SweetspotApp.Input;
 using SweetspotApp.Util;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
     public class EffectScreen : TrackingScreen
     {
-        Effect effect;
-        float currentEffectIntensity = 1f;
-        float targetEffectIntensity = 1f;
-        const float INTENSITY_SMOOTHING_FACTOR = 20f;
+        protected static readonly float INTENSITY_SMOOTHING_FACTOR = 20f;
 
-        Texture2D green;
-        Texture2D red;
+        protected Effect effect;
+        protected float currentEffectIntensity = 1f;
+        protected float targetEffectIntensity = 1f;
 
-        public EffectScreen(ScreenManager sm, string cue, Mapping mapping, Sweetspot sweetspot, Effect effect)
+        protected Texture2D green;
+        protected Texture2D red;
+
+        public EffectScreen(GameController sm, string cue, Mapping mapping, Sweetspot sweetspot, Effect effect)
             : base(sm, cue, mapping, sweetspot)
         {
             this.effect = effect;
