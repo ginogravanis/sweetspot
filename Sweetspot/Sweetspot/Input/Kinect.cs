@@ -10,7 +10,10 @@ namespace SweetspotApp.Input
 {
     public class Kinect
     {
-        const int BUFFER_TIME = 3;
+        protected static readonly int BUFFER_TIME = 3;
+        protected static readonly TimeSpan BUFFER_INTERVAL = TimeSpan.FromMilliseconds(200);
+                
+        public bool IsCalibrated { get; protected set; }
 
         protected KinectSensor sensor;
         protected List<Skeleton> activeUsers;
@@ -18,7 +21,8 @@ namespace SweetspotApp.Input
         protected TimeSpan positionSmoothingTime;
         protected Matrix TransformationMatrix;
         protected ICalibrationProvider calibrationProvider;
-        public bool IsCalibrated { get; protected set; }
+        protected TimeSpan lastBufferTime;
+        protected TimeSpan elapsedTime;
 
         protected WriteableBitmap colorBitmap;
         protected DepthImagePixel[] depthPixels;
@@ -30,6 +34,7 @@ namespace SweetspotApp.Input
 
         public Kinect(KinectSensor kinect, ICalibrationProvider calibrationProvider)
         {
+            elapsedTime = TimeSpan.FromSeconds(0);
             sensor = kinect;
             activeUsers = new List<Skeleton>();
             positionSmoothingTime = TimeSpan.FromMilliseconds(200);
@@ -37,6 +42,7 @@ namespace SweetspotApp.Input
             lastSensorUpdate = TimeSpan.FromSeconds(-1);
             this.calibrationProvider = calibrationProvider;
             IsCalibrated = false;
+            lastBufferTime = TimeSpan.FromSeconds(-1);
         }
 
         ~Kinect()
@@ -81,6 +87,7 @@ namespace SweetspotApp.Input
         {
             Skeleton[] rawSkeletons = GetRawSkeletonData();
             List<Skeleton> trackableSkeletons = GetTrackableSkeletons(rawSkeletons);
+            elapsedTime += gameTime.ElapsedGameTime;
 
             if (trackableSkeletons.Count > 0)
             {
@@ -215,9 +222,18 @@ namespace SweetspotApp.Input
                         colorBitmap.PixelWidth * sizeof(int),
                         0);
 
-                    bufferFrame(colorBitmap);
+                    if (isRecordingIntervalElapsed())
+                    {
+                        bufferFrame(colorBitmap);
+                        lastBufferTime = elapsedTime;
+                    }
                 }
             }
+        }
+
+        protected bool isRecordingIntervalElapsed()
+        {
+            return lastBufferTime + BUFFER_INTERVAL <= elapsedTime;
         }
 
         protected void bufferFrame(WriteableBitmap frame)
