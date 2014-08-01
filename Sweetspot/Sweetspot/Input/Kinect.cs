@@ -94,18 +94,10 @@ namespace SweetspotApp.Input
                 activeUsers = trackableSkeletons;
                 lastSensorUpdate = gameTime.TotalGameTime;
             }
-            else
+            else if (!sensorRecentlyUpdated(gameTime))
             {
-                if (sensorRecentlyUpdated(gameTime))
-                {
-                    // user has been seen within position smoothing time
-                    // use old skeleton data
-                }
-                else
-                {
-                    activeUsers = trackableSkeletons;
-                    lastSensorUpdate = gameTime.TotalGameTime;
-                }
+                activeUsers = trackableSkeletons;
+                lastSensorUpdate = gameTime.TotalGameTime;
             }
         }
 
@@ -116,9 +108,9 @@ namespace SweetspotApp.Input
 
         protected Skeleton[] GetRawSkeletonData()
         {
+            Skeleton[] skeletons;
             using (SkeletonFrame frame = sensor.SkeletonStream.OpenNextFrame(0))
             {
-                Skeleton[] skeletons;
                 if (null == frame)
                 {
                     skeletons = new Skeleton[0];
@@ -128,20 +120,17 @@ namespace SweetspotApp.Input
                     skeletons = new Skeleton[frame.SkeletonArrayLength];
                     frame.CopySkeletonDataTo(skeletons);
                 }
-                return skeletons;
             }
+            return skeletons;
         }
 
         protected List<Skeleton> GetTrackableSkeletons(Skeleton[] candidates)
         {
             List<Skeleton> trackableSkeletons = new List<Skeleton>();
             foreach (Skeleton skeleton in candidates)
-            {
                 if (skeleton.TrackingState != SkeletonTrackingState.NotTracked)
-                {
                     trackableSkeletons.Add(skeleton);
-                }
-            }
+
             return trackableSkeletons;
         }
 
@@ -270,9 +259,7 @@ namespace SweetspotApp.Input
         {
             DateTime timeNow = DateTime.Now;
             DateTime bufferTime = buffer.First.Value.Item2;
-
             var diffInSeconds = (timeNow - bufferTime).TotalSeconds;
-
             return diffInSeconds > BUFFER_TIME;
         }
     }

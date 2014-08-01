@@ -17,10 +17,10 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected int questionHeight;
         protected Vector2 questionPosition;
 
-        public TestScreen(GameController sm, string cue, Mapping mapping, Sweetspot sweetspot)
-            : base(sm, cue, mapping, sweetspot)
+        public TestScreen(GameController gc, string cue, Mapping mapping, Sweetspot sweetspot)
+            : base(gc, cue, mapping, sweetspot)
         {
-            QuizItem quizItem = sm.Database.GetQuestion();
+            QuizItem quizItem = gc.Database.GetQuestion();
             questionId = quizItem.Id;
             questionText = quizItem.Question;
             answerFilename = quizItem.AnswerFilename;
@@ -36,7 +36,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void Initialize()
         {
             base.Initialize();
-            Viewport viewport = sm.GraphicsDevice.Viewport;
+            Viewport viewport = gc.GraphicsDevice.Viewport;
 
             var questionBounds = questionFont.MeasureString(questionText);
             questionHeight = (int)questionBounds.Y + 2 * QUESTION_TEXT_MARGIN;
@@ -54,9 +54,9 @@ namespace SweetspotApp.ScreenManagement.Screens
 
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch spriteBatch = sm.SpriteBatch;
-            Viewport viewport = sm.GraphicsDevice.Viewport;
-            sm.GraphicsDevice.Clear(background);
+            SpriteBatch spriteBatch = gc.SpriteBatch;
+            Viewport viewport = gc.GraphicsDevice.Viewport;
+            gc.GraphicsDevice.Clear(background);
 
             spriteBatch.Begin();
             spriteBatch.Draw(image, imageRect, Color.White);

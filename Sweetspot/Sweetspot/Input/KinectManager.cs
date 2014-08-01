@@ -49,20 +49,16 @@ namespace SweetspotApp.Input
         protected void initializeSensors(ICalibrationProvider calibrationProvider)
         {
             foreach (KinectSensor candidate in KinectSensor.KinectSensors)
-            {
                 if (candidate.Status == KinectStatus.Connected)
                 {
                     Kinect sensor = new Kinect(candidate, calibrationProvider);
                     sensor.Initialize();
                     sensors.Add(sensor);
                 }
-            }
 
             int maxSensors = KinectManager.MAX_SENSOR_COUNT;
             if (sensors.Count > maxSensors)
-            {
                 sensors.RemoveRange(maxSensors, sensors.Count - maxSensors);
-            }
         }
 
         public void Update(GameTime gameTime)
@@ -100,10 +96,9 @@ namespace SweetspotApp.Input
         protected bool userPositionAvailable()
         {
             foreach (Kinect sensor in sensors)
-            {
                 if (sensor.HasActiveUsers())
                     return true;
-            }
+
             return false;
         }
 
@@ -114,23 +109,24 @@ namespace SweetspotApp.Input
 
         protected Vector2 calculateUserPosition()
         {
+            Vector2 userPosition;
             if (sensors.Count == 2
                 && sensors[0].GetActiveUserCount() == 1
                 && sensors[1].GetActiveUserCount() == 1)
             {
                 Vector2 position1 = sensors[0].GetUserPositions().First<Vector2>();
                 Vector2 position2 = sensors[1].GetUserPositions().First<Vector2>();
-                return Calibrator.CalculateMidpoint(position1, position2);
+                userPosition = Calibrator.CalculateMidpoint(position1, position2);
             }
             else
             {
                 List<Vector2> positions = new List<Vector2>();
                 foreach (Kinect sensor in sensors)
-                {
                     positions.AddRange(sensor.GetUserPositions());
-                }
-                return getNearestUser(positions);
+                userPosition = getNearestUser(positions);
             }
+
+            return userPosition;
         }
 
         protected Vector2 getNearestUser(List<Vector2> positions)
@@ -163,9 +159,7 @@ namespace SweetspotApp.Input
             Kinect result = sensorOne;
 
             if (sensors.Count > 1 && name == SensorName.Two)
-            {
                 result = sensorTwo;
-            }
 
             return result;
         }
@@ -173,9 +167,7 @@ namespace SweetspotApp.Input
         public void ResetSensorTilt()
         {
             foreach (Kinect sensor in sensors)
-            {
                 sensor.ResetSensorTilt();
-            }
         }
 
         protected void writeFrameToDisk(string folder, WriteableBitmap bitmap, DateTime time)
@@ -232,9 +224,7 @@ namespace SweetspotApp.Input
         {
             record = false;
             foreach (Kinect sensor in sensors)
-            {
                 writeMultipleFramesToDisk(computeSensorPath(sensor), sensor.GetRemainingFrames());
-            }
         }
     }
 }

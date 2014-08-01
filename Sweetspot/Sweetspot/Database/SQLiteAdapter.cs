@@ -25,7 +25,6 @@ namespace SweetspotApp.Database
 
         protected string db;
         protected List<string> insertBuffer;
-
         protected int lastQuestionId = 0;
 
         public SQLiteAdapter()
@@ -81,7 +80,7 @@ namespace SweetspotApp.Database
         {
             string sql = String.Format("SELECT * FROM {0} WHERE device_id='{1}' ORDER BY created DESC;", TABLE_CALIBRATION, deviceId);
             DataTable table = ExecuteTableQuery(sql);
-            
+
             if (table.Rows.Count == 0)
                 return new Tuple<float, Vector3>(0f, new Vector3());
 
@@ -114,6 +113,7 @@ namespace SweetspotApp.Database
         {
             string sql = String.Format("SELECT x, y FROM {0};", TABLE_SWEETSPOT_BOUNDS);
             DataTable table = ExecuteTableQuery(sql);
+
             var sweetspotBounds = new List<Vector2>();
             foreach (DataRow row in table.Rows)
             {
@@ -155,7 +155,6 @@ namespace SweetspotApp.Database
         public int RecordRound(int gameId, string cue, Mapping mapping)
         {
             int roundId = GetNewRoundId();
-
             var round = new Dictionary<string, string>
             {
                 {"round_id", roundId.ToString()},

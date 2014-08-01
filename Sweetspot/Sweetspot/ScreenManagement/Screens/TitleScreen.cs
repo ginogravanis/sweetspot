@@ -21,8 +21,8 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected float timeSinceStateChange = 0f;  // in ms
         protected bool userActive = false;
 
-        public TitleScreen(GameController sm)
-            : base(sm)
+        public TitleScreen(GameController gc)
+            : base(gc)
         {
             titleText = "Quiz";
             instructionText = "Step closer to play";
@@ -35,7 +35,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             titleFont = Content.Load<SpriteFont>(@"font\segoe_72");
             instructionFont = Content.Load<SpriteFont>(@"font\segoe_36");
 
-            Viewport viewport = sm.GraphicsDevice.Viewport;
+            Viewport viewport = gc.GraphicsDevice.Viewport;
             Vector2 titleTextSize = titleFont.MeasureString(titleText);
             titlePosition = new Vector2(
                 (viewport.Width - titleTextSize.X) / 2,
@@ -57,7 +57,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            userActive = sm.Kinect.IsUserActive();
+            userActive = gc.Kinect.IsUserActive();
             updateTransitionState(gameTime);
         }
 
@@ -121,8 +121,8 @@ namespace SweetspotApp.ScreenManagement.Screens
         {
             base.Draw(gameTime);
 
-            SpriteBatch spriteBatch = sm.SpriteBatch;
-            Viewport viewport = sm.GraphicsDevice.Viewport;
+            SpriteBatch spriteBatch = gc.SpriteBatch;
+            Viewport viewport = gc.GraphicsDevice.Viewport;
 
             spriteBatch.Begin();
             spriteBatch.DrawString(titleFont, titleText, titlePosition, Color.Black * alpha);
@@ -139,7 +139,7 @@ namespace SweetspotApp.ScreenManagement.Screens
                     break;
                 case TransitionState.PostDelay:
                     base.NextScreen();
-                    sm.NewGame();
+                    gc.NewGame();
                     break;
                 default:
                     break;

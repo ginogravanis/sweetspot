@@ -75,22 +75,14 @@ namespace SweetspotApp.ScreenManagement.Screens
             spriteBatch.Draw(red, sensorRect, Color.White);
 
             foreach (Vector2 point in calibrator.GetReferencePoints())
-            {
                 spriteBatch.Draw(white, makePositionMarker(point), Color.White);
-            }
 
             foreach (Vector2 sweetspot in container.sweetspotBounds.GetPoints())
-            {
                 spriteBatch.Draw(blue, makePositionMarker(sweetspot), Color.White);
-            }
 
             if (activeUsers)
-            {
                 foreach (Vector2 position in userPositions)
-                {
                     spriteBatch.Draw(green, makePositionMarker(position), Color.White);
-                }
-            }
         }
 
         public bool HasEnoughReferencePoints()
