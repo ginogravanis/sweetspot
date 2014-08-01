@@ -5,25 +5,18 @@ using SweetspotApp.Util;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
-    public class BaselineArrowScreen : TestScreen
+    public class BaselineArrowScreen : BaselineScreen
     {
         protected static readonly int COMPASS_WIDTH = 405;
         protected static readonly int COMPASS_HEIGHT = 200;
-        protected static readonly float FADE_TIME = 200;    // in ms
 
-        protected Texture2D black;
-        protected Texture2D green;
-        protected Texture2D red;
         protected Texture2D arrow;
         protected Texture2D checkMark;
         protected Rectangle compass;
         protected Rectangle arrowRect;
         protected Rectangle checkMarkRect;
         protected float compassOrientation;
-        protected bool userDetected = false;
-        protected bool targetReached = false;
         protected Effect perspectiveShader;
-        protected float alpha = 0;
 
         public BaselineArrowScreen(GameController gc, string cue, Mapping mapping, Sweetspot sweetspot)
             : base(gc, cue, mapping, sweetspot)
@@ -32,12 +25,10 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void LoadContent()
         {
             base.LoadContent();
-            black = Content.Load<Texture2D>("texture\\black");
-            green = Content.Load<Texture2D>("texture\\green");
-            red = Content.Load<Texture2D>("texture\\red");
             arrow = Content.Load<Texture2D>("texture\\arrow");
             checkMark = Content.Load<Texture2D>("texture\\checkmark");
             perspectiveShader = Content.Load<Effect>("shader\\PerspectiveShader");
+
             Viewport viewport = gc.GraphicsDevice.Viewport;
             compass = new Rectangle(
                 viewport.Width - COMPASS_WIDTH,
@@ -62,13 +53,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (!gc.Kinect.IsUserActive())
-            {
-                userDetected = false;
-                return;
-            }
 
-            userDetected = true;
             Vector2 userPosition = gc.Kinect.GetUserPosition();
             Vector2 vectorToSweetspot = gc.Kinect.sweetspot.GetVectorToSweetspot(userPosition);
             compassOrientation = (float)(2*Math.PI - Math.Atan2(vectorToSweetspot.Y, vectorToSweetspot.X));
@@ -83,12 +68,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            SpriteBatch spriteBatch = gc.SpriteBatch;
-            Viewport viewport = gc.GraphicsDevice.Viewport;
-
-            gc.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
-            spriteBatch.Draw(image, new Rectangle(0, 0, viewport.Width, viewport.Height), Color.White * alpha);
             spriteBatch.Draw(black, compass, Color.White);
             spriteBatch.End();
             if (userDetected)
@@ -110,17 +90,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             }
 
             if (gc.Debug)
-            {
-                // Overlay
-                Vector2 sweetspotPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, gc.Kinect.sweetspot.Position);
-                Vector2 userPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, gc.Kinect.GetUserPosition());
-                Rectangle sweetspot = new Rectangle((int)sweetspotPosition.X - 10, (int)sweetspotPosition.Y - 10, 20, 20);
-                Rectangle userRect = new Rectangle((int)userPosition.X - 15, (int)userPosition.Y - 15, 30, 30);
-                spriteBatch.Begin();
-                spriteBatch.Draw(green, sweetspot, Color.White);
-                spriteBatch.Draw(red, userRect, Color.White);
-                spriteBatch.End();
-            }
+                drawDebug();
         }
     }
 }

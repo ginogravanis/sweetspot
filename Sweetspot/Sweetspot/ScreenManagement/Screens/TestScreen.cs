@@ -54,10 +54,7 @@ namespace SweetspotApp.ScreenManagement.Screens
 
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch spriteBatch = gc.SpriteBatch;
-            Viewport viewport = gc.GraphicsDevice.Viewport;
-            gc.GraphicsDevice.Clear(background);
-
+            base.Draw(gameTime);
             spriteBatch.Begin();
             spriteBatch.Draw(image, imageRect, Color.White);
             spriteBatch.DrawString(questionFont, questionText, questionPosition, Color.Black);
