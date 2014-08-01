@@ -187,10 +187,11 @@ namespace SweetspotApp.Database
             DataRow row = table.Rows[0];
             int id = Int32.Parse(row["id"].ToString());
             string question = row["question"].ToString();
-            string answer = row["answer"].ToString();
+            string answerText = row["answer_text"].ToString();
+            string answerFilename = row["answer_filename"].ToString();
             lastQuestionId = id;
 
-            return new QuizItem(id, question, answer);
+            return new QuizItem(id, question, answerText, answerFilename);
         }
 
         public void RoundCompleted(int roundId, int timestamp)

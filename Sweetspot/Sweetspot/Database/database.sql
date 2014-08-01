@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS "calibration" (
 CREATE TABLE IF NOT EXISTS "question" (
 	"id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE,
 	"question" VARCHAR,
-	"answer" VARCHAR
+	"answer_text" VARCHAR,
+	"answer_filename" VARCHAR
     );
 CREATE TABLE IF NOT EXISTS "sweetspot_bounds" (
 	"x" VARCHAR DEFAULT (null),
@@ -33,6 +34,6 @@ CREATE TABLE IF NOT EXISTS "user_position" (
 	"y" VARCHAR DEFAULT (null)
 	);
 
-INSERT OR IGNORE INTO question (id, question, answer) VALUES
-	(1, "What is the tallest building in Munich?", "1"),
-	(2, "Different question!", "1");
+INSERT OR IGNORE INTO question (id, question, answer_text, answer_filename) VALUES
+	(1, "What is the tallest building in Munich?", "Olympia tower", "1"),
+	(2, "Different question!", "Different answer", "1");

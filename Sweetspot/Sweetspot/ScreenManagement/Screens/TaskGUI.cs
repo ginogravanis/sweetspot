@@ -4,31 +4,27 @@ using SweetspotApp.Util;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
-    public class TestScreen : TrackingScreen
+    public class TaskGUI : TrackingScreen
     {
         protected static readonly int QUESTION_TEXT_MARGIN = 20;
 
-        protected int questionId;
-        protected string questionText;
-        protected string answerFilename;
+        protected Texture2D green;
+        protected Texture2D red;
         protected Texture2D image;
         protected SpriteFont questionFont;
         protected Rectangle imageRect;
         protected int questionHeight;
         protected Vector2 questionPosition;
 
-        public TestScreen(GameController gc, string cue, Mapping mapping, Sweetspot sweetspot)
+        public TaskGUI(GameController gc, string cue, Mapping mapping, Sweetspot sweetspot)
             : base(gc, cue, mapping, sweetspot)
-        {
-            QuizItem quizItem = gc.Database.GetQuestion();
-            questionId = quizItem.Id;
-            questionText = quizItem.Question;
-            answerFilename = quizItem.AnswerFilename;
-        }
+        { }
 
         public override void LoadContent()
         {
             base.LoadContent();
+            green = Content.Load<Texture2D>("texture\\green");
+            red = Content.Load<Texture2D>("texture\\red");
             image = Content.Load<Texture2D>(@"answers\" + answerFilename);
             questionFont = Content.Load<SpriteFont>(@"font\segoe_36");
         }
@@ -58,6 +54,18 @@ namespace SweetspotApp.ScreenManagement.Screens
             spriteBatch.Begin();
             spriteBatch.Draw(image, imageRect, Color.White);
             spriteBatch.DrawString(questionFont, questionText, questionPosition, Color.Black);
+            spriteBatch.End();
+        }
+
+        protected void drawDebug()
+        {
+            Vector2 sweetspotPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, gc.Kinect.sweetspot.Position);
+            Vector2 userPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, gc.Kinect.GetUserPosition());
+            Rectangle sweetspot = new Rectangle((int)sweetspotPosition.X - 10, (int)sweetspotPosition.Y - 10, 20, 20);
+            Rectangle userRect = new Rectangle((int)userPosition.X - 15, (int)userPosition.Y - 15, 30, 30);
+            spriteBatch.Begin();
+            spriteBatch.Draw(green, sweetspot, Color.White);
+            spriteBatch.Draw(red, userRect, Color.White);
             spriteBatch.End();
         }
     }

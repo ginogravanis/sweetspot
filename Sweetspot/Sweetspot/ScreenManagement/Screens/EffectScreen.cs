@@ -4,16 +4,13 @@ using SweetspotApp.Util;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
-    public class EffectScreen : TestScreen
+    public class EffectScreen : TaskGUI
     {
         protected static readonly float INTENSITY_SMOOTHING_FACTOR = 20f;
 
         protected Effect effect;
         protected float currentEffectIntensity = 1f;
         protected float targetEffectIntensity = 1f;
-
-        protected Texture2D green;
-        protected Texture2D red;
 
         public EffectScreen(GameController gc, string cue, Mapping mapping, Sweetspot sweetspot, Effect effect)
             : base(gc, cue, mapping, sweetspot)
@@ -24,8 +21,6 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void LoadContent()
         {
             base.LoadContent();
-            green = Content.Load<Texture2D>("texture\\green");
-            red = Content.Load<Texture2D>("texture\\red");
         }
 
         public override void Update(GameTime gameTime)
@@ -86,17 +81,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             spriteBatch.End();
 
             if (gc.Debug)
-            {
-                // Overlay
-                Vector2 sweetspotPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, gc.Kinect.sweetspot.Position);
-                Vector2 userPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, gc.Kinect.GetUserPosition());
-                Rectangle sweetspot = new Rectangle((int)sweetspotPosition.X - 10, (int)sweetspotPosition.Y - 10, 20, 20);
-                Rectangle user = new Rectangle((int)userPosition.X - 15, (int)userPosition.Y - 15, 30, 30);
-                spriteBatch.Begin();
-                spriteBatch.Draw(green, sweetspot, Color.White);
-                spriteBatch.Draw(red, user, Color.White);
-                spriteBatch.End();
-            }
+                drawDebug();
         }
     }
 }
