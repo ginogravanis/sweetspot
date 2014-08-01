@@ -26,8 +26,8 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected double completionTimerSnapshot = 0f;     // in seconds
         protected TaskState currentState;
 
-        public TaskScreen(GameController sm, string cue, Mapping mapping)
-            : base(sm)
+        public TaskScreen(GameController gc, string cue, Mapping mapping)
+            : base(gc)
         {
             elapsedTime = TimeSpan.FromSeconds(0);
             this.cue = cue;
@@ -38,7 +38,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void Initialize()
         {
             base.Initialize();
-            roundId = sm.Database.RecordRound(sm.GameId, cue, mapping);
+            roundId = gc.Database.RecordRound(gc.GameId, cue, mapping);
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
@@ -54,7 +54,7 @@ namespace SweetspotApp.ScreenManagement.Screens
                     {
                         changeState(TaskState.Completing);
                     }
-                    else if (!sm.Kinect.IsUserActive())
+                    else if (!gc.Kinect.IsUserActive())
                         changeState(TaskState.Aborting);
                     break;
 
@@ -82,12 +82,11 @@ namespace SweetspotApp.ScreenManagement.Screens
                     break;
                     
                 case TaskState.Aborting:
-                    if (sm.Kinect.IsUserActive())
+                    if (gc.Kinect.IsUserActive())
                         changeState(TaskState.Active);
                     else if (timeSinceStateChange >= TASK_ABORT_TIME)
                         NextScreen();
                     break;
-
             }
         }
 
@@ -117,25 +116,25 @@ namespace SweetspotApp.ScreenManagement.Screens
         {
             base.NextScreen();
             if (TaskCompleted)
-                sm.NextQuestion();
+                gc.NextQuestion();
             else
-                sm.EndGame();
+                gc.EndGame();
         }
 
         protected bool isTaskCompleted()
         {
-            return (sm.Input.IsKeyPressed(Keys.T) || timeSinceStateChange >= TASK_COMPLETE_TIME);
+            return (gc.Input.IsKeyPressed(Keys.T) || timeSinceStateChange >= TASK_COMPLETE_TIME);
         }
 
         protected void markTaskAsCompleted()
         {
-            sm.Database.RoundCompleted(roundId, (int)elapsedTime.TotalMilliseconds);
+            gc.Database.RoundCompleted(roundId, (int)elapsedTime.TotalMilliseconds);
             TaskCompleted = true;
         }
 
         protected bool isUserAnswering()
         {
-            var kinect = sm.Kinect;
+            var kinect = gc.Kinect;
             return kinect.IsUserActive() && 
                    kinect.sweetspot.IsUserAnswering(kinect.GetUserPosition());
         }

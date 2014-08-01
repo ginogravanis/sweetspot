@@ -10,12 +10,12 @@ namespace SweetspotApp.ScreenManagement
         public bool Initialized { get; protected set; }
         public bool Finished { get; protected set; }
 
-        protected GameController sm;
+        protected GameController gc;
         protected Color background;
 
-        public Screen(GameController sm)
+        public Screen(GameController gc)
         {
-            this.sm = sm;
+            this.gc = gc;
             background = Color.White;
         }
 
@@ -26,7 +26,7 @@ namespace SweetspotApp.ScreenManagement
 
         public virtual void LoadContent()
         {
-            Content = new ContentManager(sm.Game.Services, "Content");
+            Content = new ContentManager(gc.Game.Services, "Content");
         }
 
         public virtual void UnloadContent() { }
@@ -41,21 +41,21 @@ namespace SweetspotApp.ScreenManagement
 
         public virtual void Update(GameTime gameTime)
         {
-            if (sm.Input.IsKeyDown(Keys.Escape) || sm.Input.IsGamePadButtonPressed(Buttons.Back))
-                sm.Game.Exit();
+            if (gc.Input.IsKeyDown(Keys.Escape) || gc.Input.IsGamePadButtonPressed(Buttons.Back))
+                gc.Game.Exit();
 
-            if (sm.Input.IsKeyPressed(Keys.Space) || sm.Input.IsGamePadButtonPressed(Buttons.A))
+            if (gc.Input.IsKeyPressed(Keys.Space) || gc.Input.IsGamePadButtonPressed(Buttons.A))
             {
                 NextScreen();
             }
 
-            if (sm.Input.IsKeyPressed(Keys.F12) || sm.Input.IsGamePadButtonPressed(Buttons.RightTrigger))
-                sm.ToggleDebug();
+            if (gc.Input.IsKeyPressed(Keys.F12) || gc.Input.IsGamePadButtonPressed(Buttons.RightTrigger))
+                gc.ToggleDebug();
         }
 
         public virtual void Draw(GameTime gameTime)
         {
-            sm.Game.GraphicsDevice.Clear(background);
+            gc.Game.GraphicsDevice.Clear(background);
         }
 
         public virtual void NextScreen()

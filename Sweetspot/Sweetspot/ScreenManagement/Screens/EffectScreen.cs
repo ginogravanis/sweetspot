@@ -15,8 +15,8 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected Texture2D green;
         protected Texture2D red;
 
-        public EffectScreen(GameController sm, string cue, Mapping mapping, Sweetspot sweetspot, Effect effect)
-            : base(sm, cue, mapping, sweetspot)
+        public EffectScreen(GameController gc, string cue, Mapping mapping, Sweetspot sweetspot, Effect effect)
+            : base(gc, cue, mapping, sweetspot)
         {
             this.effect = effect;
         }
@@ -38,10 +38,10 @@ namespace SweetspotApp.ScreenManagement.Screens
         {
             targetEffectIntensity = 1.0f;
 
-            if (sm.Kinect.IsUserActive())
+            if (gc.Kinect.IsUserActive())
             {
-                float distanceFromSweetspot = sm.Kinect.sweetspot.GetDistanceFromSweetspot(sm.Kinect.GetUserPosition());
-                float margin = sm.Kinect.sweetspot.MAX_INTERACTION_RADIUS;
+                float distanceFromSweetspot = gc.Kinect.sweetspot.GetDistanceFromSweetspot(gc.Kinect.GetUserPosition());
+                float margin = gc.Kinect.sweetspot.MAX_INTERACTION_RADIUS;
 
                 if (distanceFromSweetspot <= margin)
                 {
@@ -77,8 +77,8 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            SpriteBatch spriteBatch = sm.SpriteBatch;
-            Viewport viewport = sm.GraphicsDevice.Viewport;
+            SpriteBatch spriteBatch = gc.SpriteBatch;
+            Viewport viewport = gc.GraphicsDevice.Viewport;
 
             effect.Parameters["width"].SetValue(image.Width);
             effect.Parameters["height"].SetValue(image.Height);
@@ -88,11 +88,11 @@ namespace SweetspotApp.ScreenManagement.Screens
             spriteBatch.Draw(image, imageRect, Color.White);
             spriteBatch.End();
 
-            if (sm.Debug)
+            if (gc.Debug)
             {
                 // Overlay
-                Vector2 sweetspotPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, sm.Kinect.sweetspot.Position);
-                Vector2 userPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, sm.Kinect.GetUserPosition());
+                Vector2 sweetspotPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, gc.Kinect.sweetspot.Position);
+                Vector2 userPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, gc.Kinect.GetUserPosition());
                 Rectangle sweetspot = new Rectangle((int)sweetspotPosition.X - 10, (int)sweetspotPosition.Y - 10, 20, 20);
                 Rectangle user = new Rectangle((int)userPosition.X - 15, (int)userPosition.Y - 15, 30, 30);
                 spriteBatch.Begin();

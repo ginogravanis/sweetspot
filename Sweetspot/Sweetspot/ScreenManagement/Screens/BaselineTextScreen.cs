@@ -30,8 +30,8 @@ namespace SweetspotApp.ScreenManagement.Screens
             { Direction.Back, "hinten" }
         };
 
-        public BaselineTextScreen(GameController sm, string cue, Mapping mapping, Sweetspot sweetspot)
-            : base(sm, cue, mapping, sweetspot)
+        public BaselineTextScreen(GameController gc, string cue, Mapping mapping, Sweetspot sweetspot)
+            : base(gc, cue, mapping, sweetspot)
         {
         }
 
@@ -42,7 +42,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             green = Content.Load<Texture2D>("texture\\green");
             red = Content.Load<Texture2D>("texture\\red");
             font = Content.Load<SpriteFont>(@"font\segoe_36");
-            Viewport viewport = sm.GraphicsDevice.Viewport;
+            Viewport viewport = gc.GraphicsDevice.Viewport;
             int textBoxHeight = (int)font.MeasureString("W").Y;
             textBox = new Rectangle(0, viewport.Height - textBoxHeight, viewport.Width, textBoxHeight);
             textPosition = new Vector2(textBox.Center.X, textBox.Y);
@@ -52,18 +52,18 @@ namespace SweetspotApp.ScreenManagement.Screens
         {
             base.Update(gameTime);
 
-            if (!sm.Kinect.IsUserActive())
+            if (!gc.Kinect.IsUserActive())
             {
                 userDetected = false;
                 return;
             }
 
             userDetected = true;
-            Vector2 userPosition = sm.Kinect.GetUserPosition();
-            Vector2 vectorToSweetspot = sm.Kinect.sweetspot.GetVectorToSweetspot(userPosition);
+            Vector2 userPosition = gc.Kinect.GetUserPosition();
+            Vector2 vectorToSweetspot = gc.Kinect.sweetspot.GetVectorToSweetspot(userPosition);
             Direction direction = CalculateDominantDirection(vectorToSweetspot);
 
-            targetReached = sm.Kinect.sweetspot.GetDistanceFromSweetspot(userPosition) == 0;
+            targetReached = gc.Kinect.sweetspot.GetDistanceFromSweetspot(userPosition) == 0;
             if (TaskCompleted || targetReached)
             {
                 text = "Stop!";
@@ -108,10 +108,10 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            SpriteBatch spriteBatch = sm.SpriteBatch;
-            Viewport viewport = sm.GraphicsDevice.Viewport;
+            SpriteBatch spriteBatch = gc.SpriteBatch;
+            Viewport viewport = gc.GraphicsDevice.Viewport;
 
-            sm.GraphicsDevice.Clear(Color.Black);
+            gc.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
             spriteBatch.Draw(image, new Rectangle(0, 0, viewport.Width, viewport.Height), Color.White * alpha);
             spriteBatch.Draw(black, textBox, Color.White);
@@ -119,11 +119,11 @@ namespace SweetspotApp.ScreenManagement.Screens
                 spriteBatch.DrawString(font, text, textPosition, Color.White);
             spriteBatch.End();
 
-            if (sm.Debug)
+            if (gc.Debug)
             {
                 // Overlay
-                Vector2 sweetspotPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, sm.Kinect.sweetspot.Position);
-                Vector2 userPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, sm.Kinect.GetUserPosition());
+                Vector2 sweetspotPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, gc.Kinect.sweetspot.Position);
+                Vector2 userPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, gc.Kinect.GetUserPosition());
                 Rectangle sweetspot = new Rectangle((int)sweetspotPosition.X - 10, (int)sweetspotPosition.Y - 10, 20, 20);
                 Rectangle userRect = new Rectangle((int)userPosition.X - 15, (int)userPosition.Y - 15, 30, 30);
                 spriteBatch.Begin();

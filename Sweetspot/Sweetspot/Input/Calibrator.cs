@@ -52,13 +52,9 @@ namespace SweetspotApp.Input
         public static Vector2 CreateAxis(Vector2 v1, Vector2 v2)
         {
             if (v1.X > v2.X)
-            {
                 return v1 - v2;
-            }
             else
-            {
                 return v2 - v1;
-            }
         }
 
         public static float CalculateAxisTilt(Vector2 axis)
@@ -69,13 +65,9 @@ namespace SweetspotApp.Input
         public static float ClampAngle(float radians)
         {
             if (radians <= -Math.PI)
-            {
                 radians += (float)(2 * Math.PI);
-            }
             else if (radians > Math.PI)
-            {
                 radians -= (float)(2 * Math.PI);
-            }
 
             return radians;
         }

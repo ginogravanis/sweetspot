@@ -10,8 +10,8 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected Sweetspot sweetspot;
         protected TimeSpan lastCaptureTime;
 
-        public TrackingScreen(GameController sm, string cue, Mapping mapping, Sweetspot sweetspot)
-            : base(sm, cue, mapping)
+        public TrackingScreen(GameController gc, string cue, Mapping mapping, Sweetspot sweetspot)
+            : base(gc, cue, mapping)
         {
             this.sweetspot = sweetspot;
             lastCaptureTime = TimeSpan.FromSeconds(-1);
@@ -20,8 +20,8 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void Initialize()
         {
             base.Initialize();
-            sm.Kinect.sweetspot = sweetspot;
-            sm.Database.SetSweetspot(roundId, sweetspot);
+            gc.Kinect.sweetspot = sweetspot;
+            gc.Database.SetSweetspot(roundId, sweetspot);
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
@@ -35,7 +35,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         {
             return !TaskCompleted &&
                 recordingIntervalElapsed() &&
-                sm.Kinect.IsUserActive();
+                gc.Kinect.IsUserActive();
         }
 
         protected bool recordingIntervalElapsed()
@@ -46,9 +46,9 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected void recordPosition()
         {
             lastCaptureTime = elapsedTime;
-            sm.Database.RecordUserPosition(
+            gc.Database.RecordUserPosition(
                 roundId,
-                sm.Kinect.GetUserPosition(),
+                gc.Kinect.GetUserPosition(),
                 (int)lastCaptureTime.TotalMilliseconds
                 );
         }
