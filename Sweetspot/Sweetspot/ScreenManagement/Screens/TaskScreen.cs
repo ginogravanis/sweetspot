@@ -59,9 +59,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             {
                 case TaskState.Active:
                     if (isUserAnswering())
-                    {
                         changeState(TaskState.Completing);
-                    }
                     else if (!gc.Kinect.IsUserActive())
                         changeState(TaskState.Aborting);
                     break;

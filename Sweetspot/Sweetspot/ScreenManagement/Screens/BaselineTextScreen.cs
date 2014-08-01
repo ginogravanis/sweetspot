@@ -8,23 +8,29 @@ namespace SweetspotApp.ScreenManagement.Screens
 {
     public class BaselineTextScreen : BaselineScreen
     {
-        protected SpriteFont font;
-        protected Rectangle textBox;
-        protected Vector2 textPosition;
-        protected string text = "";
+        protected static readonly int TIMER_HEIGHT = 25;
 
         public enum Direction { Right, Forward, Left, Back }
         public Dictionary<Direction, string> directionName = new Dictionary<Direction, string>
         {
-            { Direction.Right, "rechts" },
-            { Direction.Forward, "vorne" },
-            { Direction.Left, "links" },
-            { Direction.Back, "hinten" }
+            { Direction.Right, "right" },
+            { Direction.Forward, "forward" },
+            { Direction.Left, "left" },
+            { Direction.Back, "back" }
         };
+
+        protected SpriteFont font;
+        protected Rectangle textBox;
+        protected Vector2 textPosition;
+        protected string text = "";
+        protected Rectangle timer;
 
         public BaselineTextScreen(GameController gc, string cue, Mapping mapping, Sweetspot sweetspot)
             : base(gc, cue, mapping, sweetspot)
         {
+            int screenHeight = gc.GraphicsDevice.Viewport.Height;
+            int screenWidth = gc.GraphicsDevice.Viewport.Width;
+            timer = new Rectangle(0, screenHeight - TIMER_HEIGHT, screenWidth, TIMER_HEIGHT);
         }
 
         public override void LoadContent()
@@ -52,7 +58,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             }
             else
             {
-                text = "Bitte noch etwas nach " + directionName[direction];
+                text = "Please step " + directionName[direction];
                 alpha = Math.Max(alpha - (gameTime.ElapsedGameTime.Milliseconds / FADE_TIME), 0);
             }
 
@@ -93,11 +99,10 @@ namespace SweetspotApp.ScreenManagement.Screens
             spriteBatch.Draw(black, textBox, Color.White);
             if (userDetected)
                 spriteBatch.DrawString(font, text, textPosition, Color.White);
-
-            if (gc.Debug)
-                drawDebug();
-
             spriteBatch.End();
+            drawTimer(timer);
+            drawDebug();
+
         }
     }
 }
