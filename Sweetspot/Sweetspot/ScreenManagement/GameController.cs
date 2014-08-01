@@ -136,13 +136,13 @@ namespace SweetspotApp.ScreenManagement
                 effectListNode.Value.Item2,
                 SweetspotBounds.GenerateSweetspot(Kinect.GetUserPosition())
                 ));
-
         }
 
         public void EndGame()
         {
             effectListNode = effectListNode.NextOrFirst();
             Add(ScreenFactory.CreateTitleScreen(this));
+            Kinect.StopRecording();
         }
     }
 }

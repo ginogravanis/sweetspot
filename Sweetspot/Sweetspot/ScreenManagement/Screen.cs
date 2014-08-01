@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace SweetspotApp.ScreenManagement
 {
@@ -11,6 +12,8 @@ namespace SweetspotApp.ScreenManagement
         public bool Finished { get; protected set; }
 
         protected GameController gc;
+        protected SpriteBatch spriteBatch;
+        protected Viewport viewport;
         protected Color background;
 
         public Screen(GameController gc)
@@ -55,6 +58,8 @@ namespace SweetspotApp.ScreenManagement
 
         public virtual void Draw(GameTime gameTime)
         {
+            spriteBatch = gc.SpriteBatch;
+            viewport = gc.GraphicsDevice.Viewport;
             gc.Game.GraphicsDevice.Clear(background);
         }
 

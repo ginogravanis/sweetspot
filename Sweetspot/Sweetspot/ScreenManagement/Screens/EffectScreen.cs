@@ -77,9 +77,6 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            SpriteBatch spriteBatch = gc.SpriteBatch;
-            Viewport viewport = gc.GraphicsDevice.Viewport;
-
             effect.Parameters["width"].SetValue(image.Width);
             effect.Parameters["height"].SetValue(image.Height);
             effect.Parameters["elapsedTime"].SetValue((float)gameTime.TotalGameTime.TotalMilliseconds);
