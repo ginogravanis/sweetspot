@@ -7,15 +7,20 @@ namespace SweetspotApp.ScreenManagement.Screens
     public class EffectScreen : TaskGUI
     {
         protected static readonly float INTENSITY_SMOOTHING_FACTOR = 20f;
+        protected static readonly int TIMER_HEIGHT = 25;
 
         protected Effect effect;
         protected float currentEffectIntensity = 1f;
         protected float targetEffectIntensity = 1f;
+        protected Rectangle timer;
 
         public EffectScreen(GameController gc, string cue, Mapping mapping, Sweetspot sweetspot, Effect effect)
             : base(gc, cue, mapping, sweetspot)
         {
             this.effect = effect;
+            int screenHeight = gc.GraphicsDevice.Viewport.Height;
+            int screenWidth = gc.GraphicsDevice.Viewport.Width;
+            timer = new Rectangle(0, screenHeight - TIMER_HEIGHT, screenWidth, TIMER_HEIGHT);
         }
 
         public override void LoadContent()
@@ -79,9 +84,8 @@ namespace SweetspotApp.ScreenManagement.Screens
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, null, null, null, effect);
             spriteBatch.Draw(image, imageRect, Color.White);
             spriteBatch.End();
-
-            if (gc.Debug)
-                drawDebug();
+            drawTimer(timer);
+            drawDebug();
         }
     }
 }

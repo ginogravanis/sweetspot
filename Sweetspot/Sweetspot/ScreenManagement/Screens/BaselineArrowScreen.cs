@@ -9,6 +9,7 @@ namespace SweetspotApp.ScreenManagement.Screens
     {
         protected static readonly int COMPASS_WIDTH = 405;
         protected static readonly int COMPASS_HEIGHT = 200;
+        protected static readonly int TIMER_HEIGHT = 25;
 
         protected Texture2D arrow;
         protected Texture2D checkMark;
@@ -17,10 +18,15 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected Rectangle checkMarkRect;
         protected float compassOrientation;
         protected Effect perspectiveShader;
+        protected Rectangle timer;
 
         public BaselineArrowScreen(GameController gc, string cue, Mapping mapping, Sweetspot sweetspot)
             : base(gc, cue, mapping, sweetspot)
-        { }
+        {
+            int screenHeight = gc.GraphicsDevice.Viewport.Height;
+            int screenWidth = gc.GraphicsDevice.Viewport.Width;
+            timer = new Rectangle(0, screenHeight - TIMER_HEIGHT, screenWidth, TIMER_HEIGHT);
+        }
 
         public override void LoadContent()
         {
@@ -88,9 +94,8 @@ namespace SweetspotApp.ScreenManagement.Screens
                     spriteBatch.End();
                 }
             }
-
-            if (gc.Debug)
-                drawDebug();
+            drawTimer(timer);
+            drawDebug();
         }
     }
 }
