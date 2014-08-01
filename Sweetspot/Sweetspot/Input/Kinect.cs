@@ -259,7 +259,9 @@ namespace SweetspotApp.Input
 
         public IEnumerable<Tuple<WriteableBitmap, DateTime>> GetRemainingFrames()
         {
-            var remainingFrames = buffer;
+            var remainingFrames = new LinkedList<Tuple<WriteableBitmap, DateTime>>();
+            foreach (var frame in buffer)
+                remainingFrames.AddLast(frame);
             buffer.Clear();
             return remainingFrames;
         }
