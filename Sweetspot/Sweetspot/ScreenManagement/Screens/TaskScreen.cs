@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using SweetspotApp.Util;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
@@ -18,6 +19,9 @@ namespace SweetspotApp.ScreenManagement.Screens
 
         public bool TaskCompleted { get; protected set; }
 
+        protected int questionId;
+        protected string questionText;
+        protected string answerFilename;
         protected int roundId;
         protected string cue;
         protected Mapping mapping;
@@ -33,6 +37,10 @@ namespace SweetspotApp.ScreenManagement.Screens
             this.cue = cue;
             this.mapping = mapping;
             TaskCompleted = false;
+            QuizItem quizItem = gc.Database.GetQuestion();
+            questionId = quizItem.Id;
+            questionText = quizItem.Question;
+            answerFilename = quizItem.AnswerFilename;
         }
 
         public override void Initialize()
@@ -41,7 +49,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             roundId = gc.Database.RecordRound(gc.GameId, cue, mapping);
         }
 
-        public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
             elapsedTime += gameTime.ElapsedGameTime;
