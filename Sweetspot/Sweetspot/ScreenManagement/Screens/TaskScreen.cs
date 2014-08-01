@@ -6,7 +6,7 @@ namespace SweetspotApp.ScreenManagement.Screens
 {
     public enum TaskState { Active, Completing, GracePeriod, Aborting }
 
-    public class TaskScreen : TestScreen
+    public class TaskScreen : Screen
     {
         protected static readonly Color TASK_ACTIVE_COLOR = Color.White;
         protected static readonly Color TASK_COMPLETE_COLOR = Color.Chartreuse;

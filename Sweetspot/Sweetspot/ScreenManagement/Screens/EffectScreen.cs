@@ -4,7 +4,7 @@ using SweetspotApp.Util;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
-    public class EffectScreen : TrackingScreen
+    public class EffectScreen : TestScreen
     {
         protected static readonly float INTENSITY_SMOOTHING_FACTOR = 20f;
 
