@@ -6,7 +6,7 @@ using SweetspotApp.Util;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
-    public class BaselineTextScreen : TrackingScreen
+    public class BaselineTextScreen : TestScreen
     {
         protected static readonly float FADE_TIME = 200;    // in ms
 

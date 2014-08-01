@@ -5,7 +5,7 @@ using SweetspotApp.Util;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
-    public class BaselineArrowScreen : TrackingScreen
+    public class BaselineArrowScreen : TestScreen
     {
         protected static readonly int COMPASS_WIDTH = 405;
         protected static readonly int COMPASS_HEIGHT = 200;

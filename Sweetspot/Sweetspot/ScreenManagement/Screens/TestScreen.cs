@@ -4,7 +4,7 @@ using SweetspotApp.Util;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
-    public class TestScreen : Screen
+    public class TestScreen : TrackingScreen
     {
         protected static readonly int QUESTION_TEXT_MARGIN = 20;
 
@@ -17,8 +17,8 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected int questionHeight;
         protected Vector2 questionPosition;
 
-        public TestScreen(GameController sm)
-            : base(sm)
+        public TestScreen(GameController sm, string cue, Mapping mapping, Sweetspot sweetspot)
+            : base(sm, cue, mapping, sweetspot)
         {
             QuizItem quizItem = sm.Database.GetQuestion();
             questionId = quizItem.Id;
