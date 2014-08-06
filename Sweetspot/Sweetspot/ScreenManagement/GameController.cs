@@ -44,7 +44,7 @@ namespace SweetspotApp.ScreenManagement
         {
             base.Initialize();
 
-            Cue[] cues = { Cue.Pixelate, Cue.Brightness, Cue.Contrast, Cue.BaselineArrow };
+            Cue[] cues = { Cue.Pixelate, Cue.Brightness, Cue.Contrast, Cue.Baseline };
             
             foreach (var cue in cues)
                     effectList.AddLast(Tuple.Create(cue, Mapping.Linear));

@@ -89,7 +89,6 @@
     <Compile Include="ScreenManagement\Cue.cs" />
     <Compile Include="ScreenManagement\Screen.cs" />
     <Compile Include="ScreenManagement\GameController.cs" />
-    <Compile Include="ScreenManagement\Screens\BaselineArrowScreen.cs" />
     <Compile Include="Input\Calibrator.cs" />
     <Compile Include="ScreenManagement\Screens\BaselineScreen.cs" />
     <Compile Include="ScreenManagement\Screens\Calibration\CalibrationScreen.cs" />
@@ -97,7 +96,6 @@
     <Compile Include="ScreenManagement\Screens\EffectScreen.cs" />
     <Compile Include="ScreenManagement\Screens\TaskScreen.cs" />
     <Compile Include="ScreenManagement\Screens\TaskGUI.cs" />
-    <Compile Include="ScreenManagement\Screens\BaselineTextScreen.cs" />
     <Compile Include="ScreenManagement\Screens\Calibration\SensorPanel.cs" />
     <Compile Include="ScreenManagement\ScreenFactory.cs" />
     <Compile Include="ScreenManagement\Screens\TrackingScreen.cs" />

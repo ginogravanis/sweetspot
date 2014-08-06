@@ -100,22 +100,9 @@ namespace SweetspotApp.ScreenManagement.Screens
         {
             currentState = newState;
             timeSinceStateChange = 0f;
-            switch (newState)
-            {
-                case TaskState.Active:
-                    background = TASK_ACTIVE_COLOR;
-                    break;
-                case TaskState.Completing:
-                    background = TASK_COMPLETE_COLOR;
-                    timeSinceStateChange = completionTimerSnapshot;
-                    break;
-                case TaskState.Aborting:
-                    background = TASK_ABORT_COLOR;
-                    break;
-                case TaskState.GracePeriod:
-                    background = TASK_GRACE_COLOR;
-                    break;
-            }
+
+            if (currentState == TaskState.Completing)
+                timeSinceStateChange = completionTimerSnapshot;
         }
 
         public override void NextScreen()
