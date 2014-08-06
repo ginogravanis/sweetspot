@@ -24,11 +24,8 @@ namespace SweetspotApp.ScreenManagement
 
             switch (cue)
             {
-                case Cue.BaselineArrow:
-                    screen = new BaselineArrowScreen(gc, StringEnum.GetStringValue(cue), mapping, sweetspot);
-                    break;
-                case Cue.BaselineText:
-                    screen = new BaselineTextScreen(gc, StringEnum.GetStringValue(cue), mapping, sweetspot);
+                case Cue.Baseline:
+                    screen = new BaselineScreen(gc, StringEnum.GetStringValue(cue), mapping, sweetspot);
                     break;
                 case Cue.Brightness:
                     effect = gc.Game.Content.Load<Effect>(@"shader\BrightnessShader");

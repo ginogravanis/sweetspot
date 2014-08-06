@@ -116,6 +116,7 @@ namespace SweetspotApp.ScreenManagement.Screens
 
         public override void Draw(GameTime gameTime)
         {
+            base.Draw(gameTime);
             GraphicsDevice graphics = gc.GraphicsDevice;
             graphics.Clear(Color.Black);
             spriteBatch.Begin();
