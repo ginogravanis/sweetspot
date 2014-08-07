@@ -15,13 +15,14 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected static readonly Color TASK_GRACE_COLOR = Color.Teal;
         protected static readonly double TASK_COMPLETE_TIME = 5f;       // in seconds
         protected static readonly double TASK_ABORT_TIME = 5f;        // in seconds
-        protected static readonly double TASK_GRACE_TIME = 2.5f;        // in seconds
+        protected static readonly double TASK_GRACE_TIME = 12.5f;        // in seconds
 
         public bool TaskCompleted { get; protected set; }
 
         protected int questionId;
         protected string questionText;
         protected string answerFilename;
+        protected string answerText;
         protected int roundId;
         protected string cue;
         protected Mapping mapping;
@@ -41,6 +42,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             questionId = quizItem.Id;
             questionText = quizItem.Question;
             answerFilename = quizItem.AnswerFilename;
+            answerText = quizItem.AnswerText;
         }
 
         public override void Initialize()

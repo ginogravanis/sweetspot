@@ -108,8 +108,9 @@ namespace SweetspotApp.ScreenManagement.Screens
                     spriteBatch.End();
                 }
             }
-            drawTimer(timer);
             drawDebug();
+            drawTimer(timer);
+            drawAnswerText();
         }
     }
 }
