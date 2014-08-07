@@ -45,19 +45,19 @@ namespace SweetspotApp.ScreenManagement.Screens
             Viewport viewport = gc.GraphicsDevice.Viewport;
             compass = new Rectangle(
                 viewport.Width - COMPASS_WIDTH,
-                viewport.Height - COMPASS_HEIGHT,
+                viewport.Height - COMPASS_HEIGHT - timer.Height,
                 COMPASS_WIDTH,
                 COMPASS_HEIGHT
             );
             arrowRect = new Rectangle(
                 compass.Left + (COMPASS_WIDTH - arrow.Bounds.Width) / 2,
-                compass.Bottom - arrow.Bounds.Height / 3,
+                compass.Bottom - arrow.Bounds.Height / 3 - timer.Height,
                 arrow.Bounds.Width,
                 arrow.Bounds.Height / 3
             );
             checkMarkRect = new Rectangle(
                 compass.Left + (COMPASS_WIDTH - checkMark.Bounds.Width / 2) / 2,
-                compass.Top + (COMPASS_WIDTH - checkMark.Bounds.Height) / 2,
+                compass.Top + (COMPASS_WIDTH - checkMark.Bounds.Height) / 2 - timer.Height,
                 checkMark.Bounds.Width / 2,
                 checkMark.Bounds.Height / 2
             );
@@ -89,7 +89,6 @@ namespace SweetspotApp.ScreenManagement.Screens
             base.Draw(gameTime);
             spriteBatch.Begin();
             spriteBatch.Draw(black, imageRect, background * alpha);
-            spriteBatch.Draw(black, compass, Color.White);
             spriteBatch.End();
             if (userDetected)
             {
