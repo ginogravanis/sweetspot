@@ -10,7 +10,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected static readonly float FADE_TIME = 200;    // in ms
         protected static readonly int COMPASS_WIDTH = 405;
         protected static readonly int COMPASS_HEIGHT = 200;
-        protected static readonly int TIMER_HEIGHT = 25;
+        protected static readonly int TIMER_HEIGHT = 50;
 
         protected Texture2D black;
         protected bool userDetected = false;
