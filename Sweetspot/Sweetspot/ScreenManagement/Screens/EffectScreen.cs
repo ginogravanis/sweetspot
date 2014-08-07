@@ -84,8 +84,9 @@ namespace SweetspotApp.ScreenManagement.Screens
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, null, null, null, effect);
             spriteBatch.Draw(image, imageRect, Color.White);
             spriteBatch.End();
-            drawTimer(timer);
             drawDebug();
+            drawTimer(timer);
+            drawAnswerText();
         }
     }
 }
