@@ -7,7 +7,7 @@ namespace SweetspotApp.ScreenManagement.Screens
     public class EffectScreen : TaskGUI
     {
         protected static readonly float INTENSITY_SMOOTHING_FACTOR = 20f;
-        protected static readonly int TIMER_HEIGHT = 25;
+        protected static readonly int TIMER_HEIGHT = 50;
 
         protected Effect effect;
         protected float currentEffectIntensity = 1f;

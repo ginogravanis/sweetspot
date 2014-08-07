@@ -7,8 +7,8 @@ namespace SweetspotApp.ScreenManagement.Screens
 
     public class TitleScreen : Screen
     {
-        static readonly float FADE_TIME = 200;                // in ms
-        static readonly float DELAY = 300;                    // in ms
+        static readonly float FADE_TIME = 200;  // in ms
+        static readonly float DELAY = 300;  // in ms
 
         protected SpriteFont titleFont;
         protected SpriteFont instructionFont;
@@ -32,8 +32,8 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void LoadContent()
         {
             base.LoadContent();
-            titleFont = Content.Load<SpriteFont>(@"font\segoe_72");
-            instructionFont = Content.Load<SpriteFont>(@"font\segoe_36");
+            titleFont = Content.Load<SpriteFont>(@"font\segoe_72b");
+            instructionFont = Content.Load<SpriteFont>(@"font\segoe_36b");
 
             Viewport viewport = gc.GraphicsDevice.Viewport;
             Vector2 titleTextSize = titleFont.MeasureString(titleText);
