@@ -18,7 +18,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected SpriteFont questionFont;
         protected Rectangle imageRect;
         protected int questionBoxHeight;
-        protected List<string> lines = new List<string>();
+        protected List<string> questionLines = new List<string>();
         protected List<Vector2> linePosition = new List<Vector2>();
 
         public TaskGUI(GameController gc, string cue, Mapping mapping, Sweetspot sweetspot)
@@ -34,51 +34,49 @@ namespace SweetspotApp.ScreenManagement.Screens
             questionFont = Content.Load<SpriteFont>(@"font\segoe_36");
         }
 
-        protected void splitRows(List<string> words, int lineSize)
-        {
-            while (words.Count > 0)
-            {
-                var firstLine = getFirstLine(words, lineSize);
-                lines.Add(String.Join(" ", firstLine));
-                words = words.GetRange(firstLine.Count, words.Count - firstLine.Count);
-            }
-        }
+        //protected void splitRows(List<string> words, int lineSize)
+        //{
+        //    while (words.Count > 0)
+        //    {
+        //        var firstLine = GetFirstLine(words, lineSize, questionFont);
+        //        lines.Add(String.Join(" ", firstLine));
+        //        words = words.GetRange(firstLine.Count, words.Count - firstLine.Count);
+        //    }
+        //}
 
-        protected List<string> getFirstLine(List<string> words, int lineSize)
-        {
-            int maxLength = 0;
-            for (int wordCount = 1; wordCount <= words.Count; wordCount++)
-            {
-                string line = String.Join(" ", words.GetRange(0, wordCount));
-                if (questionFont.MeasureString(line).X <= lineSize)
-                    maxLength = wordCount;
-                else
-                    break;
-            }
-            return words.GetRange(0, maxLength);
-        }
+        //protected List<string> getFirstLine(List<string> words, int lineSize)
+        //{
+        //    int maxLength = 0;
+        //    for (int wordCount = 1; wordCount <= words.Count; wordCount++)
+        //    {
+        //        string line = String.Join(" ", words.GetRange(0, wordCount));
+        //        if (questionFont.MeasureString(line).X <= lineSize)
+        //            maxLength = wordCount;
+        //        else
+        //            break;
+        //    }
+        //    return words.GetRange(0, maxLength);
+        //}
         
         public override void Initialize()
         {
             base.Initialize();
             Viewport viewport = gc.GraphicsDevice.Viewport;
 
-            List<string> questionWords = new List<string> (
-                questionText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                );
-
-            splitRows(questionWords, viewport.Width - 2 * QUESTION_HORIZONTAL_MARGIN);
+            questionLines = SplitString.SplitRows(questionText, viewport.Width - 2 * QUESTION_HORIZONTAL_MARGIN, questionFont);
 
             Vector2 questionLineBound;
-            for (int i = 0; i < lines.Count ; i++)
+            for (int i = 0; i < questionLines.Count ; i++)
             {
-                questionLineBound = questionFont.MeasureString(lines[i]);
+                questionLineBound = questionFont.MeasureString(questionLines[i]);
                 float questionX = (viewport.Width - questionLineBound.X) / 2;
-                float questionY = QUESTION_VERTICAL_MARGIN + i * (QUESTION_LINE_SPACING + questionFont.MeasureString(lines[i]).Y);
+                float questionY = QUESTION_VERTICAL_MARGIN + i * (QUESTION_LINE_SPACING + questionFont.MeasureString(questionLines[i]).Y);
                 linePosition.Add(new Vector2(questionX, questionY));
             }
 
-            questionBoxHeight = (int)questionFont.MeasureString(lines[0]).Y * lines.Count + 2 * QUESTION_VERTICAL_MARGIN + QUESTION_LINE_SPACING * (lines.Count - 1);
+            questionBoxHeight = (int)questionFont.MeasureString(questionLines[0]).Y * questionLines.Count +
+                2 * QUESTION_VERTICAL_MARGIN +
+                QUESTION_LINE_SPACING * (questionLines.Count - 1);
 
             imageRect = new Rectangle(
                 0,
@@ -94,8 +92,8 @@ namespace SweetspotApp.ScreenManagement.Screens
             base.Draw(gameTime);
             spriteBatch.Begin();
             spriteBatch.Draw(image, imageRect, Color.White);
-            for (int i = 0; i < lines.Count; i++)
-                spriteBatch.DrawString(questionFont, lines[i], linePosition[i], Color.Black);
+            for (int i = 0; i < questionLines.Count; i++)
+                spriteBatch.DrawString(questionFont, questionLines[i], linePosition[i], Color.Black);
             spriteBatch.End();
         }
 
