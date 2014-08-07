@@ -32,7 +32,7 @@ namespace SweetspotApp.Input
         protected Vector2 lastUserPosition;
         protected bool userActive;
         protected bool record = false;
-        protected int counter;
+        protected int frameCounter;
         protected int gameId;
 
         public KinectManager(ICalibrationProvider calibrationProvider)
@@ -176,8 +176,8 @@ namespace SweetspotApp.Input
             encoder.Frames.Add(BitmapFrame.Create(bitmap));
 
             string formattedTime = time.ToString("hh'-'mm'-'ss");
-            string filename = Path.Combine(folder, formattedTime + " - " + counter + ".png");
-            counter++;
+            string filename = Path.Combine(folder, formattedTime + " - " + frameCounter + ".png");
+            frameCounter++;
 
             try
             {
@@ -212,6 +212,7 @@ namespace SweetspotApp.Input
         {
             record = true;
             this.gameId = gameId;
+            frameCounter = 0;
 
             foreach (Kinect sensor in sensors)
             {
