@@ -20,7 +20,8 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected Texture2D yellow;
         protected Texture2D red;
         protected Texture2D image;
-        protected SpriteFont quizFont;
+        protected SpriteFont questionFont;
+        protected SpriteFont answerFont;
         protected SpriteFont timerFont;
         protected Rectangle imageRect;
         protected Rectangle answerRect;
@@ -41,7 +42,8 @@ namespace SweetspotApp.ScreenManagement.Screens
             yellow = Content.Load<Texture2D>("texture\\yellow");
             red = Content.Load<Texture2D>("texture\\red");
             image = Content.Load<Texture2D>(@"answers\" + answerFilename);
-            quizFont = Content.Load<SpriteFont>(@"font\segoe_36b");
+            questionFont = Content.Load<SpriteFont>(@"font\segoe_36b");
+            answerFont = Content.Load<SpriteFont>(@"font\segoe_44b");
             timerFont = Content.Load<SpriteFont>(@"font\segoe_24b");
         }
         
@@ -51,28 +53,28 @@ namespace SweetspotApp.ScreenManagement.Screens
             Viewport viewport = gc.GraphicsDevice.Viewport;
             ANSWER_HEIGHT = (int)(viewport.Height * .63f);
 
-            questionLines = SplitString.SplitRows(questionText, viewport.Width - 2 * QUESTION_HORIZONTAL_MARGIN, quizFont);
-            answerLines = SplitString.SplitRows(answerText, viewport.Width/2, quizFont);
+            questionLines = SplitString.SplitRows(questionText, viewport.Width - 2 * QUESTION_HORIZONTAL_MARGIN, questionFont);
+            answerLines = SplitString.SplitRows(answerText, viewport.Width/2, questionFont);
 
             Vector2 questionLineBound;
             for (int i = 0; i < questionLines.Count ; i++)
             {
-                questionLineBound = quizFont.MeasureString(questionLines[i]);
+                questionLineBound = questionFont.MeasureString(questionLines[i]);
                 float questionX = (viewport.Width - questionLineBound.X) / 2;
-                float questionY = QUESTION_VERTICAL_MARGIN + i * (QUESTION_LINE_SPACING + quizFont.MeasureString(questionLines[i]).Y);
+                float questionY = QUESTION_VERTICAL_MARGIN + i * (QUESTION_LINE_SPACING + questionFont.MeasureString(questionLines[i]).Y);
                 questionLinePositions.Add(new Vector2(questionX, questionY));
             }
 
-            questionBoxHeight = (int)quizFont.MeasureString(questionLines[0]).Y * questionLines.Count +
+            questionBoxHeight = (int)questionFont.MeasureString(questionLines[0]).Y * questionLines.Count +
                 2 * QUESTION_VERTICAL_MARGIN +
                 QUESTION_LINE_SPACING * (questionLines.Count - 1);
 
             Vector2 answerLineDimensions;
             for (int i = 0; i < answerLines.Count; i++)
             {
-                answerLineDimensions = quizFont.MeasureString(answerLines[i]);
+                answerLineDimensions = questionFont.MeasureString(answerLines[i]);
                 float answerX = (viewport.Width - answerLineDimensions.X) / 2;
-                float answerY = ANSWER_PERCENTAGE * viewport.Height + i * (QUESTION_LINE_SPACING + quizFont.MeasureString(answerLines[i]).Y);
+                float answerY = ANSWER_PERCENTAGE * viewport.Height + i * (QUESTION_LINE_SPACING + questionFont.MeasureString(answerLines[i]).Y);
                 answerLinePositions.Add(new Vector2(answerX, answerY));
             }
 
@@ -90,7 +92,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             spriteBatch.Begin();
             spriteBatch.Draw(image, imageRect, Color.White);
             for (int i = 0; i < questionLines.Count; i++)
-                spriteBatch.DrawString(quizFont, questionLines[i], questionLinePositions[i], Color.Black);
+                spriteBatch.DrawString(questionFont, questionLines[i], questionLinePositions[i], Color.Black);
             spriteBatch.End();
         }
 
@@ -171,11 +173,11 @@ namespace SweetspotApp.ScreenManagement.Screens
             spriteBatch.Begin();
             for (int i = 0; i < answerLines.Count; i++)
             {
-                spriteBatch.DrawString(quizFont, answerLines[i], answerLinePositions[i] + new Vector2(1, 1), Color.Black);
-                spriteBatch.DrawString(quizFont, answerLines[i], answerLinePositions[i] + new Vector2(-1, 1), Color.Black);
-                spriteBatch.DrawString(quizFont, answerLines[i], answerLinePositions[i] + new Vector2(1, -1), Color.Black);
-                spriteBatch.DrawString(quizFont, answerLines[i], answerLinePositions[i] + new Vector2(-1, -1), Color.Black);
-                spriteBatch.DrawString(quizFont, answerLines[i], answerLinePositions[i], Color.White);
+                spriteBatch.DrawString(answerFont, answerLines[i], answerLinePositions[i] + new Vector2(1, 1), Color.Black);
+                spriteBatch.DrawString(answerFont, answerLines[i], answerLinePositions[i] + new Vector2(-1, 1), Color.Black);
+                spriteBatch.DrawString(answerFont, answerLines[i], answerLinePositions[i] + new Vector2(1, -1), Color.Black);
+                spriteBatch.DrawString(answerFont, answerLines[i], answerLinePositions[i] + new Vector2(-1, -1), Color.Black);
+                spriteBatch.DrawString(answerFont, answerLines[i], answerLinePositions[i], Color.White);
             }
             spriteBatch.End();
         }
