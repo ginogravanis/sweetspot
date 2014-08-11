@@ -7,11 +7,11 @@ namespace SweetspotApp.Util
     {
         // Following numbers in meters.
         public readonly float MAX_INTERACTION_RADIUS = 2f;
-        public readonly float RADIUS = 0.1f;
+        public readonly float RADIUS = 0.2f;
 
         // Following numbers in percent of MAX_INTERACTION_RADIUS.
-        public readonly float ANSWER_RADIUS = 0.02f;
-        protected readonly float SAFTEY_RADIUS = 0.2f;
+        public readonly float ANSWER_RADIUS = 0.05f;
+        protected readonly float SAFTEY_RADIUS = 0.4f;
 
         public Vector2 Position { get; set; }
 

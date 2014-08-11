@@ -9,11 +9,7 @@ namespace SweetspotApp.ScreenManagement.Screens
 
     public class TaskScreen : Screen
     {
-        protected static readonly Color TASK_ACTIVE_COLOR = Color.White;
-        protected static readonly Color TASK_COMPLETE_COLOR = Color.Chartreuse;
-        protected static readonly Color TASK_ABORT_COLOR = Color.MediumVioletRed;
-        protected static readonly Color TASK_GRACE_COLOR = Color.Teal;
-        protected static readonly double TASK_COMPLETE_TIME = 5f;       // in seconds
+        protected static readonly double TASK_COMPLETE_TIME = 7f;       // in seconds
         protected static readonly double TASK_ABORT_TIME = 5f;        // in seconds
         protected static readonly double TASK_GRACE_TIME = 12.5f;        // in seconds
 
