@@ -13,8 +13,8 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected static readonly int QUESTION_HORIZONTAL_MARGIN = 20;
         protected static readonly string COMPLETE_TIMER_CAPTION = "Next question in {0}...";
         protected static readonly string ABORT_TIMER_CAPTION = "Game ends in {0}...";
-        protected static readonly float ANSWER_PERCENTAGE = 0.5f;
         protected static readonly float ANSWER_HEIGHT = 0.5f;
+        protected static readonly float ANSWER_PERCENTAGE = 0.25f;
 
         protected Texture2D green;
         protected Texture2D yellow;
