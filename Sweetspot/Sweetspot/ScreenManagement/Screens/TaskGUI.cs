@@ -13,6 +13,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected static readonly int QUESTION_HORIZONTAL_MARGIN = 20;
         protected static readonly string COMPLETE_TIMER_CAPTION = "Next question in {0}...";
         protected static readonly string ABORT_TIMER_CAPTION = "Game ends in {0}...";
+        protected static readonly string TIMEOUT_CAPTION = "Skipping question in {0}...";
         protected static readonly float ANSWER_HEIGHT = 0.5f;
         protected static readonly float ANSWER_PERCENTAGE = 0.25f;
 
@@ -112,24 +113,29 @@ namespace SweetspotApp.ScreenManagement.Screens
 
         protected void drawTimer(Rectangle bar)
         {
-            switch (currentState)
+            switch (currentGameState)
             {
-                case TaskState.Active:
+                case GameState.Active:
                     return;
 
-                case TaskState.Aborting:
+                case GameState.Aborting:
                     drawTimerBar(bar, red, timeSinceStateChange, TASK_ABORT_TIME);
                     drawTimerCaption(ABORT_TIMER_CAPTION, bar, timeSinceStateChange, TASK_ABORT_TIME);
                     break;
 
-                case TaskState.Completing:
+                case GameState.Completing:
                     drawTimerBar(bar, green, timeSinceStateChange, TASK_COMPLETE_TIME);
                     drawTimerCaption(COMPLETE_TIMER_CAPTION, bar, timeSinceStateChange, TASK_COMPLETE_TIME);
                     break;
 
-                case TaskState.GracePeriod:
+                case GameState.GracePeriod:
                     drawTimerBar(bar, yellow, completionTimerSnapshot, TASK_COMPLETE_TIME);
                     drawTimerCaption(COMPLETE_TIMER_CAPTION, bar, completionTimerSnapshot, TASK_COMPLETE_TIME);
+                    break;
+
+                case GameState.Timeout:
+                    drawTimerBar(bar, red, timeSinceStateChange, TASK_TIMEOUT_TIME);
+                    drawTimerCaption(TIMEOUT_CAPTION, bar, timeSinceStateChange, TASK_TIMEOUT_TIME);
                     break;
             }
         }
@@ -162,7 +168,7 @@ namespace SweetspotApp.ScreenManagement.Screens
 
         protected void drawAnswerText()
         {
-            if (TaskState.Completing != currentState)
+            if (GameState.Completing != currentGameState)
                 return;
             
             bool showAnswer = timeSinceStateChange / TASK_COMPLETE_TIME >= ANSWER_PERCENTAGE;
