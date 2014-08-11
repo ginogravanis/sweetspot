@@ -5,13 +5,15 @@ using SweetspotApp.Util;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
-    public enum TaskState { Active, Completing, GracePeriod, Aborting }
+    public enum GameState { Active, Completing, GracePeriod, Aborting, Timeout }
+    public enum TaskState { Complete, Fail, Skip }
 
     public class TaskScreen : Screen
     {
         protected static readonly double TASK_COMPLETE_TIME = 7f;       // in seconds
         protected static readonly double TASK_ABORT_TIME = 5f;        // in seconds
-        protected static readonly double TASK_GRACE_TIME = 12.5f;        // in seconds
+        protected static readonly double TASK_GRACE_TIME = 1.5f;        // in seconds
+        protected static readonly double TASK_TIMEOUT_TIME = 3f;        // in seconds
 
         public bool TaskCompleted { get; protected set; }
 
@@ -25,7 +27,9 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected TimeSpan elapsedTime;
         protected double timeSinceStateChange = 0f;     // in seconds
         protected double completionTimerSnapshot = 0f;     // in seconds
-        protected TaskState currentState;
+        protected double timeoutTimer = 40f;     //in seconds
+        protected GameState currentGameState;
+        protected TaskState currentTaskState;
 
         public TaskScreen(GameController gc, string cue, Mapping mapping)
             : base(gc)
@@ -53,21 +57,24 @@ namespace SweetspotApp.ScreenManagement.Screens
             base.Update(gameTime);
             elapsedTime += gameTime.ElapsedGameTime;
             timeSinceStateChange += gameTime.ElapsedGameTime.TotalSeconds;
+            timeoutTimer -= gameTime.ElapsedGameTime.TotalSeconds;
 
-            switch (currentState)
+            switch (currentGameState)
             {
-                case TaskState.Active:
+                case GameState.Active:
                     if (isUserAnswering())
-                        changeState(TaskState.Completing);
+                        changeGameState(GameState.Completing);
                     else if (!gc.Kinect.IsUserActive())
-                        changeState(TaskState.Aborting);
+                        changeGameState(GameState.Aborting);
+                    else if (timeoutTimer <= TASK_TIMEOUT_TIME)
+                        changeGameState(GameState.Timeout);
                     break;
 
-                case TaskState.Completing:
+                case GameState.Completing:
                     if (!isUserAnswering())
                     {
                         completionTimerSnapshot = timeSinceStateChange;
-                        changeState(TaskState.GracePeriod);
+                        changeGameState(GameState.GracePeriod);
                     }
                     else if (timeSinceStateChange >= TASK_COMPLETE_TIME)
                     {
@@ -76,41 +83,69 @@ namespace SweetspotApp.ScreenManagement.Screens
                     }
                     break;
 
-                case TaskState.GracePeriod:
+                case GameState.GracePeriod:
                     if (timeSinceStateChange >= TASK_GRACE_TIME)
                     {
                         completionTimerSnapshot = 0f;
-                        changeState(TaskState.Active);
+                        changeGameState(GameState.Active);
                     }
                     else if (isUserAnswering())
-                        changeState(TaskState.Completing);
+                        changeGameState(GameState.Completing);
                     break;
                     
-                case TaskState.Aborting:
-                    if (gc.Kinect.IsUserActive())
-                        changeState(TaskState.Active);
+                case GameState.Aborting:
+                    if (isUserAnswering())
+                        changeGameState(GameState.Active);
                     else if (timeSinceStateChange >= TASK_ABORT_TIME)
+                    {
+                        markGamekAsFail();
                         NextScreen();
+                    }
+                    break;
+
+                case GameState.Timeout:
+                    Console.WriteLine(timeoutTimer);
+                    if (isUserAnswering())
+                        changeGameState(GameState.Active);
+                    else if (timeoutTimer <= 0)
+                    {
+                        markTaskAsIncomplete();
+                        NextScreen();
+                    }
                     break;
             }
         }
 
-        protected void changeState(TaskState newState)
+        protected void changeGameState(GameState newState)
         {
-            currentState = newState;
+            currentGameState = newState;
             timeSinceStateChange = 0f;
 
-            if (currentState == TaskState.Completing)
+            if (currentGameState == GameState.Completing)
                 timeSinceStateChange = completionTimerSnapshot;
+
+            if (currentGameState != GameState.Timeout)
+                timeoutTimer = 5;
         }
 
         public override void NextScreen()
         {
             base.NextScreen();
-            if (TaskCompleted)
-                gc.NextQuestion();
-            else
-                gc.EndGame();
+
+            switch (currentTaskState)
+            {
+                case TaskState.Complete:
+                    gc.NextQuestion();
+                    break;
+
+                case TaskState.Fail:
+                    gc.EndGame();
+                    break;
+
+                case TaskState.Skip:
+                    gc.NextQuestion();
+                    break;
+            }
         }
 
         protected bool isTaskCompleted()
@@ -121,7 +156,17 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected void markTaskAsCompleted()
         {
             gc.Database.RoundCompleted(roundId, (int)elapsedTime.TotalMilliseconds);
-            TaskCompleted = true;
+            currentTaskState = TaskState.Complete;
+        }
+
+        protected void markTaskAsIncomplete()
+        {
+            currentTaskState = TaskState.Skip;
+        }
+
+        protected void markGamekAsFail()
+        {
+            currentTaskState = TaskState.Fail;
         }
 
         protected bool isUserAnswering()
