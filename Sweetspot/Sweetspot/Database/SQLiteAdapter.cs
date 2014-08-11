@@ -152,7 +152,7 @@ namespace SweetspotApp.Database
             return int.Parse(maxRoundId) + 1;
         }
 
-        public int RecordRound(int gameId, string cue, Mapping mapping)
+        public int RecordRound(int gameId, DateTime startTime, string cue, Mapping mapping)
         {
             int roundId = GetNewRoundId();
             var round = new Dictionary<string, string>
@@ -161,7 +161,8 @@ namespace SweetspotApp.Database
                 {"game_id", gameId.ToString()},
                 {"cue", cue},
                 {"mapping", mapping.ToString()},
-                {"begin_ms", DateTime.Now.Millisecond.ToString()}
+                {"begin", startTime.ToString("yyyy-MM-dd HH:mm:ss")},
+                {"begin_ms", startTime.Millisecond.ToString()}
             };
             Insert(TABLE_ROUND, round);
 
