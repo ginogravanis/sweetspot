@@ -13,8 +13,8 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected static readonly int QUESTION_HORIZONTAL_MARGIN = 20;
         protected static readonly string COMPLETE_TIMER_CAPTION = "Next question in {0}...";
         protected static readonly string ABORT_TIMER_CAPTION = "Game ends in {0}...";
-        protected static int ANSWER_HEIGHT;
         protected static readonly float ANSWER_PERCENTAGE = 0.5f;
+        protected static readonly float ANSWER_HEIGHT = 0.5f;
 
         protected Texture2D green;
         protected Texture2D yellow;
@@ -51,7 +51,6 @@ namespace SweetspotApp.ScreenManagement.Screens
         {
             base.Initialize();
             Viewport viewport = gc.GraphicsDevice.Viewport;
-            ANSWER_HEIGHT = (int)(viewport.Height * .63f);
 
             questionLines = SplitString.SplitRows(questionText, viewport.Width - 2 * QUESTION_HORIZONTAL_MARGIN, questionFont);
             answerLines = SplitString.SplitRows(answerText, viewport.Width/2, questionFont);
@@ -74,7 +73,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             {
                 answerLineDimensions = questionFont.MeasureString(answerLines[i]);
                 float answerX = (viewport.Width - answerLineDimensions.X) / 2;
-                float answerY = ANSWER_PERCENTAGE * viewport.Height + i * (QUESTION_LINE_SPACING + questionFont.MeasureString(answerLines[i]).Y);
+                float answerY = ANSWER_HEIGHT * viewport.Height + i * (QUESTION_LINE_SPACING + questionFont.MeasureString(answerLines[i]).Y);
                 answerLinePositions.Add(new Vector2(answerX, answerY));
             }
 
@@ -124,12 +123,12 @@ namespace SweetspotApp.ScreenManagement.Screens
                     break;
 
                 case TaskState.Completing:
-                    drawTimerBar(bar, green, timeSinceStateChange, TASK_ABORT_TIME);
+                    drawTimerBar(bar, green, timeSinceStateChange, TASK_COMPLETE_TIME);
                     drawTimerCaption(COMPLETE_TIMER_CAPTION, bar, timeSinceStateChange, TASK_COMPLETE_TIME);
                     break;
 
                 case TaskState.GracePeriod:
-                    drawTimerBar(bar, yellow, completionTimerSnapshot, TASK_ABORT_TIME);
+                    drawTimerBar(bar, yellow, completionTimerSnapshot, TASK_COMPLETE_TIME);
                     drawTimerCaption(COMPLETE_TIMER_CAPTION, bar, completionTimerSnapshot, TASK_COMPLETE_TIME);
                     break;
             }
