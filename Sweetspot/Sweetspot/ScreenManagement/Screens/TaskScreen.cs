@@ -44,7 +44,8 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void Initialize()
         {
             base.Initialize();
-            roundId = gc.Database.RecordRound(gc.GameId, cue, mapping);
+            DateTime now = DateTime.Now;
+            roundId = gc.Database.RecordRound(gc.GameId, now, cue, mapping);
         }
 
         public override void Update(GameTime gameTime)
