@@ -18,8 +18,8 @@ namespace SweetspotApp
                 {
                     app.Run();
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
+                    Logger.Log(e.Message);
                     MessageBox.Show(e.Message);
                 }
             }
