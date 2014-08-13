@@ -11,12 +11,14 @@ namespace SweetspotApp.ScreenManagement.Screens
         static readonly float DELAY = 300;  // in ms
 
         protected SpriteFont titleFont;
+        protected Texture2D titleImage;
         protected SpriteFont instructionFont;
         protected string titleText;
         protected string instructionText;
         protected Vector2 titlePosition;
         protected Vector2 instructionPosition;
         protected TransitionState currentState;
+        protected Rectangle imageRect;
         protected float alpha = 0f;
         protected float timeSinceStateChange = 0f;  // in ms
         protected bool userActive = false;
@@ -25,7 +27,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             : base(gc)
         {
             titleText = "Quiz";
-            instructionText = "Step closer to play";
+            instructionText = "Walk around to play";
             titlePosition = new Vector2();
         }
 
@@ -39,12 +41,20 @@ namespace SweetspotApp.ScreenManagement.Screens
             Vector2 titleTextSize = titleFont.MeasureString(titleText);
             titlePosition = new Vector2(
                 (viewport.Width - titleTextSize.X) / 2,
-                (viewport.Height - titleTextSize.Y) / 2
+                (viewport.Height - titleTextSize.Y) / 2 - 100
                 );
             Vector2 instructionTextSize = instructionFont.MeasureString(instructionText);
             instructionPosition = new Vector2(
                 (viewport.Width - instructionTextSize.X) / 2,
-                (viewport.Height - instructionTextSize.Y + titleTextSize.Y) / 2 + 25
+                (viewport.Height - instructionTextSize.Y + titleTextSize.Y) / 2 - 75
+                );
+
+            titleImage = Content.Load<Texture2D>("texture\\pawn");
+            imageRect = new Rectangle(
+                (int)(viewport.Width - titleImage.Width) / 2,
+                (int)(viewport.Height - instructionTextSize.Y + titleTextSize.Y) / 2 + 25,
+                titleImage.Width,
+                titleImage.Height
                 );
         }
 
@@ -123,6 +133,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             spriteBatch.Begin();
             spriteBatch.DrawString(titleFont, titleText, titlePosition, Color.Black * alpha);
             spriteBatch.DrawString(instructionFont, instructionText, instructionPosition, Color.Black * alpha);
+            spriteBatch.Draw(titleImage, imageRect, Color.White * alpha);
             spriteBatch.End();
         }
 
