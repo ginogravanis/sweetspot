@@ -110,15 +110,6 @@ namespace SweetspotApp.Input
         protected Vector2 calculateUserPosition()
         {
             Vector2 userPosition;
-            if (sensors.Count == 2
-                && sensors[0].GetActiveUserCount() == 1
-                && sensors[1].GetActiveUserCount() == 1)
-            {
-                Vector2 position1 = sensors[0].GetUserPositions().First<Vector2>();
-                Vector2 position2 = sensors[1].GetUserPositions().First<Vector2>();
-                userPosition = Calibrator.CalculateMidpoint(position1, position2);
-            }
-            else
             {
                 List<Vector2> positions = new List<Vector2>();
                 foreach (Kinect sensor in sensors)
@@ -134,14 +125,14 @@ namespace SweetspotApp.Input
             if (positions.Count == 0)
                 throw new ApplicationException("User position not available.");
 
-            float shortestDistanceToSweetspot = sweetspot.GetDistanceFromSweetspot(positions[0]);
+            float shortestDistanceToOrigin = positions[0].Length();
             Vector2 nearestUserPosition = positions[0];
-            foreach (Vector2 position in positions.Skip(1))
+            foreach (Vector2 position in positions)
             {
-                float newDistance = sweetspot.GetDistanceFromSweetspot(position);
-                if (newDistance < shortestDistanceToSweetspot)
+                float newDistance = position.Length();
+                if (newDistance < shortestDistanceToOrigin)
                 {
-                    shortestDistanceToSweetspot = newDistance;
+                    shortestDistanceToOrigin = newDistance;
                     nearestUserPosition = position;
                 }
             }
