@@ -207,6 +207,7 @@ namespace SweetspotApp.Input
 
             foreach (Kinect sensor in sensors)
             {
+                sensor.startRecord();
                 string sensorPath = Path.Combine(computeGamePath(), sensor.ToString());
                 Directory.CreateDirectory(sensorPath);
             }
@@ -216,7 +217,10 @@ namespace SweetspotApp.Input
         {
             record = false;
             foreach (Kinect sensor in sensors)
+            {
+                sensor.stopRecord();
                 writeMultipleFramesToDisk(computeSensorPath(sensor), sensor.GetRemainingFrames());
+            }
         }
     }
 }

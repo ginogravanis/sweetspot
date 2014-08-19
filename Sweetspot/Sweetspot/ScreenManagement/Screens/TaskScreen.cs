@@ -104,7 +104,6 @@ namespace SweetspotApp.ScreenManagement.Screens
                     break;
 
                 case GameState.Timeout:
-                    Console.WriteLine(timeoutTimer);
                     if (isUserAnswering())
                         changeGameState(GameState.Active);
                     else if (timeoutTimer <= 0)

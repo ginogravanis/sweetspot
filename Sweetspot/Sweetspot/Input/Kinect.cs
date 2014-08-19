@@ -31,6 +31,7 @@ namespace SweetspotApp.Input
         protected LinkedList<Tuple<WriteableBitmap, DateTime>> buffer = new LinkedList<Tuple<WriteableBitmap, DateTime>>();
         protected LinkedList<Tuple<WriteableBitmap, DateTime>> expiredBuffer = new LinkedList<Tuple<WriteableBitmap, DateTime>>();
         protected String[] timestamp = new String[0];
+        protected bool record = false;
 
         public Kinect(KinectSensor kinect, ICalibrationProvider calibrationProvider)
         {
@@ -99,6 +100,16 @@ namespace SweetspotApp.Input
                 activeUsers = trackableSkeletons;
                 lastSensorUpdate = gameTime.TotalGameTime;
             }
+        }
+
+        public void startRecord()
+        {
+            this.record = true;
+        }
+
+        public void stopRecord()
+        {
+            this.record = false;
         }
 
         protected bool sensorRecentlyUpdated(GameTime gameTime)
@@ -232,7 +243,8 @@ namespace SweetspotApp.Input
 
             while (isFirstFrameExpired())
             {
-                expiredBuffer.AddLast(buffer.First.Value);
+                if (record)
+                    expiredBuffer.AddLast(buffer.First.Value);
                 buffer.RemoveFirst();
             }
         }
