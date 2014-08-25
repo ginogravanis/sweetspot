@@ -25,7 +25,9 @@ CREATE TABLE IF NOT EXISTS "game_round" (
 	"sweetspot_y" REAL,
 	"begin" DATETIME NOT NULL  DEFAULT CURRENT_TIMESTAMP,
 	"begin_ms" INTEGER NOT NULL,
-	"task_completed" INTEGER
+	"round_duration" INTEGER,
+	"task_completed" BOOLEAN,
+	"accuracy" REAL
 	);
 CREATE TABLE IF NOT EXISTS "user_position" (
 	"round_id" INTEGER DEFAULT (null),

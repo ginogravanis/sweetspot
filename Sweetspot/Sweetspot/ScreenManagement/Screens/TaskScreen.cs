@@ -154,18 +154,27 @@ namespace SweetspotApp.ScreenManagement.Screens
 
         protected void markTaskAsCompleted()
         {
-            gc.Database.RoundCompleted(roundId, (int)elapsedTime.TotalMilliseconds);
+            recordRoundEnd(true);
             currentTaskState = TaskState.Complete;
         }
+        
 
         protected void markTaskAsIncomplete()
         {
+            recordRoundEnd(false);
             currentTaskState = TaskState.Skip;
         }
 
         protected void markGamekAsFail()
         {
+            recordRoundEnd(false);
             currentTaskState = TaskState.Fail;
+        }
+
+        protected void recordRoundEnd(bool taskCompleted)
+        {
+            var accuracy = gc.Kinect.sweetspot.GetDistanceFromSweetspot(gc.Kinect.GetUserPosition());
+            gc.Database.RoundCompleted(roundId, (int)elapsedTime.TotalMilliseconds, accuracy, taskCompleted);
         }
 
         protected bool isUserAnswering()

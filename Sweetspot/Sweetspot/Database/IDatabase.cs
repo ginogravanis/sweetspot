@@ -16,7 +16,7 @@ namespace SweetspotApp.Database
 
         int RecordRound(int gameId, DateTime startTime, string cue, Mapping mapping);
         void SetSweetspot(int roundId, Sweetspot sweetspot);
-        void RoundCompleted(int roundId, int timestamp);
+        void RoundCompleted(int roundId, int timestamp, float accuracy, bool taskCompleted);
         void RecordUserPosition(int roundId, Vector2 position, int timestamp);
     }
 }
