@@ -16,7 +16,10 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected static readonly string TIMEOUT_CAPTION = "Skipping question in {0}...";
         protected static readonly float ANSWER_HEIGHT = 0.5f;
         protected static readonly float ANSWER_PERCENTAGE = 0.25f;
+        protected static readonly float ANSWER_BOX_OPACITY = 0.75f;
+        protected static readonly int ANSWER_BOX_MARGIN = 15;
 
+        protected Texture2D black;
         protected Texture2D green;
         protected Texture2D yellow;
         protected Texture2D red;
@@ -31,6 +34,8 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected List<string> answerLines = new List<string>();
         protected List<Vector2> questionLinePositions = new List<Vector2>();
         protected List<Vector2> answerLinePositions = new List<Vector2>();
+        protected Rectangle answerBox = new Rectangle();
+
 
         public TaskGUI(GameController gc, string cue, Mapping mapping, Sweetspot sweetspot)
             : base(gc, cue, mapping, sweetspot)
@@ -39,6 +44,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void LoadContent()
         {
             base.LoadContent();
+            black = Content.Load<Texture2D>("texture\\black");
             green = Content.Load<Texture2D>("texture\\green");
             yellow = Content.Load<Texture2D>("texture\\yellow");
             red = Content.Load<Texture2D>("texture\\red");
@@ -69,14 +75,26 @@ namespace SweetspotApp.ScreenManagement.Screens
                 2 * QUESTION_VERTICAL_MARGIN +
                 QUESTION_LINE_SPACING * (questionLines.Count - 1);
 
+            int minAnswerLineX = viewport.Width;
+            int maxAnswerLineX = 0;
+            int minAnswerLineY = viewport.Height;
+            int maxAnswerLineY = 0;
             Vector2 answerLineDimensions;
             for (int i = 0; i < answerLines.Count; i++)
             {
-                answerLineDimensions = questionFont.MeasureString(answerLines[i]);
+                answerLineDimensions = answerFont.MeasureString(answerLines[i]);
                 float answerX = (viewport.Width - answerLineDimensions.X) / 2;
                 float answerY = ANSWER_HEIGHT * viewport.Height + i * (QUESTION_LINE_SPACING + questionFont.MeasureString(answerLines[i]).Y);
                 answerLinePositions.Add(new Vector2(answerX, answerY));
+
+                minAnswerLineX = (int)Math.Min(minAnswerLineX, answerX - ANSWER_BOX_MARGIN);
+                maxAnswerLineX = (int)Math.Max(maxAnswerLineX, answerX + answerLineDimensions.X + ANSWER_BOX_MARGIN);
+                minAnswerLineY = (int)Math.Min(minAnswerLineY, answerY);
+                maxAnswerLineY = (int)Math.Max(maxAnswerLineY, answerY + answerLineDimensions.Y);
             }
+            int answerBoxWidth = maxAnswerLineX - minAnswerLineX;
+            int answerBoxHeight = maxAnswerLineY - minAnswerLineY;
+            answerBox = new Rectangle(minAnswerLineX, minAnswerLineY, answerBoxWidth, answerBoxHeight);
 
             imageRect = new Rectangle(
                 0,
@@ -154,7 +172,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             int lineWidth = captionBounds.Width;
             int timer = (int)Math.Round(period - currentTime);
             string timerText = String.Format(caption, timer);
-            float questionX = (captionBounds.Width -  timerFont.MeasureString(timerText).X) / 2;
+            float questionX = (captionBounds.Width - timerFont.MeasureString(timerText).X) / 2;
             Vector2 captionPosition = new Vector2(questionX, captionBounds.Y);
 
             spriteBatch.Begin();
@@ -176,14 +194,9 @@ namespace SweetspotApp.ScreenManagement.Screens
                 return;
 
             spriteBatch.Begin();
+            spriteBatch.Draw(black, answerBox, Color.White * ANSWER_BOX_OPACITY);
             for (int i = 0; i < answerLines.Count; i++)
-            {
-                spriteBatch.DrawString(answerFont, answerLines[i], answerLinePositions[i] + new Vector2(1, 1), Color.Black);
-                spriteBatch.DrawString(answerFont, answerLines[i], answerLinePositions[i] + new Vector2(-1, 1), Color.Black);
-                spriteBatch.DrawString(answerFont, answerLines[i], answerLinePositions[i] + new Vector2(1, -1), Color.Black);
-                spriteBatch.DrawString(answerFont, answerLines[i], answerLinePositions[i] + new Vector2(-1, -1), Color.Black);
                 spriteBatch.DrawString(answerFont, answerLines[i], answerLinePositions[i], Color.White);
-            }
             spriteBatch.End();
         }
     }

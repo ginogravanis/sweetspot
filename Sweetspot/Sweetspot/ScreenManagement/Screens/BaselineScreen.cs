@@ -12,7 +12,6 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected static readonly int COMPASS_HEIGHT = 200;
         protected static readonly int TIMER_HEIGHT = 50;
 
-        protected Texture2D black;
         protected bool userDetected = false;
         protected bool targetReached = false;
         protected float alpha = 1;
@@ -37,7 +36,6 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void LoadContent()
         {
             base.LoadContent();
-            black = Content.Load<Texture2D>("texture\\black");
             arrow = Content.Load<Texture2D>("texture\\arrow");
             checkMark = Content.Load<Texture2D>("texture\\checkmark");
             perspectiveShader = Content.Load<Effect>("shader\\PerspectiveShader");
