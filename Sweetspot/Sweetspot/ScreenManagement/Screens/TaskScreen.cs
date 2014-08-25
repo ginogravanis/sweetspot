@@ -94,7 +94,7 @@ namespace SweetspotApp.ScreenManagement.Screens
                     break;
                     
                 case GameState.Aborting:
-                    if (isUserAnswering())
+                    if (gc.Kinect.IsUserActive())
                         changeGameState(GameState.Active);
                     else if (timeSinceStateChange >= TASK_ABORT_TIME)
                     {
@@ -124,7 +124,7 @@ namespace SweetspotApp.ScreenManagement.Screens
                 timeSinceStateChange = completionTimerSnapshot;
 
             if (currentGameState != GameState.Timeout)
-                timeoutTimer = 5;
+                timeoutTimer = Math.Max(timeoutTimer, 5);
         }
 
         public override void NextScreen()
