@@ -44,17 +44,15 @@ namespace SweetspotApp.ScreenManagement
         {
             base.Initialize();
 
-            Cue[] cues = { Cue.Pixelate, Cue.Brightness, Cue.Saturation, Cue.Baseline };
-            
-            foreach (var cue in cues)
-                    effectList.AddLast(Tuple.Create(cue, Mapping.SCurve));
+            Cue[] cues = { Cue.Pixelate, Cue.Distort, Cue.Jitter};
 
-            effectList.AddLast(Tuple.Create(Cue.Pixelate, Mapping.SlowStart));
-            effectList.AddLast(Tuple.Create(Cue.Pixelate, Mapping.QuickStart));
-            effectList.AddLast(Tuple.Create(Cue.Brightness, Mapping.SlowStart));
-            effectList.AddLast(Tuple.Create(Cue.Brightness, Mapping.QuickStart));
-            effectList.AddLast(Tuple.Create(Cue.Saturation, Mapping.SlowStart));
-            effectList.AddLast(Tuple.Create(Cue.Saturation, Mapping.QuickStart));
+            foreach (var cue in cues)
+            {
+                effectList.AddLast(Tuple.Create(cue, Mapping.SCurve));
+                effectList.AddLast(Tuple.Create(cue, Mapping.SlowStart));
+                effectList.AddLast(Tuple.Create(cue, Mapping.QuickStart));
+            }
+            effectList.AddLast(Tuple.Create(Cue.Baseline, Mapping.Linear));
 
             effectListNode = effectList.First;
 
