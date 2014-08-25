@@ -195,9 +195,10 @@ namespace SweetspotApp.Database
             return new QuizItem(id, question, answerText, answerFilename);
         }
 
-        public void RoundCompleted(int roundId, int timestamp)
+        public void RoundCompleted(int roundId, int timestamp, float accuracy, bool taskCompleted)
         {
-            ExecuteNonQuery(String.Format("UPDATE {0} SET task_completed={1} WHERE round_id={2};", TABLE_ROUND, timestamp, roundId));
+            ExecuteNonQuery(String.Format("UPDATE {0} SET round_duration={1}, accuracy={2}, task_completed={3} WHERE round_id={4};",
+                TABLE_ROUND, timestamp, accuracy, taskCompleted ? 1 : 0, roundId));
             flushInsertBuffer();
         }
 
