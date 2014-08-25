@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS "game_round" (
 	"game_id" INTEGER NOT NULL,
 	"cue" VARCHAR NOT NULL,
 	"mapping" VARCHAR NOT NULL,
-	"sweetspot_x" VARCHAR,
-	"sweetspot_y" VARCHAR,
+	"sweetspot_x" REAL,
+	"sweetspot_y" REAL,
 	"begin" DATETIME NOT NULL  DEFAULT CURRENT_TIMESTAMP,
 	"begin_ms" INTEGER NOT NULL,
 	"task_completed" INTEGER
