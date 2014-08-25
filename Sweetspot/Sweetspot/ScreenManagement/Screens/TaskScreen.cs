@@ -11,7 +11,7 @@ namespace SweetspotApp.ScreenManagement.Screens
     public class TaskScreen : Screen
     {
         protected static readonly double TASK_COMPLETE_TIME = 7f;       // in seconds
-        protected static readonly double TASK_ABORT_TIME = 5f;        // in seconds
+        protected static readonly double TASK_ABORT_TIME = 7f;        // in seconds
         protected static readonly double TASK_GRACE_TIME = 1.5f;        // in seconds
         protected static readonly double TASK_TIMEOUT_TIME = 3f;        // in seconds
 
