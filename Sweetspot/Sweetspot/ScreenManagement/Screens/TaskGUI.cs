@@ -18,6 +18,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected static readonly float ANSWER_PERCENTAGE = 0.25f;
         protected static readonly float ANSWER_BOX_OPACITY = 0.75f;
         protected static readonly int ANSWER_BOX_MARGIN = 15;
+        protected static readonly float TIMER_BACKGROUND_OPACITY = 0.4f;
 
         protected Texture2D black;
         protected Texture2D green;
@@ -131,6 +132,8 @@ namespace SweetspotApp.ScreenManagement.Screens
 
         protected void drawTimer(Rectangle bar)
         {
+            drawTimerBackground(bar);
+
             switch (currentGameState)
             {
                 case GameState.Active:
@@ -164,6 +167,13 @@ namespace SweetspotApp.ScreenManagement.Screens
             Rectangle scaledBar = new Rectangle(bar.X, bar.Y, (int)(bar.Width * barWidthScale), bar.Height);
             spriteBatch.Begin();
             spriteBatch.Draw(color, scaledBar, Color.White);
+            spriteBatch.End();
+        }
+
+        protected void drawTimerBackground(Rectangle timerBar)
+        {
+            spriteBatch.Begin();
+            spriteBatch.Draw(black, timerBar, Color.White * TIMER_BACKGROUND_OPACITY);
             spriteBatch.End();
         }
 
