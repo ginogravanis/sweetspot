@@ -44,7 +44,7 @@ namespace SweetspotApp.ScreenManagement
         {
             base.Initialize();
 
-            Cue[] cues = { Cue.Pixelate, Cue.Distort, Cue.Jitter};
+            Cue[] cues = {Cue.Pixelate, Cue.Distort, Cue.Jitter};
 
             foreach (var cue in cues)
             {
