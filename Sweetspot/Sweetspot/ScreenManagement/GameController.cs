@@ -46,15 +46,13 @@ namespace SweetspotApp.ScreenManagement
         {
             base.Initialize();
 
-            Cue[] cues = {Cue.Pixelate, Cue.Distort, Cue.Jitter};
+            Cue[] cues = { Cue.Pixelate, Cue.Distort, Cue.Jitter };
+            Mapping[] mappings = { Mapping.SCurve, Mapping.SlowStart, Mapping.QuickStart };
 
-            foreach (var cue in cues)
-            {
-                effectList.AddLast(Tuple.Create(cue, Mapping.SCurve));
-                effectList.AddLast(Tuple.Create(cue, Mapping.SlowStart));
-                effectList.AddLast(Tuple.Create(cue, Mapping.QuickStart));
-            }
             effectList.AddLast(Tuple.Create(Cue.Baseline, Mapping.Linear));
+            foreach (var mapping in mappings)
+                foreach (var cue in cues)
+                    effectList.AddLast(Tuple.Create(cue, mapping));
 
             effectListNode = effectList.First;
 
