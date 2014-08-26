@@ -1,8 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SweetspotApp.Util;
-using System.Collections.Generic;
-using System;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
@@ -11,14 +11,14 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected static readonly int QUESTION_VERTICAL_MARGIN = 5;
         protected static readonly int QUESTION_LINE_SPACING = -10;
         protected static readonly int QUESTION_HORIZONTAL_MARGIN = 20;
-        protected static readonly string COMPLETE_TIMER_CAPTION = "Next question in {0}...";
-        protected static readonly string ABORT_TIMER_CAPTION = "Game ends in {0}...";
-        protected static readonly string TIMEOUT_CAPTION = "Skipping question in {0}...";
         protected static readonly float ANSWER_HEIGHT = 0.5f;
         protected static readonly float ANSWER_PERCENTAGE = 0.25f;
         protected static readonly float ANSWER_BOX_OPACITY = 0.75f;
         protected static readonly int ANSWER_BOX_MARGIN = 15;
-        protected static readonly float TIMER_BACKGROUND_OPACITY = 0.4f;
+        protected static readonly int TIMER_HEIGHT = 50;
+        protected static readonly string COMPLETE_TIMER_CAPTION = "Next question in {0}...";
+        protected static readonly string ABORT_TIMER_CAPTION = "Game ends in {0}...";
+        protected static readonly string TIMEOUT_CAPTION = "Skipping question in {0}...";
 
         protected Texture2D black;
         protected Texture2D green;
@@ -27,7 +27,6 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected Texture2D image;
         protected SpriteFont questionFont;
         protected SpriteFont answerFont;
-        protected SpriteFont timerFont;
         protected Rectangle imageRect;
         protected Rectangle answerRect;
         protected int questionBoxHeight;
@@ -36,7 +35,11 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected List<Vector2> questionLinePositions = new List<Vector2>();
         protected List<Vector2> answerLinePositions = new List<Vector2>();
         protected Rectangle answerBox = new Rectangle();
-
+        protected Rectangle timerBar;
+        protected BarTimer completeBarTimer;
+        protected BarTimer abortBarTimer;
+        protected BarTimer timeoutBarTimer;
+        protected BarTimer activeBarTimer;
 
         public TaskGUI(GameController gc, string cue, Mapping mapping, Sweetspot sweetspot)
             : base(gc, cue, mapping, sweetspot)
@@ -52,7 +55,6 @@ namespace SweetspotApp.ScreenManagement.Screens
             image = Content.Load<Texture2D>(@"answers\" + answerFilename);
             questionFont = Content.Load<SpriteFont>(@"font\segoe_36b");
             answerFont = Content.Load<SpriteFont>(@"font\segoe_44b");
-            timerFont = Content.Load<SpriteFont>(@"font\segoe_24b");
         }
         
         public override void Initialize()
@@ -103,6 +105,27 @@ namespace SweetspotApp.ScreenManagement.Screens
                 viewport.Width,
                 viewport.Height - questionBoxHeight
                 );
+
+            int screenHeight = gc.GraphicsDevice.Viewport.Height;
+            int screenWidth = gc.GraphicsDevice.Viewport.Width;
+            timerBar = new Rectangle(0, viewport.Height - TIMER_HEIGHT, viewport.Width, TIMER_HEIGHT);
+            completeBarTimer = new BarTimer(gc, timerBar, green, COMPLETE_TIMER_CAPTION, TASK_COMPLETE_TIME, yellow);
+            abortBarTimer = new BarTimer(gc, timerBar, red, ABORT_TIMER_CAPTION, TASK_ABORT_TIME);
+            timeoutBarTimer = new BarTimer(gc, timerBar, red, TIMEOUT_CAPTION, TASK_TIMEOUT_TIME);
+            activeBarTimer = null;
+            completeBarTimer.LoadContent();
+            abortBarTimer.LoadContent();
+            timeoutBarTimer.LoadContent();
+            completeBarTimer.Initialize();
+            abortBarTimer.Initialize();
+            timeoutBarTimer.Initialize();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            if (activeBarTimer != null)
+                activeBarTimer.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
@@ -130,68 +153,33 @@ namespace SweetspotApp.ScreenManagement.Screens
             }
         }
 
-        protected void drawTimer(Rectangle bar)
+        protected override void changeGameState(GameState gameState)
         {
-            drawTimerBackground(bar);
-
+            base.changeGameState(gameState);
             switch (currentGameState)
             {
                 case GameState.Active:
-                    return;
-
+                    completeBarTimer.Reset();
+                    timeoutBarTimer.Reset();
+                    abortBarTimer.Reset();
+                    activeBarTimer = null;
+                    break;
                 case GameState.Aborting:
-                    drawTimerBar(bar, red, timeSinceStateChange, TASK_ABORT_TIME);
-                    drawTimerCaption(ABORT_TIMER_CAPTION, bar, timeSinceStateChange, TASK_ABORT_TIME);
+                    abortBarTimer.Start();
+                    activeBarTimer = abortBarTimer;
                     break;
-
                 case GameState.Completing:
-                    drawTimerBar(bar, green, timeSinceStateChange, TASK_COMPLETE_TIME);
-                    drawTimerCaption(COMPLETE_TIMER_CAPTION, bar, timeSinceStateChange, TASK_COMPLETE_TIME);
+                    completeBarTimer.Start();
+                    activeBarTimer = completeBarTimer;
                     break;
-
                 case GameState.GracePeriod:
-                    drawTimerBar(bar, yellow, completionTimerSnapshot, TASK_COMPLETE_TIME);
-                    drawTimerCaption(COMPLETE_TIMER_CAPTION, bar, completionTimerSnapshot, TASK_COMPLETE_TIME);
+                    completeBarTimer.Stop();
                     break;
-
                 case GameState.Timeout:
-                    drawTimerBar(bar, red, timeSinceStateChange, TASK_TIMEOUT_TIME);
-                    drawTimerCaption(TIMEOUT_CAPTION, bar, timeSinceStateChange, TASK_TIMEOUT_TIME);
+                    timeoutBarTimer.Start();
+                    activeBarTimer = timeoutBarTimer;
                     break;
             }
-        }
-
-        protected void drawTimerBar(Rectangle bar, Texture2D color, double currentTime, double period)
-        {
-            double barWidthScale = currentTime / period;
-            Rectangle scaledBar = new Rectangle(bar.X, bar.Y, (int)(bar.Width * barWidthScale), bar.Height);
-            spriteBatch.Begin();
-            spriteBatch.Draw(color, scaledBar, Color.White);
-            spriteBatch.End();
-        }
-
-        protected void drawTimerBackground(Rectangle timerBar)
-        {
-            spriteBatch.Begin();
-            spriteBatch.Draw(black, timerBar, Color.White * TIMER_BACKGROUND_OPACITY);
-            spriteBatch.End();
-        }
-
-        protected void drawTimerCaption(string caption, Rectangle captionBounds, double currentTime, double period)
-        {
-            int lineWidth = captionBounds.Width;
-            int timer = (int)Math.Round(period - currentTime);
-            string timerText = String.Format(caption, timer);
-            float questionX = (captionBounds.Width - timerFont.MeasureString(timerText).X) / 2;
-            Vector2 captionPosition = new Vector2(questionX, captionBounds.Y);
-
-            spriteBatch.Begin();
-            spriteBatch.DrawString(timerFont, timerText, captionPosition + new Vector2(1, 1), Color.Black);
-            spriteBatch.DrawString(timerFont, timerText, captionPosition + new Vector2(-1, 1), Color.Black);
-            spriteBatch.DrawString(timerFont, timerText, captionPosition + new Vector2(1, -1), Color.Black);
-            spriteBatch.DrawString(timerFont, timerText, captionPosition + new Vector2(-1, -1), Color.Black);
-            spriteBatch.DrawString(timerFont, timerText, captionPosition, Color.White);
-            spriteBatch.End();
         }
 
         protected void drawAnswerText()

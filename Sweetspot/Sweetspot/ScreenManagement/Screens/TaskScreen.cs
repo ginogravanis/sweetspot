@@ -10,10 +10,10 @@ namespace SweetspotApp.ScreenManagement.Screens
 
     public class TaskScreen : Screen
     {
-        protected static readonly double TASK_COMPLETE_TIME = 7f;       // in seconds
-        protected static readonly double TASK_ABORT_TIME = 7f;        // in seconds
-        protected static readonly double TASK_GRACE_TIME = 1.5f;        // in seconds
-        protected static readonly double TASK_TIMEOUT_TIME = 3f;        // in seconds
+        protected static readonly float TASK_COMPLETE_TIME = 7f;       // in seconds
+        protected static readonly float TASK_ABORT_TIME = 7f;        // in seconds
+        protected static readonly float TASK_GRACE_TIME = 1.5f;        // in seconds
+        protected static readonly float TASK_TIMEOUT_TIME = 3f;        // in seconds
 
         public bool TaskCompleted { get; protected set; }
 
@@ -115,7 +115,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             }
         }
 
-        protected void changeGameState(GameState newState)
+        protected virtual void changeGameState(GameState newState)
         {
             currentGameState = newState;
             timeSinceStateChange = 0f;

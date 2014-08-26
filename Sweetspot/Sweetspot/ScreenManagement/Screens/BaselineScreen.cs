@@ -10,7 +10,6 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected static readonly float FADE_TIME = 200;    // in ms
         protected static readonly int COMPASS_WIDTH = 405;
         protected static readonly int COMPASS_HEIGHT = 200;
-        protected static readonly int TIMER_HEIGHT = 50;
 
         protected bool userDetected = false;
         protected bool targetReached = false;
@@ -23,15 +22,10 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected Rectangle checkMarkRect;
         protected float compassOrientation;
         protected Effect perspectiveShader;
-        protected Rectangle timer;
 
         public BaselineScreen(GameController gc, string cue, Mapping mapping, Sweetspot sweetspot)
             :base(gc, cue, mapping, sweetspot)
-        {
-            int screenHeight = gc.GraphicsDevice.Viewport.Height;
-            int screenWidth = gc.GraphicsDevice.Viewport.Width;
-            timer = new Rectangle(0, screenHeight - TIMER_HEIGHT, screenWidth, TIMER_HEIGHT);
-        }
+        { }
 
         public override void LoadContent()
         {
@@ -43,19 +37,19 @@ namespace SweetspotApp.ScreenManagement.Screens
             Viewport viewport = gc.GraphicsDevice.Viewport;
             compass = new Rectangle(
                 viewport.Width - COMPASS_WIDTH,
-                viewport.Height - COMPASS_HEIGHT - timer.Height,
+                viewport.Height - COMPASS_HEIGHT - timerBar.Height,
                 COMPASS_WIDTH,
                 COMPASS_HEIGHT
             );
             arrowRect = new Rectangle(
                 compass.Left + (COMPASS_WIDTH - arrow.Bounds.Width) / 2,
-                compass.Bottom - arrow.Bounds.Height / 3 - timer.Height,
+                compass.Bottom - arrow.Bounds.Height / 3 - timerBar.Height,
                 arrow.Bounds.Width,
                 arrow.Bounds.Height / 3
             );
             checkMarkRect = new Rectangle(
                 compass.Left + (COMPASS_WIDTH - checkMark.Bounds.Width / 2) / 2,
-                compass.Top + (COMPASS_WIDTH - checkMark.Bounds.Height) / 2 - timer.Height,
+                compass.Top + (COMPASS_WIDTH - checkMark.Bounds.Height) / 2 - timerBar.Height,
                 checkMark.Bounds.Width / 2,
                 checkMark.Bounds.Height / 2
             );
@@ -106,7 +100,7 @@ namespace SweetspotApp.ScreenManagement.Screens
                 }
             }
             drawDebug();
-            drawTimer(timer);
+            activeBarTimer.Draw(gameTime);
             drawAnswerText();
         }
     }

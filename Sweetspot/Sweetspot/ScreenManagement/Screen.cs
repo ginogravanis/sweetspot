@@ -1,13 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace SweetspotApp.ScreenManagement
 {
     public abstract class Screen
     {
-        public ContentManager Content { get; protected set; }
+        public ContentManager Content { get { return gc.Content; } }
         public bool Initialized { get; protected set; }
         public bool Finished { get; protected set; }
 
@@ -28,9 +28,7 @@ namespace SweetspotApp.ScreenManagement
         }
 
         public virtual void LoadContent()
-        {
-            Content = new ContentManager(gc.Game.Services, "Content");
-        }
+        { }
 
         public virtual void UnloadContent() { }
 
