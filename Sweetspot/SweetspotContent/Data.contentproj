@@ -112,13 +112,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="texture\checkmark.png">
-      <Name>checkmark</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="shader\PerspectiveShader.fx">
       <Name>PerspectiveShader</Name>
       <Importer>EffectImporter</Importer>

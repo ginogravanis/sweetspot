@@ -8,18 +8,14 @@ namespace SweetspotApp.ScreenManagement.Screens
     public class BaselineScreen : TaskGUI
     {
         protected static readonly float FADE_TIME = 200;    // in ms
-        protected static readonly int COMPASS_WIDTH = 405;
-        protected static readonly int COMPASS_HEIGHT = 200;
+        protected static readonly int ARROW_MARGIN = 400;
 
         protected bool userDetected = false;
         protected bool targetReached = false;
         protected float alpha = 1;
 
         protected Texture2D arrow;
-        protected Texture2D checkMark;
-        protected Rectangle compass;
         protected Rectangle arrowRect;
-        protected Rectangle checkMarkRect;
         protected float compassOrientation;
         protected Effect perspectiveShader;
 
@@ -31,27 +27,14 @@ namespace SweetspotApp.ScreenManagement.Screens
         {
             base.LoadContent();
             arrow = Content.Load<Texture2D>(@"texture\arrow");
-            checkMark = Content.Load<Texture2D>(@"texture\checkmark");
             perspectiveShader = Content.Load<Effect>(@"shader\PerspectiveShader");
 
             Viewport viewport = gc.GraphicsDevice.Viewport;
-            compass = new Rectangle(
-                viewport.Width - COMPASS_WIDTH,
-                viewport.Height - COMPASS_HEIGHT - timerBar.Height,
-                COMPASS_WIDTH,
-                COMPASS_HEIGHT
-            );
             arrowRect = new Rectangle(
-                compass.Left + (COMPASS_WIDTH - arrow.Bounds.Width) / 2,
-                compass.Bottom - arrow.Bounds.Height / 3 - timerBar.Height,
+                (viewport.Width - arrow.Bounds.Width) / 2,
+                (viewport.Height - arrow.Bounds.Height) / 2 + ARROW_MARGIN,
                 arrow.Bounds.Width,
                 arrow.Bounds.Height / 3
-            );
-            checkMarkRect = new Rectangle(
-                compass.Left + (COMPASS_WIDTH - checkMark.Bounds.Width / 2) / 2,
-                compass.Top + (COMPASS_WIDTH - checkMark.Bounds.Height) / 2 - timerBar.Height,
-                checkMark.Bounds.Width / 2,
-                checkMark.Bounds.Height / 2
             );
         }
 
@@ -82,25 +65,17 @@ namespace SweetspotApp.ScreenManagement.Screens
             spriteBatch.Begin();
             spriteBatch.Draw(black, imageRect, background * alpha);
             spriteBatch.End();
-            if (userDetected)
+            if (userDetected && !targetReached)
             {
-                if (TaskCompleted || targetReached)
-                {
-                    spriteBatch.Begin();
-                    spriteBatch.Draw(checkMark, checkMarkRect, Color.White);
-                    spriteBatch.End();
-                }
-                else
-                {
                     perspectiveShader.Parameters["s"].SetValue((float)Math.Sin(compassOrientation));
                     perspectiveShader.Parameters["c"].SetValue((float)Math.Cos(compassOrientation));
                     spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, perspectiveShader);
                     spriteBatch.Draw(arrow, arrowRect, Color.White);
                     spriteBatch.End();
-                }
             }
             drawDebug();
-            activeBarTimer.Draw(gameTime);
+            if (activeBarTimer != null)
+                activeBarTimer.Draw(gameTime);
             drawAnswerText();
         }
     }
