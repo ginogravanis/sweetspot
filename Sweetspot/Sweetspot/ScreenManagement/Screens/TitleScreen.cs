@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SweetspotApp.Util;
+using System;
 
 namespace SweetspotApp.ScreenManagement.Screens
 {
@@ -7,8 +9,11 @@ namespace SweetspotApp.ScreenManagement.Screens
 
     public class TitleScreen : Screen
     {
-        static readonly float FADE_TIME = 200;  // in ms
-        static readonly float DELAY = 300;  // in ms
+        protected static readonly float FADE_TIME = 200;  // in ms
+        protected static readonly float DELAY = 300;  // in ms
+        protected static readonly int TIMER_HEIGHT = 50;
+        protected static readonly string START_GAME_TIMER_CAPTION = "Game starts in {0}...";
+        protected static readonly float START_GAME_TIMER_DURATION = 7f; // in sec
 
         protected SpriteFont titleFont;
         protected Texture2D titleImage;
@@ -22,6 +27,9 @@ namespace SweetspotApp.ScreenManagement.Screens
         protected float alpha = 0f;
         protected float timeSinceStateChange = 0f;  // in ms
         protected bool userActive = false;
+        protected BarTimer startGameTimer;
+        protected Rectangle startGameTimerBar;
+        protected Texture2D startGameTimerColor;
 
         public TitleScreen(GameController gc)
             : base(gc)
@@ -36,6 +44,7 @@ namespace SweetspotApp.ScreenManagement.Screens
             base.LoadContent();
             titleFont = Content.Load<SpriteFont>(@"font\segoe_72b");
             instructionFont = Content.Load<SpriteFont>(@"font\segoe_36b");
+            startGameTimerColor = Content.Load<Texture2D>(@"texture\green");
 
             Viewport viewport = gc.GraphicsDevice.Viewport;
             Vector2 titleTextSize = titleFont.MeasureString(titleText);
@@ -49,7 +58,7 @@ namespace SweetspotApp.ScreenManagement.Screens
                 (viewport.Height - instructionTextSize.Y + titleTextSize.Y) / 2 - 75
                 );
 
-            titleImage = Content.Load<Texture2D>("texture\\pawn");
+            titleImage = Content.Load<Texture2D>(@"texture\pawn");
             imageRect = new Rectangle(
                 (int)(viewport.Width - titleImage.Width) / 2,
                 (int)(viewport.Height - instructionTextSize.Y + titleTextSize.Y) / 2 + 25,
@@ -62,12 +71,21 @@ namespace SweetspotApp.ScreenManagement.Screens
         {
             base.Initialize();
             changeState(TransitionState.PreDelay);
+
+            int screenHeight = gc.GraphicsDevice.Viewport.Height;
+            int screenWidth = gc.GraphicsDevice.Viewport.Width;
+            startGameTimerBar = new Rectangle(0, screenHeight - TIMER_HEIGHT, screenWidth, TIMER_HEIGHT);
+            startGameTimer = new BarTimer(gc, startGameTimerBar, startGameTimerColor,
+                START_GAME_TIMER_CAPTION, START_GAME_TIMER_DURATION);
+            startGameTimer.LoadContent();
+            startGameTimer.Initialize();
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
             userActive = gc.Kinect.IsUserActive();
+            startGameTimer.Update(gameTime);
             updateTransitionState(gameTime);
         }
 
@@ -96,9 +114,13 @@ namespace SweetspotApp.ScreenManagement.Screens
 
                 case TransitionState.Active:
                     if (userActive)
-                    {
+                        startGameTimer.Start();
+                    else
+                        startGameTimer.Stop();
+
+                    if (startGameTimer.Expired)
                         changeState(TransitionState.FadingOut);
-                    }
+
                     break;
 
                 case TransitionState.FadingOut:
@@ -117,7 +139,6 @@ namespace SweetspotApp.ScreenManagement.Screens
                     if (timeSinceStateChange >= DELAY)
                         NextScreen();
                     break;
-
             }
         }
 
@@ -135,6 +156,8 @@ namespace SweetspotApp.ScreenManagement.Screens
             spriteBatch.DrawString(instructionFont, instructionText, instructionPosition, Color.Black * alpha);
             spriteBatch.Draw(titleImage, imageRect, Color.White * alpha);
             spriteBatch.End();
+            if (startGameTimer.Running)
+                startGameTimer.Draw(gameTime);
         }
 
         public override void NextScreen()

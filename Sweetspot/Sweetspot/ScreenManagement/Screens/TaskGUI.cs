@@ -48,10 +48,10 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void LoadContent()
         {
             base.LoadContent();
-            black = Content.Load<Texture2D>("texture\\black");
-            green = Content.Load<Texture2D>("texture\\green");
-            yellow = Content.Load<Texture2D>("texture\\yellow");
-            red = Content.Load<Texture2D>("texture\\red");
+            black = Content.Load<Texture2D>(@"texture\black");
+            green = Content.Load<Texture2D>(@"texture\green");
+            yellow = Content.Load<Texture2D>(@"texture\yellow");
+            red = Content.Load<Texture2D>(@"texture\red");
             image = Content.Load<Texture2D>(@"answers\" + answerFilename);
             questionFont = Content.Load<SpriteFont>(@"font\segoe_36b");
             answerFont = Content.Load<SpriteFont>(@"font\segoe_44b");
@@ -140,6 +140,7 @@ namespace SweetspotApp.ScreenManagement.Screens
 
         protected void drawDebug()
         {
+            Viewport viewport = gc.GraphicsDevice.Viewport;
             if (gc.Debug)
             {
                 Vector2 sweetspotPosition = SweetspotBounds.WorldToScreenCoords(viewport.Bounds, gc.Kinect.sweetspot.Position);
@@ -159,9 +160,9 @@ namespace SweetspotApp.ScreenManagement.Screens
             switch (currentGameState)
             {
                 case GameState.Active:
-                    completeBarTimer.Reset();
-                    timeoutBarTimer.Reset();
-                    abortBarTimer.Reset();
+                    completeBarTimer.Stop();
+                    timeoutBarTimer.Stop();
+                    abortBarTimer.Stop();
                     activeBarTimer = null;
                     break;
                 case GameState.Aborting:
@@ -173,7 +174,7 @@ namespace SweetspotApp.ScreenManagement.Screens
                     activeBarTimer = completeBarTimer;
                     break;
                 case GameState.GracePeriod:
-                    completeBarTimer.Stop();
+                    completeBarTimer.Pause();
                     break;
                 case GameState.Timeout:
                     timeoutBarTimer.Start();

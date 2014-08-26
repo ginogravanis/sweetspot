@@ -57,10 +57,10 @@ namespace SweetspotApp.ScreenManagement.Screens
 
         public void LoadContent(ContentManager content)
         {
-            green = content.Load<Texture2D>("texture\\green");
-            red = content.Load<Texture2D>("texture\\red");
-            blue = content.Load<Texture2D>("texture\\blue");
-            white = content.Load<Texture2D>("texture\\white");
+            green = content.Load<Texture2D>(@"texture\green");
+            red = content.Load<Texture2D>(@"texture\red");
+            blue = content.Load<Texture2D>(@"texture\blue");
+            white = content.Load<Texture2D>(@"texture\white");
         }
 
         public void Update(GameTime gameTime)

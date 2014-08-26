@@ -8,6 +8,7 @@ namespace SweetspotApp.Util
     public class BarTimer
     {
         public bool Expired { get { return elapsedTime >= duration; } }
+        public bool Running { get; set; }
 
         protected static readonly float BACKGROUND_OPACITY = 0.4f;
 
@@ -21,7 +22,6 @@ namespace SweetspotApp.Util
         protected string caption;
         protected float duration;
         protected float elapsedTime;
-        protected bool running;
         protected SpriteFont font;
         protected Rectangle scaledBar;
 
@@ -39,13 +39,13 @@ namespace SweetspotApp.Util
         {
             var cm = gc.Content;
             font = cm.Load<SpriteFont>(@"font\segoe_24b");
-            backgroundColor = cm.Load<Texture2D>("texture\\black");
+            backgroundColor = cm.Load<Texture2D>(@"texture\black");
         }
 
         public void Initialize()
         {
             elapsedTime = 0;
-            running = false;
+            Running = false;
             string caption = String.Format(captionTemplate, 0);
             float questionX = bar.Left + (bar.Width - font.MeasureString(caption).X) / 2;
             float questionY = bar.Top + (bar.Height - font.MeasureString(caption).Y) / 2;
@@ -54,7 +54,7 @@ namespace SweetspotApp.Util
 
         public void Update(GameTime gameTime)
         {
-            if (running)
+            if (Running)
             {
                 elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 elapsedTime = Math.Min(elapsedTime, duration);
@@ -68,7 +68,7 @@ namespace SweetspotApp.Util
 
         public void Draw(GameTime gameTime)
         {
-            var barColor = running ? color : stopColor;
+            var barColor = Running ? color : stopColor;
             drawTimerBackground();
             drawTimerBar(barColor);
             drawTimerCaption();
@@ -76,12 +76,18 @@ namespace SweetspotApp.Util
 
         public void Start()
         {
-            running = true;
+            Running = true;
+        }
+
+        public void Pause()
+        {
+            Running = false;
         }
 
         public void Stop()
         {
-            running = false;
+            Pause();
+            Reset();
         }
 
         public void Reset()

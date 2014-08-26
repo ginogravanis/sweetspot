@@ -13,7 +13,6 @@ namespace SweetspotApp.ScreenManagement
 
         protected GameController gc;
         protected SpriteBatch spriteBatch;
-        protected Viewport viewport;
         protected Color background;
 
         public Screen(GameController gc)
@@ -57,7 +56,6 @@ namespace SweetspotApp.ScreenManagement
         public virtual void Draw(GameTime gameTime)
         {
             spriteBatch = gc.SpriteBatch;
-            viewport = gc.GraphicsDevice.Viewport;
             gc.Game.GraphicsDevice.Clear(background);
         }
 
