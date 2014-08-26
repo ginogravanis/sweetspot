@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using SweetspotApp.Database;
 using SweetspotApp.Input;
 using SweetspotApp.Util;
-using System;
 
 namespace SweetspotApp.ScreenManagement
 {
@@ -14,6 +15,7 @@ namespace SweetspotApp.ScreenManagement
     public class GameController : DrawableGameComponent
     {
         public bool Debug { get; protected set; }
+        public ContentManager Content { get; protected set; }
         public KinectManager Kinect { get; protected set; }
         public InputManager Input { get; protected set; }
         public IDatabase Database { get; protected set; }
@@ -70,6 +72,7 @@ namespace SweetspotApp.ScreenManagement
 
         protected override void LoadContent()
         {
+            Content = new ContentManager(Game.Services, "Content");
             SpriteBatch = new SpriteBatch(GraphicsDevice);
         }
 

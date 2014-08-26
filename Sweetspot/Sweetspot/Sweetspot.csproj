@@ -101,6 +101,7 @@
     <Compile Include="ScreenManagement\Screens\TrackingScreen.cs" />
     <Compile Include="ScreenManagement\Screens\TitleScreen.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Util\BarTimer.cs" />
     <Compile Include="Util\SplitString.cs" />
     <Compile Include="Util\QuizItem.cs" />
     <Compile Include="Util\Sweetspot.cs" />
