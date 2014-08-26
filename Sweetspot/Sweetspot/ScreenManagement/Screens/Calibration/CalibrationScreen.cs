@@ -25,7 +25,7 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void LoadContent()
         {
             base.LoadContent();
-            white = Content.Load<Texture2D>("texture\\white");
+            white = Content.Load<Texture2D>(@"texture\white");
             Viewport viewport = gc.GraphicsDevice.Viewport;
             separator = new Rectangle(
                 viewport.Width/2,

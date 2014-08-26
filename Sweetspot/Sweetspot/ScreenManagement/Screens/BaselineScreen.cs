@@ -30,9 +30,9 @@ namespace SweetspotApp.ScreenManagement.Screens
         public override void LoadContent()
         {
             base.LoadContent();
-            arrow = Content.Load<Texture2D>("texture\\arrow");
-            checkMark = Content.Load<Texture2D>("texture\\checkmark");
-            perspectiveShader = Content.Load<Effect>("shader\\PerspectiveShader");
+            arrow = Content.Load<Texture2D>(@"texture\arrow");
+            checkMark = Content.Load<Texture2D>(@"texture\checkmark");
+            perspectiveShader = Content.Load<Effect>(@"shader\PerspectiveShader");
 
             Viewport viewport = gc.GraphicsDevice.Viewport;
             compass = new Rectangle(
