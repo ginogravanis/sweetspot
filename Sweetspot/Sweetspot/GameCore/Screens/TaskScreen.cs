@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SweetspotApp.Util;
 
-namespace SweetspotApp.ScreenManagement.Screens
+namespace SweetspotApp.GameCore.Screens
 {
     public enum GameState { Active, Completing, GracePeriod, Aborting, Timeout }
     public enum TaskState { Complete, Fail, Skip }

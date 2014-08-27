@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
-using SweetspotApp.ScreenManagement.Screens;
+using SweetspotApp.GameCore.Screens;
 using SweetspotApp.Util;
 
-namespace SweetspotApp.ScreenManagement
+namespace SweetspotApp.GameCore
 {
     public class ScreenFactory
     {

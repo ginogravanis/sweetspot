@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using SweetspotApp.Input;
 using SweetspotApp.Util;
 
-namespace SweetspotApp.ScreenManagement.Screens
+namespace SweetspotApp.GameCore.Screens
 {
     class SensorPanel
     {

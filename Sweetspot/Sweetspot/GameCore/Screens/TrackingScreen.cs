@@ -1,7 +1,7 @@
 ﻿using System;
 using SweetspotApp.Util;
 
-namespace SweetspotApp.ScreenManagement.Screens
+namespace SweetspotApp.GameCore.Screens
 {
     public class TrackingScreen : TaskScreen
     {

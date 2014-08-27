@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using SweetspotApp.Input;
 using SweetspotApp.Util;
 
-namespace SweetspotApp.ScreenManagement.Screens
+namespace SweetspotApp.GameCore.Screens
 {
     class CalibrationScreen : Screen
     {
