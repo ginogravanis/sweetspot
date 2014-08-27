@@ -4,7 +4,7 @@ using System;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SweetspotApp.ScreenManagement;
+using SweetspotApp.GameCore;
 
 namespace SweetspotApp
 {

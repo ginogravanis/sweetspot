@@ -8,7 +8,7 @@ using SweetspotApp.Database;
 using SweetspotApp.Input;
 using SweetspotApp.Util;
 
-namespace SweetspotApp.ScreenManagement
+namespace SweetspotApp.GameCore
 {
     public enum Scene { Calibration, Game };
 

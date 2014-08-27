@@ -6,7 +6,7 @@ using System.IO;
 using System.Text;
 using Microsoft.Xna.Framework;
 using SweetspotApp.Input;
-using SweetspotApp.ScreenManagement;
+using SweetspotApp.GameCore;
 using SweetspotApp.Util;
 
 namespace SweetspotApp.Database

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using SweetspotApp.Util;
 using System;
 
-namespace SweetspotApp.ScreenManagement.Screens
+namespace SweetspotApp.GameCore.Screens
 {
     public enum TransitionState { PreDelay, FadingIn, Active, FadingOut, PostDelay }
 
